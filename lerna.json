@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "basic-wallet",
+    "local-wallet",
+    "burner-wallet/packages/*",
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "independent"
+}

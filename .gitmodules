@@ -1,0 +1,4 @@
+[submodule "burner-wallet"]
+	path = burner-wallet
+	url = https://github.com/dmihal/burner-wallet-2.git
+	branch = 1.0
