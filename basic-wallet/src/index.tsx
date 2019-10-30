@@ -8,6 +8,7 @@ import { InfuraGateway, InjectedGateway, XDaiGateway, } from '@burner-wallet/cor
 import Exchange, { Uniswap, XDaiBridge } from '@burner-wallet/exchange';
 import ModernUI from '@burner-wallet/modern-ui';
 import LegacyPlugin from '@burner-wallet/legacy-plugin';
+import CarbonPlugin from 'carbon-burner-wallet-plugin';
 
 const core = new BurnerCore({
   signers: [new InjectedSigner(), new LocalSigner()],
@@ -27,7 +28,7 @@ const BurnerWallet = () =>
   <ModernUI
     title="ETHWaterloo"
     core={core}
-    plugins={[exchange, new LegacyPlugin()]}
+    plugins={[exchange, new LegacyPlugin(), new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!)]}
   />
 
 

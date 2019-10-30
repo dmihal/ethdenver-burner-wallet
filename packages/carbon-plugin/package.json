@@ -1,0 +1,21 @@
+{
+  "name": "carbon-burner-wallet-plugin",
+  "version": "1.0.0",
+  "description": "Purchase crypto with credit cards inside the Burner Wallet",
+  "license": "MIT",
+  "main": "dist/CarbonPlugin.js",
+  "types": "dist/CarbonPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "waterloo-start-basic": "tsc -w",
+    "waterloo-start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/assets": "^0.0.22",
+    "@burner-wallet/types": "^1.0.0",
+    "@types/react": "*"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  }
+}
