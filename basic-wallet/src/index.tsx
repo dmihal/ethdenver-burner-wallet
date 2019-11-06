@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import { xdai, dai, eth } from '@burner-wallet/assets';
+import { xdai, dai, eth, NativeAsset, ERC20Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, } from '@burner-wallet/core/gateways';
@@ -10,6 +10,19 @@ import ModernUI from '@burner-wallet/modern-ui';
 import LegacyPlugin from '@burner-wallet/legacy-plugin';
 import CarbonPlugin from 'carbon-burner-wallet-plugin';
 
+const keth = new NativeAsset({
+  id: 'keth',
+  name: 'kETH',
+  network: '42',
+});
+
+const kdai = new ERC20Asset({
+  id: 'kdai',
+  name: 'kDai',
+  network: '42',
+  address: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
+});
+
 const core = new BurnerCore({
   signers: [new InjectedSigner(), new LocalSigner()],
   gateways: [
@@ -17,7 +30,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [xdai, dai, eth],
+  assets: [keth, kdai, xdai, dai, eth],
 });
 
 const exchange = new Exchange({

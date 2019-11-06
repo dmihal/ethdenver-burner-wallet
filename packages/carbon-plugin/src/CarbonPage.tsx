@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Asset } from '@burner-wallet/assets';
-import { PluginPageContext } from '@burner-wallet/types';
+import { PluginPageContext, Asset } from '@burner-wallet/types';
 import CarbonPlugin from './CarbonPlugin';
 
 let carbonScriptTag: HTMLScriptElement | null = null;
@@ -22,7 +21,7 @@ const CarbonPage: React.FC<PluginPageContext> = ({ assets, plugin, burnerCompone
   }
 
   const initializeWidget = () => {
-    const receiveAddress = {};
+    const receiveAddress: { [assetId: string]: string } = {};
     carbonAssets.forEach(id => {
       receiveAddress[id] = defaultAccount;
     });
