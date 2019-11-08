@@ -1,0 +1,25 @@
+{
+  "name": "linkdrop-plugin",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/LinkdropPlugin.js",
+  "types": "dist/LinkdropPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "waterloo-start-basic": "tsc -w",
+    "waterloo-start-test": "tsc -w",
+    "waterloo-start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/assets": "^0.0.24",
+    "@burner-wallet/types": "^1.0.0-beta.0",
+    "@linkdrop/commons": "^1.0.83",
+    "@linkdrop/sdk": "^1.0.88",
+    "@types/react": "*",
+    "node-sass": "^4.13.0",
+    "styled-components": "^4.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  }
+}
