@@ -17,6 +17,7 @@
   "workspaces": [
     "basic-wallet",
     "local-wallet",
+    "test-wallet",
     "burner-wallet/packages/*",
     "packages/*"
   ],

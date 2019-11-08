@@ -17,7 +17,7 @@
     "@linkdrop/sdk": "^1.0.88",
     "@types/react": "*",
     "node-sass": "^4.13.0",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.0"
   },
   "devDependencies": {
     "typescript": "^3.5.2"
