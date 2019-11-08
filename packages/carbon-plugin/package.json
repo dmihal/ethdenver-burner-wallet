@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "waterloo-start-basic": "tsc -w",
+    "waterloo-start-test": "tsc -w",
     "waterloo-start-local": "tsc -w"
   },
   "dependencies": {
