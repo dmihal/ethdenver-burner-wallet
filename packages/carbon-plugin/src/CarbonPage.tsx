@@ -28,7 +28,7 @@ const CarbonPage: React.FC<PluginPageContext> = ({ assets, plugin, burnerCompone
     // @ts-ignore
     window.CarbonWidget.default.carbonFiber.render({
       clientName: 'Burner Wallet',
-      environment: 'sandbox',
+      environment: _plugin.environment,
       apiKey: _plugin.apiKey,
       targetContainerId: 'carbon-container',
       tokens: carbonAssets.join(','),

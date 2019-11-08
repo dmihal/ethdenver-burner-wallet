@@ -32,7 +32,7 @@ const BurnerWallet = () =>
     plugins={[
       exchange,
       new LinkdropPlugin(),
-      new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!)
+      new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production')
     ]}
   />
 
