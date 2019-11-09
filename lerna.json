@@ -4,6 +4,7 @@
     "local-wallet",
     "test-wallet",
     "burner-wallet/packages/*",
+    "burner-factory-plugins/plugins/*",
     "packages/*"
   ],
   "npmClient": "yarn",

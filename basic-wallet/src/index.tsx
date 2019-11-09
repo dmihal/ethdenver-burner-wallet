@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { xdai, dai, eth } from '@burner-wallet/assets';
+import { xdai, dai, eth, ERC777Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, } from '@burner-wallet/core/gateways';
@@ -9,7 +9,14 @@ import ModernUI from '@burner-wallet/modern-ui';
 // import LegacyPlugin from '@burner-wallet/legacy-plugin';
 import CarbonPlugin from 'carbon-burner-wallet-plugin';
 import LinkdropPlugin from 'linkdrop-plugin';
+import SchedulePlugin from '@burner-factory/schedule-plugin';
 
+const waterloo = new ERC777Asset({
+  id: 'waterloo',
+  name: 'Waterloonies',
+  address: '0x35fB13688F44DfcF3AE8aC508bBFCeab420762e0',
+  network: '100',
+});
 
 const core = new BurnerCore({
   signers: [new InjectedSigner(), new LocalSigner()],
@@ -18,7 +25,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [xdai, dai, eth],
+  assets: [waterloo, xdai, dai, eth],
 });
 
 const exchange = new Exchange({
@@ -31,6 +38,7 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       exchange,
+      new SchedulePlugin(),
       new LinkdropPlugin(),
       new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production')
     ]}

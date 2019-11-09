@@ -18,6 +18,7 @@
     "basic-wallet",
     "local-wallet",
     "test-wallet",
+    "burner-factory-plugins/plugins/*",
     "burner-wallet/packages/*",
     "packages/*"
   ],
