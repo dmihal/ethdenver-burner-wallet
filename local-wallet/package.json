@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@burner-factory/stock-market-menu-plugin": "^0.1.0",
     "@burner-wallet/assets": "^1.0.0-beta.1",
     "@burner-wallet/core": "^1.0.0-beta.1",
     "@burner-wallet/modern-ui": "^1.0.0",

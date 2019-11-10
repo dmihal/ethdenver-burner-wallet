@@ -10,6 +10,7 @@ import ModernUI from '@burner-wallet/modern-ui';
 import CarbonPlugin from 'carbon-burner-wallet-plugin';
 import LinkdropPlugin from 'linkdrop-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
+import StockMarketMenuPlugin from '@burner-factory/stock-market-menu-plugin';
 
 const waterloo = new ERC777Asset({
   id: 'waterloo',
@@ -38,6 +39,7 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       exchange,
+      new StockMarketMenuPlugin('0xbf732911584c88f166b7CAB0EF943A0C968fe1D0', 'waterloo', '100', false),
       new SchedulePlugin(),
       new LinkdropPlugin(),
       new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production')
