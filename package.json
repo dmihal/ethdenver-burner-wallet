@@ -19,7 +19,6 @@
     "local-wallet",
     "test-wallet",
     "burner-factory-plugins/plugins/*",
-    "burner-wallet/packages/*",
     "packages/*"
   ],
   "devDependencies": {
@@ -30,6 +29,6 @@
     "lerna": "^3.16.4"
   },
   "dependencies": {
-    "typescript": "^3.6.3"
+    "typescript": "3.5.1"
   }
 }
