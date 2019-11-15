@@ -97,7 +97,7 @@ const ClaimForm: React.FC<ClaimFormFullProps> = ({
         <AmountCard key={asset.id} asset={asset} value={value} />
       ))}
 
-      <Button disabled={claiming} onClick={claim}>Claim Anyways</Button>
+      <Button disabled={claiming} onClick={claim}>Claim!</Button>
     </div>
   );
 };

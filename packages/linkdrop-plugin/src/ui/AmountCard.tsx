@@ -6,6 +6,7 @@ const Card = styled.div`
   display: inline-block;
   border-radius: 10px;
   border: solid 1px #AAAAAA;
+  padding: 4px;
 `;
 
 interface AmountCardProps {

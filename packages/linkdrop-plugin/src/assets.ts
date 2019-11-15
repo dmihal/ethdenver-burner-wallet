@@ -27,7 +27,7 @@ export const getAssetValues = (allAssets: Asset[], urlProps: any) => {
     }
   }
 
-  if (urlProps.tokenAmount && urlProps.weiAmount != 0) {
+  if (urlProps.tokenAmount && urlProps.tokenAmount != 0) {
     const [token] = allAssets.filter((asset: any) =>
       asset.network === urlProps.chainId
       && asset.type !== 'native'

@@ -40,9 +40,9 @@ export default class LinkdropPlugin implements Plugin {
     })
   }
 
-  async checkIfClaimed({ network, linkdropMasterAddress, linkKey, campaignId }:
-    { network: string, linkdropMasterAddress: string, linkKey: string, campaignId: string }) {
-    const web3 = this.pluginContext!.getWeb3(network);
+  async checkIfClaimed({ chainId, linkdropMasterAddress, linkKey, campaignId }:
+    { chainId: string, linkdropMasterAddress: string, linkKey: string, campaignId: string }) {
+    const web3 = this.pluginContext!.getWeb3(chainId);
     const factoryContract = new web3.eth.Contract(linkdropABI as any, FACTORY_ADDRESS);
     const { address: linkId } = web3.eth.accounts.privateKeyToAccount(linkKey);
     return await factoryContract.methods.isClaimedLink(linkdropMasterAddress, campaignId, linkId).call();
