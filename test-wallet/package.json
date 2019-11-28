@@ -11,8 +11,6 @@
     "@types/react": "*",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
-    "carbon-burner-wallet-plugin": "^1.0.0",
-    "linkdrop-plugin": "^1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.2.0",

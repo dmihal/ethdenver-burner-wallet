@@ -27,6 +27,8 @@ const core = new BurnerCore({
     new XDaiGateway(),
   ],
   assets: [waterloo, xdai, dai, eth],
+  // @ts-ignore
+  gsnGasPrice: 4100000000,
 });
 
 const exchange = new Exchange({
@@ -35,14 +37,14 @@ const exchange = new Exchange({
 
 const BurnerWallet = () =>
   <ModernUI
-    title="ETHWaterloo"
+    title="ETHDenver"
     core={core}
     plugins={[
+      new StockMarketMenuPlugin('0x04a726C7a94dc374fF088537C9434bD7E9f06F6b', 'waterloo', '100', false),
       exchange,
-      new StockMarketMenuPlugin('0xbf732911584c88f166b7CAB0EF943A0C968fe1D0', 'waterloo', '100', false),
       new SchedulePlugin(),
+      new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production'),
       new LinkdropPlugin(),
-      new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production')
     ]}
   />
 

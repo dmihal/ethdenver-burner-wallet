@@ -5,8 +5,7 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
 import ModernUI from '@burner-wallet/modern-ui';
-import LegacyPlugin from '@burner-wallet/legacy-plugin';
-import CarbonPlugin from 'carbon-burner-wallet-plugin';
+import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 
 const core = new BurnerCore({
   signers: [
@@ -34,9 +33,9 @@ const core = new BurnerCore({
 
 const BurnerWallet = () =>
   <ModernUI
-    title="ETHWaterloo"
+    title="ETHDenver"
     core={core}
-    plugins={[new LegacyPlugin(), new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!)]}
+    plugins={[new BurnableENSSubdomainPlugin('myburner.eth')]}
   />
 
 

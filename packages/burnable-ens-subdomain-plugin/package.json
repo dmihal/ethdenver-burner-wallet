@@ -1,15 +1,15 @@
 {
-  "name": "carbon-burner-wallet-plugin",
+  "name": "burnable-ens-subdomain-plugin",
   "version": "1.0.0",
   "description": "Purchase crypto with credit cards inside the Burner Wallet",
   "license": "MIT",
-  "main": "dist/CarbonPlugin.js",
-  "types": "dist/CarbonPlugin.d.ts",
+  "main": "dist/BurnableENSSubdomainPlugin.js",
+  "types": "dist/BurnableENSSubdomainPlugin.d.ts",
   "scripts": {
     "build": "tsc",
-    "waterloo-start-basic": "tsc -w",
-    "waterloo-start-test": "tsc -w",
-    "waterloo-start-local": "tsc -w"
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
   },
   "dependencies": {
     "@burner-wallet/types": "^1.0.0-beta.1",

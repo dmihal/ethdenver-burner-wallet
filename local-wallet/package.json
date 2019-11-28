@@ -3,29 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@burner-factory/stock-market-menu-plugin": "^0.1.0",
-    "@burner-wallet/assets": "^1.0.0-beta.1",
-    "@burner-wallet/core": "^1.0.0-beta.1",
-    "@burner-wallet/modern-ui": "^1.0.0-beta.2",
+    "@burner-wallet/assets": "^1.0.0",
+    "@burner-wallet/core": "^1.0.0",
+    "@burner-wallet/modern-ui": "^1.0.0",
     "@types/node": "12.0.4",
     "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
-    "carbon-burner-wallet-plugin": "^1.0.0",
+    "burnable-ens-subdomain-plugin": "^1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.2.0",
     "typescript": "3.5.1",
-    "web3": "1.0.0-beta.55"
+    "web3": "^1.2.2"
   },
   "scripts": {
     "start": "node ./scripts/run-local.js",
-    "waterloo-start-local": "node ./scripts/run-local.js",
+    "start-local": "node ./scripts/run-local.js",
     "start-wallet": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "install-all": "./scripts/install.sh"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [

@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@burner-factory/schedule-plugin": "^0.1.0",
-    "@burner-factory/stock-market-menu-plugin": "^0.1.0",
     "@burner-wallet/assets": "^1.0.0-beta.2",
+    "@burner-wallet/carbon-plugin": "^1.0.3",
     "@burner-wallet/core": "^1.0.0-beta.3",
     "@burner-wallet/exchange": "^1.0.0-beta.0",
     "@burner-wallet/modern-ui": "^1.0.0-beta.0",
@@ -13,8 +12,6 @@
     "@types/react": "*",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
-    "carbon-burner-wallet-plugin": "^1.0.0",
-    "linkdrop-plugin": "^1.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.2.0",
@@ -22,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "waterloo-start-basic": "react-scripts start",
+    "start-basic": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
