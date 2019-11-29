@@ -1,10 +1,10 @@
 {
-  "name": "burnable-ens-subdomain-plugin",
+  "name": "fortmatic-plugin",
   "version": "1.0.0",
-  "description": "Purchase crypto with credit cards inside the Burner Wallet",
+  "description": "Authenticate using Fortmatic",
   "license": "MIT",
-  "main": "dist/BurnableENSSubdomainPlugin.js",
-  "types": "dist/BurnableENSSubdomainPlugin.d.ts",
+  "main": "dist/FortmaticPlugin.js",
+  "types": "dist/FortmaticPlugin.d.ts",
   "scripts": {
     "build": "tsc",
     "start-basic": "tsc -w",

@@ -6,6 +6,7 @@ import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
 import ModernUI from '@burner-wallet/modern-ui';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
+import FortmaticPlugin from 'fortmatic-plugin';
 
 const core = new BurnerCore({
   signers: [
@@ -35,7 +36,10 @@ const BurnerWallet = () =>
   <ModernUI
     title="ETHDenver"
     core={core}
-    plugins={[new BurnableENSSubdomainPlugin('myburner.eth')]}
+    plugins={[
+      new BurnableENSSubdomainPlugin('myburner.eth'),
+      new FortmaticPlugin(),
+    ]}
   />
 
 

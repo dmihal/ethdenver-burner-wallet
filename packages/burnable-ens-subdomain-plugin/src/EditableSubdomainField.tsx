@@ -9,10 +9,6 @@ interface EditableSubdomainFieldProps {
 const EditableSubdomainField: React.FC<EditableSubdomainFieldProps> = ({ value, domain, onUpdate }) => {
   const [newValue, setNewValue] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (onUpdate && !newValue) {}
-  }, [onUpdate]);
-
   const update = (newValue: string) => {
     onUpdate(newValue);
     setNewValue(null);

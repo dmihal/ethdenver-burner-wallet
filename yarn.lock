@@ -1158,7 +1158,7 @@
     react-qr-reader "^2.2.1"
     styled-components "^4.4.0"
 
-"@burner-wallet/types@^1.0.0", "@burner-wallet/types@^1.0.0-beta.1":
+"@burner-wallet/types@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@burner-wallet/types/-/types-1.0.0.tgz#f7a0d66ed5ed6796ba05fd49406f46763036d417"
   integrity sha512-cgbsFXryN/5SyyBMFZ3qui/zNqloifnfTg/BMpYFA/vcWNtVZrIJ6V+Rg5iA6Q0Aef/X/QuEAdkfUEKIiqm+OA==
