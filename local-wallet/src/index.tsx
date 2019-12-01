@@ -5,6 +5,7 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
 import ModernUI from '@burner-wallet/modern-ui';
+import AdventurePlugin from 'adventure-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 
@@ -39,6 +40,7 @@ const BurnerWallet = () =>
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
+      new AdventurePlugin(),
     ]}
   />
 

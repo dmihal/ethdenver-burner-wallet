@@ -1,0 +1,21 @@
+{
+  "name": "adventure-plugin",
+  "version": "1.0.0",
+  "description": "Play an adventure!",
+  "license": "MIT",
+  "main": "dist/AdventurePlugin.js",
+  "types": "dist/AdventurePlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.0",
+    "@types/react": "*"
+  },
+  "devDependencies": {
+    "typescript": "3.5.1"
+  }
+}
