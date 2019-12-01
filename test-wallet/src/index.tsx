@@ -9,6 +9,7 @@ import ModernUI from '@burner-wallet/modern-ui';
 import AdventurePlugin from 'adventure-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
+import DAOPlugin from 'dao-plugin';
 
 
 const buff = new ERC777Asset({
@@ -62,6 +63,7 @@ const BurnerWallet = () =>
       exchange,
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
+      new DAOPlugin(),
       new AdventurePlugin(),
     ]}
   />
