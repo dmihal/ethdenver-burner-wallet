@@ -3,18 +3,28 @@ import ReactDOM from 'react-dom';
 import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
-import { InfuraGateway, InjectedGateway, XDaiGateway, } from '@burner-wallet/core/gateways';
+import { InfuraGateway, InjectedGateway, XDaiGateway } from '@burner-wallet/core/gateways';
 import Exchange, { Uniswap, XDaiBridge } from '@burner-wallet/exchange';
 import ModernUI from '@burner-wallet/modern-ui';
-// import LegacyPlugin from '@burner-wallet/legacy-plugin';
-import CarbonPlugin from 'carbon-burner-wallet-plugin';
-import LinkdropPlugin from 'linkdrop-plugin';
+import AdventurePlugin from 'adventure-plugin';
+import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
+import FortmaticPlugin from 'fortmatic-plugin';
 
-const wat = new ERC777Asset({
-  id: 'wat',
-  name: 'Waterloo',
+
+const buff = new ERC777Asset({
+  id: 'buff',
+  name: 'BuffiDai',
   network: '42',
   address: '0xc0d48A6ED1C9CD4a784A025C366b868574AA33a0',
+  icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
+});
+
+const rep = new ERC777Asset({
+  id: 'rep',
+  name: 'Rep',
+  network: '42',
+  address: '0xc0d48A6ED1C9CD4a784A025C366b868574AA33a0',
+  icon: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/flexed-biceps_1f4aa.png',
 });
 
 const keth = new NativeAsset({
@@ -37,7 +47,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [wat, keth, kdai],
+  assets: [buff, rep, keth, kdai],
 });
 
 const exchange = new Exchange({
@@ -50,8 +60,9 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       exchange,
-      new LinkdropPlugin(),
-      new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!)
+      new BurnableENSSubdomainPlugin('myburner.eth'),
+      new FortmaticPlugin(),
+      new AdventurePlugin(),
     ]}
   />
 
