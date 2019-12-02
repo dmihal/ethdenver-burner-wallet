@@ -4,12 +4,15 @@ import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway } from '@burner-wallet/core/gateways';
-import Exchange, { Uniswap, XDaiBridge } from '@burner-wallet/exchange';
+import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import ModernUI from '@burner-wallet/modern-ui';
+import CollectablePlugin from '@burner-factory/collectable-plugin';
 import AdventurePlugin from 'adventure-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import DAOPlugin from 'dao-plugin';
+import SchedulePlugin from '@burner-factory/schedule-plugin';
+import schedule from './waterloo.json';
 
 
 const buff = new ERC777Asset({
@@ -52,19 +55,21 @@ const core = new BurnerCore({
 });
 
 const exchange = new Exchange({
-  pairs: [new XDaiBridge(), new Uniswap('dai')],
+  pairs: [new Uniswap('dai')],
 });
 
 const BurnerWallet = () =>
   <ModernUI
-    title="ETHWaterloo"
+    title="ETHDenver"
     core={core}
     plugins={[
       exchange,
       new BurnableENSSubdomainPlugin('myburner.eth'),
+      new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
       new FortmaticPlugin(),
       new DAOPlugin(),
       new AdventurePlugin(),
+      new SchedulePlugin(schedule),
     ]}
   />
 
