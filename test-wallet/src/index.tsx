@@ -8,10 +8,11 @@ import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import ModernUI from '@burner-wallet/modern-ui';
 import CollectablePlugin from '@burner-factory/collectable-plugin';
 import AdventurePlugin from 'adventure-plugin';
+import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
+import SchedulePlugin from '@burner-factory/schedule-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import DAOPlugin from 'dao-plugin';
-import SchedulePlugin from '@burner-factory/schedule-plugin';
 import schedule from './waterloo.json';
 
 
@@ -66,6 +67,7 @@ const BurnerWallet = () =>
       exchange,
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
+      new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, '0'),
       new FortmaticPlugin(),
       new DAOPlugin(),
       new AdventurePlugin(),
