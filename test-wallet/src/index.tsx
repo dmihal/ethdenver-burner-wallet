@@ -20,13 +20,13 @@ const buff = new ERC777Asset({
   id: 'buff',
   name: 'BuffiDai',
   network: '42',
-  address: '0xc0d48A6ED1C9CD4a784A025C366b868574AA33a0',
+  address: '0x78D7ac51Ea53aF5E98EDe66DF28Ccb2f9BE59CE1',
   icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
 });
 
-const rep = new ERC777Asset({
-  id: 'rep',
-  name: 'Rep',
+const xp = new ERC777Asset({
+  id: 'xp',
+  name: 'XP',
   network: '42',
   address: '0xc0d48A6ED1C9CD4a784A025C366b868574AA33a0',
   icon: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/emojione/211/flexed-biceps_1f4aa.png',
@@ -52,7 +52,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, rep, keth, kdai],
+  assets: [buff, xp, keth, kdai],
 });
 
 const exchange = new Exchange({
