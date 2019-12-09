@@ -12,6 +12,7 @@ import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
+import FortmaticSigner from 'fortmatic-signer';
 import DAOPlugin from 'dao-plugin';
 import schedule from './waterloo.json';
 
@@ -46,7 +47,12 @@ const kdai = new ERC20Asset({
 });
 
 const core = new BurnerCore({
-  signers: [new InjectedSigner(), new LocalSigner()],
+  // @ts-ignore
+  signers: [
+    new InjectedSigner(),
+    new LocalSigner(),
+    new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY),
+  ],
   gateways: [
     new InjectedGateway(),
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),

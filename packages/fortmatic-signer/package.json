@@ -1,0 +1,21 @@
+{
+  "name": "fortmatic-signer",
+  "version": "1.0.0",
+  "description": "Sign messages using Fortmatic",
+  "license": "MIT",
+  "main": "dist/FortmaticSigner.js",
+  "types": "dist/FortmaticSigner.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/core": "^1.0.1",
+    "fortmatic": "^1.0.1"
+  },
+  "devDependencies": {
+    "typescript": "3.5.1"
+  }
+}

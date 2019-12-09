@@ -1063,6 +1063,13 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@7.3.4":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
+  integrity sha512-IvfvnMdSaLBateu0jfsYIpZTxAc2cKEXEMiezGGN75QcBcecDUKd3PgLAncT0oOgxKy8dd8hrJKj9MfzgfZd6g==
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@babel/runtime@7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.0.tgz#4fc1d642a9fd0299754e8b5de62c631cf5568205"
@@ -1153,10 +1160,10 @@
     "@burner-wallet/types" "^1.0.0"
     "@types/react" "*"
 
-"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.0.0-beta.1", "@burner-wallet/core@^1.0.0-beta.3":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.0.tgz#caa15c34e9560e270ed5cffebd8c377789245e32"
-  integrity sha512-fQWQPbBrkhdtbCT3eEMrCVW5X31RTLt4JEUdLDgqJwYuAUDW8fQiqVNzU6e3o8jvDXTXRGlqucEjyGQ8+T1hZQ==
+"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.0.0-beta.1", "@burner-wallet/core@^1.0.0-beta.3", "@burner-wallet/core@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.1.tgz#133978530b85bc84304fd496d527cb602fd980e1"
+  integrity sha512-NXK0fM6u0BFfbxzwdb2aJmcs+dklU5q71ehF+2GhpL9rh3xEkaOJvBrto23atM9U0s3qhFF1+MojqTxgqJKJHw==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@dmihal/tabookey-gasless" "^0.4.1"
@@ -6936,6 +6943,13 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+fortmatic@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fortmatic/-/fortmatic-1.0.1.tgz#ecb2c6777cd25658befe5e86c5eeddcb6c4db472"
+  integrity sha512-D48g0talOofK6AdwppO2VL/rRjLZb69Qf6fBR1lYUZ2rqMCM8WbBqoEDgFgJyjO1YV7XCJGbm+mW0/y2RxxbEg==
+  dependencies:
+    "@babel/runtime" "7.3.4"
 
 forwarded@~0.1.2:
   version "0.1.2"
