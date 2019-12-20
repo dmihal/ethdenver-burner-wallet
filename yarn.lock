@@ -1126,6 +1126,13 @@
     "@types/styled-components" "4.1.8"
     styled-components "^4.4.0"
 
+"@burner-factory/contract-wallet-signer@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-signer/-/contract-wallet-signer-0.1.0.tgz#1e15af9fef77ddacad25b0db9041ceb6bd678cc0"
+  integrity sha512-UTKmGj8XR3NZzdCiWq2mylWY6czqvBUVspkGmLQPjp6JHMiKCfkcx1ZRZAhA3MjjUUWF7zDEPqzDL44nqnxHlA==
+  dependencies:
+    "@burner-wallet/core" "^1.0.2"
+
 "@burner-factory/push-notification-plugin@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@burner-factory/push-notification-plugin/-/push-notification-plugin-0.1.0.tgz#1a7090e9d31918dea1caf5e354874842db1a6d35"
@@ -1164,6 +1171,16 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.1.tgz#133978530b85bc84304fd496d527cb602fd980e1"
   integrity sha512-NXK0fM6u0BFfbxzwdb2aJmcs+dklU5q71ehF+2GhpL9rh3xEkaOJvBrto23atM9U0s3qhFF1+MojqTxgqJKJHw==
+  dependencies:
+    "@burner-wallet/assets" "^1.0.0"
+    "@dmihal/tabookey-gasless" "^0.4.1"
+    web3 "^1.2.2"
+    web3-provider-engine "15.0.3"
+
+"@burner-wallet/core@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.2.tgz#173be119b91d42a6d5d55a2c16bfcdeabe4f3872"
+  integrity sha512-ZZH8rCAkRDJsvMlfQ7R2jkJN2TCG3aozIpoLnGYWY2rml+cLKjmWTCk5Y/I6/nHDWxAA67Ol6rdEDMs4wfDopA==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@dmihal/tabookey-gasless" "^0.4.1"

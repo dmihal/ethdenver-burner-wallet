@@ -11,7 +11,7 @@ export default class FortmaticSigner extends Signer {
 
   constructor(key: string) {
     super({ id: 'fortmatic' });
-    this.fortmatic = new Fortmatic(key);
+    this.fortmatic = new Fortmatic(key, 'kovan');
     this.isLoggedIn = false;
     this.web3 = new Web3(this.fortmatic.getProvider());
 
@@ -47,6 +47,7 @@ export default class FortmaticSigner extends Signer {
   async enable() {
     await this.fortmatic.getProvider().enable();
     await this.updateAccounts();
+    return this.accounts.length > 0 ? this.accounts[0] : null;
   }
 
   async updateAccounts() {

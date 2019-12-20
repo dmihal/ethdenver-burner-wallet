@@ -9,6 +9,7 @@ import ModernUI from '@burner-wallet/modern-ui';
 import CollectablePlugin from '@burner-factory/collectable-plugin';
 import AdventurePlugin from 'adventure-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
+import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
@@ -49,9 +50,10 @@ const kdai = new ERC20Asset({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
+    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
+    new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),
     new LocalSigner(),
-    new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY),
   ],
   gateways: [
     new InjectedGateway(),

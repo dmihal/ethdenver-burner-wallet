@@ -10,12 +10,19 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const FortmaticStatusBar: React.FC<PluginElementContext> = ({ BurnerComponents, actions }) => {
+const FortmaticStatusBar: React.FC<PluginElementContext> = ({ BurnerComponents, actions, accounts }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     setAuthenticated(!actions.canCallSigner('enable', 'fortmatic'));
-  }, []);
+  }, [accounts]);
+
+  useEffect(() => {
+    const isContractWallet = actions.canCallSigner('isContractWallet', accounts[0]);
+    if (isContractWallet) {
+      actions.callSigner('setSignerOverride', accounts[0], accounts[accounts.length - 1]);
+    }
+  }, [accounts[0]]);
 
   return (
     <Container>
@@ -23,8 +30,8 @@ const FortmaticStatusBar: React.FC<PluginElementContext> = ({ BurnerComponents, 
         <Account />
       ) : (
         <FortmaticButton Button={BurnerComponents.Button} onClick={async () => {
-          await actions.callSigner('enable', 'fortmatic');
-          setAuthenticated(!actions.canCallSigner('enable', 'fortmatic'));
+          const account = await actions.callSigner('enable', 'fortmatic');
+          setAuthenticated(!!account);
         }} />
       )}
     </Container>
