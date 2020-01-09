@@ -3,7 +3,6 @@ import { PluginElementContext, Asset } from '@burner-wallet/types';
 import styled from 'styled-components';
 import Account from './Account';
 import FortmaticButton from './FortmaticButton';
-import FortmaticLogin from './FortmaticLogin';
 
 const Container = styled.div`
   display: flex;
@@ -19,8 +18,9 @@ const FortmaticStatusBar: React.FC<PluginElementContext> = ({ BurnerComponents, 
 
   useEffect(() => {
     const isContractWallet = actions.canCallSigner('isContractWallet', accounts[0]);
-    if (isContractWallet) {
-      actions.callSigner('setSignerOverride', accounts[0], accounts[accounts.length - 1]);
+    const localSigner = accounts[accounts.length - 1]
+    if (isContractWallet && actions.callSigner('getSignerOverride', accounts[0]) !== localSigner) {
+      actions.callSigner('setSignerOverride', accounts[0], localSigner);
     }
   }, [accounts[0]]);
 

@@ -1,5 +1,5 @@
 declare module 'fortmatic' {
   export default class Fortmatic {
-    constructor(key: string);
+    constructor(key: string, chain?: string);
   }
 }
