@@ -10,6 +10,7 @@ import CollectablePlugin from '@burner-factory/collectable-plugin';
 import AdventurePlugin from 'adventure-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
+import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
@@ -80,6 +81,7 @@ const BurnerWallet = () =>
       new DAOPlugin(),
       new AdventurePlugin(),
       new SchedulePlugin(schedule),
+      new ContractWalletPlugin(),
     ]}
   />
 

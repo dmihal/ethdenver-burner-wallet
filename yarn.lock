@@ -1126,10 +1126,17 @@
     "@types/styled-components" "4.1.8"
     styled-components "^4.4.0"
 
-"@burner-factory/contract-wallet-signer@^0.1.0":
+"@burner-factory/contract-wallet-plugin@^0.1.0":
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-signer/-/contract-wallet-signer-0.1.0.tgz#1e15af9fef77ddacad25b0db9041ceb6bd678cc0"
-  integrity sha512-UTKmGj8XR3NZzdCiWq2mylWY6czqvBUVspkGmLQPjp6JHMiKCfkcx1ZRZAhA3MjjUUWF7zDEPqzDL44nqnxHlA==
+  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-plugin/-/contract-wallet-plugin-0.1.0.tgz#e4941c78bd77ccc61849a52f2bfb7a91957e483a"
+  integrity sha512-OlgJrGm6tGrJGhDnXLFTU1RttRmYXnv0J8QazZQrfGYthjcUI5suA0i8Ihwm8Lch7hmddUUuA0c36dqKieU3MA==
+  dependencies:
+    "@burner-wallet/types" "^1.0.0"
+
+"@burner-factory/contract-wallet-signer@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-signer/-/contract-wallet-signer-0.1.1.tgz#964392dc7ee4c33bc96abc21455cb5c8f7065844"
+  integrity sha512-V38IpRmuIWxaoCAzg3CEvnXa8zpkoXyiYq40YKbMe9IPZ8FKrFofd7+EqPLmZwRkqhKAWfYb5viElsjK3ecAwg==
   dependencies:
     "@burner-wallet/core" "^1.0.2"
 
@@ -1151,10 +1158,10 @@
     react-swipeable-routes "^0.6.0"
     styled-components "^4.4.1"
 
-"@burner-wallet/assets@^1.0.0", "@burner-wallet/assets@^1.0.0-beta.1", "@burner-wallet/assets@^1.0.0-beta.2":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/assets/-/assets-1.0.0.tgz#fddd9ad7b4f3411c2a72bc838648b029f5aa7db2"
-  integrity sha512-kPmn7ORc12vMf0zenb17Omk/X+LDt1vOMt0csFc5BDbnYmVK4zBgCzOvmijHMtLPkPAKWaLyKmcJBzGRaSU2Hw==
+"@burner-wallet/assets@^1.0.0":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/assets/-/assets-1.0.3.tgz#314cad8f24fbe6a40b917dc9f0dc3aa5a3c65670"
+  integrity sha512-gSOVtNGDeZk0GtB3Bk1suGSq1pthLndXMcTMev7UXAmIQSQ8i3xfdLD/nWoDOdppbyUsdvrVQXVNWpXvQ+W0zg==
   dependencies:
     isomorphic-fetch "^2.2.1"
     web3-utils "^1.2.2"
@@ -1167,27 +1174,17 @@
     "@burner-wallet/types" "^1.0.0"
     "@types/react" "*"
 
-"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.0.0-beta.1", "@burner-wallet/core@^1.0.0-beta.3", "@burner-wallet/core@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.1.tgz#133978530b85bc84304fd496d527cb602fd980e1"
-  integrity sha512-NXK0fM6u0BFfbxzwdb2aJmcs+dklU5q71ehF+2GhpL9rh3xEkaOJvBrto23atM9U0s3qhFF1+MojqTxgqJKJHw==
+"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.0.1", "@burner-wallet/core@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.3.tgz#276012ac81b4b483e46ebd9c140095584f439b1b"
+  integrity sha512-kEikQyMzH0T17UacDEPukO210FjiaeECpd36SZxEE7mu6xruOM7F7eNZwO4FGDfzGfew1I2rorCQPesimn9paw==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@dmihal/tabookey-gasless" "^0.4.1"
     web3 "^1.2.2"
     web3-provider-engine "15.0.3"
 
-"@burner-wallet/core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.0.2.tgz#173be119b91d42a6d5d55a2c16bfcdeabe4f3872"
-  integrity sha512-ZZH8rCAkRDJsvMlfQ7R2jkJN2TCG3aozIpoLnGYWY2rml+cLKjmWTCk5Y/I6/nHDWxAA67Ol6rdEDMs4wfDopA==
-  dependencies:
-    "@burner-wallet/assets" "^1.0.0"
-    "@dmihal/tabookey-gasless" "^0.4.1"
-    web3 "^1.2.2"
-    web3-provider-engine "15.0.3"
-
-"@burner-wallet/exchange@^1.0.0-beta.0":
+"@burner-wallet/exchange@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@burner-wallet/exchange/-/exchange-1.0.0.tgz#a5a1ac11ff95d07965868095fa1a8dbe70200635"
   integrity sha512-E3e3sxALyKXRhRUXQ4NuA9AM0oxJl/VijrkxzBA8gki2EC7620T0IuL4tveh4M+s6oSpL6ytQPgX+mZKErHE5g==
@@ -1195,7 +1192,7 @@
     "@burner-wallet/types" "^1.0.0"
     "@types/react" "*"
 
-"@burner-wallet/modern-ui@^1.0.0", "@burner-wallet/modern-ui@^1.0.0-beta.0", "@burner-wallet/modern-ui@^1.0.0-beta.1":
+"@burner-wallet/modern-ui@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@burner-wallet/modern-ui/-/modern-ui-1.0.0.tgz#b348a702c69b54a9887d80872feea163bd6d3d00"
   integrity sha512-NEratdWp/B2bSxu61ffuHK69tFtL4WhC/7GLiRpzjQBmPs8bZfFDCbYgGSAmOKV6rfuD/XQfYNXzWOip14tTyg==
@@ -1216,10 +1213,10 @@
     react-qr-reader "^2.2.1"
     styled-components "^4.4.0"
 
-"@burner-wallet/types@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/types/-/types-1.0.0.tgz#f7a0d66ed5ed6796ba05fd49406f46763036d417"
-  integrity sha512-cgbsFXryN/5SyyBMFZ3qui/zNqloifnfTg/BMpYFA/vcWNtVZrIJ6V+Rg5iA6Q0Aef/X/QuEAdkfUEKIiqm+OA==
+"@burner-wallet/types@^1.0.0", "@burner-wallet/types@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/types/-/types-1.0.1.tgz#9edcb30425c71a9b0815322860a3b41211ada813"
+  integrity sha512-mxSktRWYuTQFlrYBxuExJPMPSBqOHllOAEMaZyxMqj7ryBTmZndCdwoz0n8mMCO6B91dC3Ze2k+urhsuSjYBmA==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@burner-wallet/core" "^1.0.0"
@@ -1228,12 +1225,12 @@
     web3 "^1.2.2"
 
 "@burner-wallet/ui-core@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/ui-core/-/ui-core-1.0.0.tgz#9f95f3396e4bb02016a26c862c05279c9a665cec"
-  integrity sha512-LmiESDGAPsQ+NZlDqNR4ogGwKfc4dadO88ZLz+bNfmgeZrG3yRKYjLFMI8gJNTFxzc9nrac/iEXnKPFE3GNNIQ==
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/ui-core/-/ui-core-1.0.1.tgz#a1ea18b720adbf974f147bd18381e01550fc414e"
+  integrity sha512-vCi6vH2SZ6EC7pzIJqkZq2Iqxiy9p3QiodIEzQJwdcoedi/pJuN2EfEl6LnylfJydfvoYBH0x9hxcuvJzMyLSg==
   dependencies:
     "@burner-wallet/core" "^1.0.0"
-    "@burner-wallet/types" "^1.0.0"
+    "@burner-wallet/types" "^1.0.1"
     "@types/react" "*"
     "@types/react-router-dom" "^4.3.4"
     react-router-dom "^5.0.1"
@@ -10588,7 +10585,7 @@ opener@^1.5.1:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
   integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
 
-openzeppelin-solidity@^2.3.0:
+openzeppelin-solidity@^2.3.0, openzeppelin-solidity@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/openzeppelin-solidity/-/openzeppelin-solidity-2.4.0.tgz#5f0a7b30571c45493449166e57b947203415349d"
   integrity sha512-533gc5jkspxW5YT0qJo02Za5q1LHwXK9CJCc48jNj/22ncNM/3M/3JfWLqfpB90uqLwOKOovpl0JfaMQTR+gXQ==
