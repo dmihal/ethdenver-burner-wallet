@@ -39,6 +39,10 @@ export default class FortmaticSigner extends Signer {
     switch (action) {
       case 'enable':
         return this.enable();
+      case 'logout':
+        return this.fortmatic.user.logout();
+      case 'user':
+        return this.fortmatic.user.getUser();
       default:
         throw new Error(`Unknown action ${action}`);
     }

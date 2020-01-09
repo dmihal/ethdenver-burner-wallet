@@ -24,17 +24,15 @@ const FortmaticStatusBar: React.FC<PluginElementContext> = ({ BurnerComponents, 
     }
   }, [accounts[0]]);
 
+  if (authenticated) {
+    return null;
+  }
+
   return (
-    <Container>
-      {authenticated ? (
-        <Account />
-      ) : (
-        <FortmaticButton Button={BurnerComponents.Button} onClick={async () => {
-          const account = await actions.callSigner('enable', 'fortmatic');
-          setAuthenticated(!!account);
-        }} />
-      )}
-    </Container>
+    <FortmaticButton Button={BurnerComponents.Button} onClick={async () => {
+      const account = await actions.callSigner('enable', 'fortmatic');
+      setAuthenticated(!!account);
+    }} />
   );
 };
 
