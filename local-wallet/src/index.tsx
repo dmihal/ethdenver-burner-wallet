@@ -8,6 +8,7 @@ import ModernUI from '@burner-wallet/modern-ui';
 import AdventurePlugin from 'adventure-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
+import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 
 const core = new BurnerCore({
   signers: [
@@ -40,7 +41,7 @@ const BurnerWallet = () =>
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
-      new AdventurePlugin(),
+      new ThreeBoxEditProfilePlugin(),
     ]}
   />
 

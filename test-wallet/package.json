@@ -16,6 +16,7 @@
     "@types/react": "*",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
+    "3box-edit-profile-plugin": "^0.1.0",
     "adventure-plugin": "^1.0.0",
     "burnable-ens-subdomain-plugin": "^1.0.0",
     "dao-plugin": "^1.0.0",
