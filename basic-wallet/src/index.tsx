@@ -11,6 +11,7 @@ import CarbonPlugin from 'carbon-burner-wallet-plugin';
 import LinkdropPlugin from 'linkdrop-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import StockMarketMenuPlugin from '@burner-factory/stock-market-menu-plugin';
+import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 
 const waterloo = new ERC777Asset({
   id: 'waterloo',
@@ -45,6 +46,7 @@ const BurnerWallet = () =>
       new SchedulePlugin(),
       new CarbonPlugin(process.env.REACT_APP_CARBON_API_KEY!, 'production'),
       new LinkdropPlugin(),
+      new ThreeBoxEditProfilePlugin(),
     ]}
   />
 
