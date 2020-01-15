@@ -5,13 +5,17 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
 import ModernUI from '@burner-wallet/modern-ui';
-import AdventurePlugin from 'adventure-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
+import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
+import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
+import FortmaticSigner from 'fortmatic-signer';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 
 const core = new BurnerCore({
   signers: [
+    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
+    new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),
     new LocalSigner({ privateKey: process.env.REACT_APP_PK, saveKey: false }),
   ],
@@ -41,7 +45,16 @@ const BurnerWallet = () =>
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
+<<<<<<< HEAD
       new ThreeBoxEditProfilePlugin(),
+=======
+<<<<<<< HEAD
+      new AdventurePlugin(),
+=======
+      new ThreeBoxEditProfilePlugin(),
+      new ContractWalletPlugin(),
+>>>>>>> a673121... Clean up packages
+>>>>>>> Clean up packages
     ]}
   />
 
