@@ -11,6 +11,8 @@
     "start-local": "tsc -w"
   },
   "dependencies": {
+    "3box": "^1.16.1",
+    "3box-profile-edit-react": "0.0.4",
     "@burner-wallet/types": "^1.0.0",
     "@types/react": "*"
   },

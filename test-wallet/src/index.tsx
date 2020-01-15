@@ -7,7 +7,6 @@ import { InfuraGateway, InjectedGateway, XDaiGateway } from '@burner-wallet/core
 import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import ModernUI from '@burner-wallet/modern-ui';
 import CollectablePlugin from '@burner-factory/collectable-plugin';
-import AdventurePlugin from 'adventure-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
@@ -72,7 +71,6 @@ const BurnerWallet = () =>
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, '0'),
       new FortmaticPlugin(),
       new DAOPlugin(),
-      new AdventurePlugin(),
       new SchedulePlugin(schedule),
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
