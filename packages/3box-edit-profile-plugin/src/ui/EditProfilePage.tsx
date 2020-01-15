@@ -18,18 +18,27 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
   const [box, setBox] = useState();
   const [space, setSpace] = useState();
   const [profile, setProfile] = useState();
+  const [myAddress, setAddress] = useState();
 
   useEffect(() => {
     async function handleLoad3Box() {
-      const updatedBox = await Box.openBox(defaultAccount, _plugin.getProvider(), {});
-      const updatedProfile = await Box.getProfile(defaultAccount);
+      const addresses = await window.ethereum.enable();
+      const myAddress = addresses[0];
+
+      const updatedBox = await Box.openBox(myAddress, window.ethereum, {});
+      // const updatedBox = await Box.openBox(defaultAccount, _plugin.getProvider(), {});
+
+      const updatedProfile = await Box.getProfile(myAddress);
+      // const updatedProfile = await Box.getProfile(defaultAccount);
+
       const updatedSpace = await updatedBox.openSpace('ethDenver');
 
-      setBox(updatedBox);
+      await updatedBox.syncDone;
+
       setSpace(updatedSpace);
       setProfile(updatedProfile);
-
-      await updatedBox.syncDone;
+      setAddress(myAddress);
+      setBox(updatedBox);
     }
 
     handleLoad3Box();
@@ -37,11 +46,14 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
   return (
     <Page title="Edit profile">
-      <EditProfile
-        box={box}
-        space={space}
-        currentUserAddr={defaultAccount}
-      />
+      {box ? (
+        <EditProfile
+          box={box}
+          space={space}
+          currentUserAddr={myAddress}
+        // currentUserAddr={defaultAccount}
+        />
+      ) : <p>Loading</p>}
     </Page>
   );
 };

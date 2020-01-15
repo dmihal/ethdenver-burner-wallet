@@ -46,7 +46,6 @@ const BurnerWallet = () =>
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
       new ThreeBoxEditProfilePlugin('5777'),
-      new ThreeBoxEditProfilePlugin(),
       new ContractWalletPlugin(),
     ]}
   />
