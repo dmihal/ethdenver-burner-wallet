@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { PluginPageContext } from '@burner-wallet/types';
 import EditProfile from '3box-profile-edit-react';
 import Box from '3box';
+import ThreeBoxEditProfilePlugin from '../ThreeBoxEditProfilePlugin';
 
 // interface EditProfileProps {
 //   box: object;
@@ -11,24 +12,20 @@ import Box from '3box';
 
 // class EditProfileComponent extends Component<EditProfileProps, {}>;
 
-const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents }) => {
+const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents, plugin }) => {
+  const _plugin = plugin as ThreeBoxEditProfilePlugin;
   const { Page } = BurnerComponents;
   const [box, setBox] = useState();
-  const [address, setAddress] = useState('');
   const [space, setSpace] = useState();
   const [profile, setProfile] = useState();
 
   useEffect(() => {
     async function handleLoad3Box() {
-      const addresses = await window.ethereum.enable();
-      const address = addresses[0];
-
-      const updatedBox = await Box.openBox(address, window.ethereum, {});
-      const updatedProfile = await Box.getProfile(address);
+      const updatedBox = await Box.openBox(defaultAccount, _plugin.getProvider(), {});
+      const updatedProfile = await Box.getProfile(defaultAccount);
       const updatedSpace = await updatedBox.openSpace('ethDenver');
 
       setBox(updatedBox);
-      setAddress(address);
       setSpace(updatedSpace);
       setProfile(updatedProfile);
 
@@ -36,20 +33,15 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
     }
 
     handleLoad3Box();
-  }, []);
+  }, [defaultAccount]);
 
   return (
     <Page title="Edit profile">
-      {address && <p>fetched</p>}
-      {defaultAccount}
-
-      {address && (
-        <EditProfile
-          box={box}
-          space={space}
-          currentUserAddr={address}
-        />
-      )}
+      <EditProfile
+        box={box}
+        space={space}
+        currentUserAddr={defaultAccount}
+      />
     </Page>
   );
 };
