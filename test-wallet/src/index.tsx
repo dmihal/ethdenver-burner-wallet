@@ -14,7 +14,6 @@ import SchedulePlugin from '@burner-factory/schedule-plugin';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
-import DAOPlugin from 'dao-plugin';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 
@@ -68,9 +67,8 @@ const BurnerWallet = () =>
       exchange,
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
-      new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, '0'),
+      new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
-      new DAOPlugin(),
       new SchedulePlugin(schedule),
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),

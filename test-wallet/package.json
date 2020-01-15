@@ -18,7 +18,6 @@
     "@types/react-router-dom": "^4.3.3",
     "3box-edit-profile-plugin": "^0.1.0",
     "burnable-ens-subdomain-plugin": "^1.0.0",
-    "dao-plugin": "^1.0.0",
     "fortmatic-plugin": "^1.0.0",
     "fortmatic-signer": "^1.0.0",
     "react": "^16.8.6",

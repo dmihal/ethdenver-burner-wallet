@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PluginElementContext, Asset } from '@burner-wallet/types';
 import styled from 'styled-components';
-import Account from './Account';
 import FortmaticButton from './FortmaticButton';
 
 const Container = styled.div`
