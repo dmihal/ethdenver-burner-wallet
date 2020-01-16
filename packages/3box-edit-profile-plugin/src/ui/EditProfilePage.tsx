@@ -2,7 +2,6 @@ import React, { useState, useEffect, Component } from 'react';
 import { PluginPageContext } from '@burner-wallet/types';
 import styled from 'styled-components';
 import EditProfile from '3box-profile-edit-react';
-import Box from '3box';
 
 import ThreeBoxEditProfilePlugin from '../ThreeBoxEditProfilePlugin';
 
@@ -22,23 +21,12 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
   useEffect(() => {
     async function handleLoad3Box() {
-      const addresses = await window.ethereum.enable();
-      const address = addresses[0];
-      const updatedBox = await Box.create(address, window.ethereum, {});
-      const spaces = ['ethDenver'];
-      await updatedBox.auth(spaces, { address })
-      // const updatedBox = await Box.openBox(defaultAccount, _plugin.getProvider(), {});
+      const threeBox = await _plugin.exposeBox();
 
-      const updatedProfile = await Box.getProfile(address);
-      // const updatedProfile = await Box.getProfile(defaultAccount);
-
-      const updatedSpace = await updatedBox.openSpace('ethDenver');
-      await updatedBox.syncDone;
-
-      setSpace(updatedSpace);
-      setProfile(updatedProfile);
-      setAddress(address);
-      setBox(updatedBox);
+      setSpace(threeBox.space);
+      setProfile(threeBox.profile);
+      setAddress(threeBox.address);
+      setBox(threeBox.box);
     }
 
     handleLoad3Box();
