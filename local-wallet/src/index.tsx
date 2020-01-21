@@ -11,6 +11,7 @@ import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import LeaderboardPlugin from 'leaderboard';
 
 const core = new BurnerCore({
   signers: [
@@ -45,16 +46,9 @@ const BurnerWallet = () =>
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
-<<<<<<< HEAD
       new ThreeBoxEditProfilePlugin(),
-=======
-<<<<<<< HEAD
-      new AdventurePlugin(),
-=======
-      new ThreeBoxEditProfilePlugin(),
+      new LeaderboardPlugin(),
       new ContractWalletPlugin(),
->>>>>>> a673121... Clean up packages
->>>>>>> Clean up packages
     ]}
   />
 

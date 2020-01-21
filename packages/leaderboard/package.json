@@ -1,0 +1,22 @@
+{
+  "name": "leaderboard",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/LeaderboardPlugin.js",
+  "types": "dist/LeaderboardPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
+  },
+  "dependencies": {
+    "3box": "^1.16.1",
+    "@burner-wallet/types": "^1.0.0",
+    "@types/react": "*",
+    "ethereum-blockies-base64": "^1.0.2"
+  },
+  "devDependencies": {
+    "typescript": "3.5.1"
+  }
+}

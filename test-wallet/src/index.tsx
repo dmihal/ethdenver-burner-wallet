@@ -16,6 +16,7 @@ import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import LeaderboardPlugin from 'leaderboard';
 
 
 const buff = new ERC777Asset({
@@ -72,6 +73,7 @@ const BurnerWallet = () =>
       new SchedulePlugin(schedule),
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
+      new LeaderboardPlugin(),
     ]}
   />
 
