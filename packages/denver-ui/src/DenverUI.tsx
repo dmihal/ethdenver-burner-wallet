@@ -1,5 +1,6 @@
 import React from 'react';
 import BurnerUICore, { Page } from '@burner-wallet/ui-core';
+import { Route } from 'react-router-dom';
 
 import burnerComponents from './components/burner-components';
 import Header from './components/Header';
@@ -45,7 +46,11 @@ export default class DenverUI extends BurnerUICore {
       <Template theme={this.props.theme}>
         <Scanner />
         {/*<Loading />*/}
-        <Header title={this.props.title} />
+        <Route path="/" exact>
+          {({ match }) => !match && (
+            <Header title={this.props.title} />
+          )}
+        </Route>
         {this.router()}
       </Template>
     );
