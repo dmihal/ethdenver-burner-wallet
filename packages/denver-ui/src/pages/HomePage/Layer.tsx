@@ -21,11 +21,10 @@ const Layer: React.FC<LayerProps> = ({
 
   return (
     <div style={{
-      zIndex:index,
-      position: "absolute",
-      left: Math.floor(left),
-      top: Math.floor(top),
-      opacity: _opacity
+      zIndex: index,
+      position: 'absolute',
+      transform: `translate3d(${left}px, ${top}px, 0)`;
+      opacity: _opacity,
     }}>
       <img
         src={img}

@@ -225,11 +225,23 @@ const HomePage: React.FC = () => {
           <img src={qrscan} style={{width:"80%",height:"80%",marginTop:5}}></img>
         </div>
 
-        <div className={"sky-gradient-06"} style={{backgroundColor:"#FFFFFF",width:width,height:height*0.85,position:"fixed",top:rangePercent(scrollPercent,-height*0.2,0)}}>
+        <div style={{
+          backgroundColor:"#FFFFFF",
+          width:width,
+          height:height*0.85,
+          position:"fixed",
+          transform: `translate3d(0, ${rangePercent(scrollPercent,-height*0.2,0)}px, 0)`,
+        }}>
           <img src={stars} style={{minWidth:width}} />
         </div>
 
-        <div className={"title"} style={{position:"fixed",top:height*0.09-scrollY/3,width:width,height:height,overflow:"hidden"}}>
+        <div style={{
+          position: "fixed",
+          transform: `translate3d(0, ${height * 0.09 - scrollY / 3}px, 0)`,
+          width,
+          height,
+          overflow: 'hidden',
+        }}>
           <div style={{color:"#efefef",fontSize:"30pt"}}>B<span style={{color:"#efefef",fontSize:"28pt"}}>UFFI</span>DAO</div>
           <div style={{color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
         </div>
@@ -440,7 +452,12 @@ const HomePage: React.FC = () => {
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
           />
-          <div style={{zIndex:255,position:"absolute",right:scrollX/2,top:rangePercent(scrollPercent,0,-height*0.8)}}>
+          <div style={{
+            zIndex:255,
+            position: "absolute",
+            right: scrollX/2,
+            transform: `translate3d(0, ${rangePercent(scrollPercent, 0, -height * 0.8)}px, 0)`,
+          }}>
             <img src={buffImage} style={{maxWidth:width/1.5}} />
           </div>
         </div>
