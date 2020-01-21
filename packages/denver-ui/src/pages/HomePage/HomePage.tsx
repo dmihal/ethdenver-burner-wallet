@@ -76,6 +76,7 @@ const Title = styled.div.attrs<{ topPos: number }>({
     transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)`,
   }),
 })<{ topPos: number }>`
+  color: #efefef;
   width: 100vw;
   position: fixed;
   overflow: hidden;
@@ -232,7 +233,7 @@ const HomePage: React.FC = () => {
         <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
 
         <Title topPos={height * 0.09 - scrollY / 3}>
-          <div style={{color:"#efefef",fontSize:"30pt"}}>B<span style={{color:"#efefef",fontSize:"28pt"}}>UFFI</span>DAO</div>
+          <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
           <div style={{color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
         </Title>
 

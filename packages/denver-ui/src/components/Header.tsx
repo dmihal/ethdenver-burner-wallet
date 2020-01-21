@@ -10,11 +10,13 @@ const HeaderElement = styled.header`
   align-items: center;
   justify-content: space-between;
   margin: 0 var(--page-margin);
+  color: #efefef;
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: 'Squada One',Impact,Arial,Helvetica,sans-serif;
 `;
 
 const Title = styled.h1`
@@ -55,10 +57,8 @@ interface HeaderProps extends BurnerContext {
 const Header: React.FC<HeaderProps> = ({ defaultAccount, title, actions }) => (
   <HeaderElement>
     <TitleContainer>
-      <Title>{title || 'Burner Wallet'}</Title>
-      {title && title !== 'Burner Wallet' && (
-        <Subtitle>Powered by Burner Wallet</Subtitle>
-      )}
+      <Title>BuffiDAO</Title>
+      <Subtitle>Powered by Burner Wallet</Subtitle>
     </TitleContainer>
 
     <RightSide>

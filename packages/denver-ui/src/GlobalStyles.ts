@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import stars from "./images/stars.png"
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -46,7 +47,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: #ededed;
+    background-image: url('${stars}'), linear-gradient(to bottom, #0a1411 0%,#372e56 20%,#df5089 100%);
+    background-attachment: fixed;
   }
 
   html, body {
