@@ -64,6 +64,12 @@ const GlobalStyle = createGlobalStyle`
 
   /* disable iOS zooming on select */
   input, select { font-size: 100%; }
+
+  /* fortmatic pixel */
+  body > img {
+    position: absolute;
+    bottom: 0;
+  }
 `;
 
 export default GlobalStyle;

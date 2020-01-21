@@ -11,10 +11,10 @@ const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number }>({
     transform: `translate3d(0, ${topPos}px, 0)`,
   }),
 })<{ topPos: number, rightPos: number }>`
-  z-index:255;
+  z-index: 255;
   position: absolute;
   right: ${props => props.rightPos}px;
-  width: 66.666vw;
+  width: 300px;
   padding-bottom: 66.66%;
   background-image: url(${pegabuff});
 
