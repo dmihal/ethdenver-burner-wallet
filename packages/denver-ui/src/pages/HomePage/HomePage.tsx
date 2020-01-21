@@ -45,11 +45,44 @@ const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
     height: boxWidth * 0.9 + 'px',
   }),
 })<{ boxWidth: number }>`
-  zIndex: 999;
+  z-index: 999;
   position: absolute;
   top: 0;
   height: 60%;
-  marginTop: 10%;
+  margin-top: 10%;
+`;
+
+const Sky = styled.div.attrs<{ topPos: number }>({
+  style: ({ topPos }) => ({
+    transform: `translate3d(0, ${topPos}px, 0)`,
+  }),
+})<{ topPos: number }>`
+  background-image: linear-gradient(to bottom, #0a1411 0%,#372e56 20%,#df5089 100%);
+  background-color: #FFFFFF;
+  width: 100vw;
+  height: 85vh;
+  position: fixed;
+
+  &:after {
+    content: '';
+    background-image: url('${stars}');
+    display: block;
+    height: 100%;
+  }
+`;
+
+const Title = styled.div.attrs<{ topPos: number }>({
+  style: ({ topPos }) => ({
+    transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)`,
+  }),
+})<{ topPos: number }>`
+  width: 100vw;
+  position: fixed;
+  overflow: hidden;
+  transform-origin: top center;
+  font-family: 'Squada One', Impact, Arial, Helvetica, sans-serif;
+  line-height: 0.777;
+  padding: 4px;
 `;
 
 const HomePage: React.FC = () => {
@@ -196,26 +229,12 @@ const HomePage: React.FC = () => {
           <img src={qrscan} style={{width:"80%",height:"80%",marginTop:5}}></img>
         </div>
 
-        <div style={{
-          backgroundColor:"#FFFFFF",
-          width:width,
-          height:height*0.85,
-          position:"fixed",
-          transform: `translate3d(0, ${rangePercent(scrollPercent,-height*0.2,0)}px, 0)`,
-        }}>
-          <img src={stars} style={{minWidth:width}} />
-        </div>
+        <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
 
-        <div style={{
-          position: "fixed",
-          transform: `translate3d(0, ${height * 0.09 - scrollY / 3}px, 0)`,
-          width,
-          height,
-          overflow: 'hidden',
-        }}>
+        <Title topPos={height * 0.09 - scrollY / 3}>
           <div style={{color:"#efefef",fontSize:"30pt"}}>B<span style={{color:"#efefef",fontSize:"28pt"}}>UFFI</span>DAO</div>
           <div style={{color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
-        </div>
+        </Title>
 
 
         {!loggedIn && (
