@@ -23,7 +23,7 @@ const Layer: React.FC<LayerProps> = ({
     <div style={{
       zIndex: index,
       position: 'absolute',
-      transform: `translate3d(${left}px, ${top}px, 0)`;
+      transform: `translate3d(${left}px, ${top}px, 0)`,
       opacity: _opacity,
     }}>
       <img

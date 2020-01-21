@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
-import pegabuff from "../../images/pegabufficorn.png"
-import pegabuff2 from "../../images/pegabufficorn2.png"
 import trees from "../../images/trees.png"
 import qrscan from "../../images/qrscan.png"
 import profile from "../../images/profile.png"
@@ -17,6 +15,7 @@ import castleFiles from '../../images/castle';
 import QuestButton from './QuestButton';
 import Layer from './Layer';
 import StartButton from './StartButton';
+import PegaBufficorn from './PegaBufficorn';
 
 const STARTLOGGEDIN = false
 const SHOWOWOCKI = false
@@ -40,25 +39,6 @@ function useWindowSize() {
   return size;
 }
 
-
-function useInterval(callback, delay: number | null) {
-  const savedCallback = useRef(callback);
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    const tick = () => savedCallback.current();
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
-
 const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   style: ({ boxWidth }) => ({
     left: boxWidth * 1.1 + 'px',
@@ -76,8 +56,6 @@ const HomePage: React.FC = () => {
   const [openedBuilding, setOpenedBuilding] = useState(STARTLOGGEDIN);
   const [loggedIn, setLoggedIn] = useState(STARTLOGGEDIN);
 
-  const [mode, setMode] = useState(false);
-
   const [scrollY, setScrollY] = useState(0);
   const [scrollX, setScrollX] = useState(0);
 
@@ -85,11 +63,6 @@ const HomePage: React.FC = () => {
     setScrollY(window.scrollY)
     setScrollX(window.scrollX)
   };
-
-  useInterval(() => {
-    // Your custom logic here
-    setMode(!mode)
-  }, 50);
 
   useEffect(() => {
     window.addEventListener("scroll", listener);
@@ -201,8 +174,6 @@ const HomePage: React.FC = () => {
   const stickPointLayer4 = (coverMax < stickPointLayer3 ? stickPointLayer3 : coverMax) - height * buildingLayerSpread;
   const stickPointLayer5 = (coverMax < stickPointLayer4 ? stickPointLayer4 : coverMax) - height * buildingLayerSpread;
   const stickPointLayer6 = (coverMax < stickPointLayer5 ? stickPointLayer5 : coverMax) - height * buildingLayerSpread;
-
-  const buffImage = mode ? pegabuff : pegabuff2
 
   return (
     <div style={{width:"100%",textAlign:"center",backgroundColor:"#000000"}}>
@@ -452,14 +423,7 @@ const HomePage: React.FC = () => {
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
           />
-          <div style={{
-            zIndex:255,
-            position: "absolute",
-            right: scrollX/2,
-            transform: `translate3d(0, ${rangePercent(scrollPercent, 0, -height * 0.8)}px, 0)`,
-          }}>
-            <img src={buffImage} style={{maxWidth:width/1.5}} />
-          </div>
+          <PegaBufficorn rightPos={scrollX/2} topPos={rangePercent(scrollPercent, 0, -height * 0.8)} />
         </div>
 
         <div style={{position:"relative",width:width,height:adjustedHeight,overflow:"hidden"}}>
