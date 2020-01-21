@@ -5,7 +5,8 @@
   "main": "dist/DenverUI.js",
   "types": "dist/DenverUI.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && yarn images",
+    "images": "copyfiles -u 1 \"src/**/*.png\" dist/",
     "start-basic": "tsc -w",
     "start-test": "tsc -w",
     "start-local": "tsc -w"
@@ -13,7 +14,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-    "@babel/preset-typescript": "^7.3.3"
+    "@babel/preset-typescript": "^7.3.3",
+    "copyfiles": "^2.2.0"
   },
   "dependencies": {
     "@burner-wallet/types": "^1.0.2",
