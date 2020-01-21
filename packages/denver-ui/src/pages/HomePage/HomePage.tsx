@@ -16,6 +16,7 @@ import castleFiles from '../../images/castle';
 
 import QuestButton from './QuestButton';
 import Layer from './Layer';
+import StartButton from './StartButton';
 
 const STARTLOGGEDIN = false
 const SHOWOWOCKI = false
@@ -235,22 +236,21 @@ const HomePage: React.FC = () => {
 
 
         {!loggedIn && (
-          <div style={{cursor:"pointer",position:"absolute",left:scrollX,top:height*1.333,zIndex:999,width:"100%"}} onClick={()=>{
-            setLoggedIn(true)
-            setTimeout(()=>{
-              window.scrollTo({
-                top: height*1.33,
-                left: width*0.1,
-                behavior: 'smooth'
-              });
-              setOpenedBuilding(true)
-            },30)
-
-          }}>
-            <div style={{margin:"0 auto",width:"77%",padding:"5%",backgroundColor:"#EEEEEE",borderRadius:6,borderBottom:"4px solid #9d9d9d"}}>
-              <span style={{verticalAlign:"middle",color:"#444444",fontSize:"9vw"}} className={"title"}> ⚔️ Start Questing...</span>
-            </div>
-          </div>
+          <StartButton
+            scrollX={scrollX}
+            height={height}
+            onClick={()=>{
+              setLoggedIn(true)
+              setTimeout(() => {
+                window.scrollTo({
+                  top: height*1.33,
+                  left: width*0.1,
+                  behavior: 'smooth',
+                });
+                setOpenedBuilding(true);
+              }, 30);
+            }}
+          />
         )}
 
 
