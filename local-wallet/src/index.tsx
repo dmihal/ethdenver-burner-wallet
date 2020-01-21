@@ -4,7 +4,7 @@ import { NativeAsset, ERC20Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
-import ModernUI from '@burner-wallet/modern-ui';
+import DenverUI from 'denver-ui';
 import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
@@ -39,22 +39,13 @@ const core = new BurnerCore({
 });
 
 const BurnerWallet = () =>
-  <ModernUI
+  <DenverUI
     title="ETHDenver"
     core={core}
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
-<<<<<<< HEAD
-      new ThreeBoxEditProfilePlugin(),
-=======
-<<<<<<< HEAD
-      new AdventurePlugin(),
-=======
-      new ThreeBoxEditProfilePlugin(),
       new ContractWalletPlugin(),
->>>>>>> a673121... Clean up packages
->>>>>>> Clean up packages
     ]}
   />
 
