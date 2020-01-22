@@ -1,8 +1,12 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { PluginPageContext } from '@burner-wallet/types';
 import Box from '3box';
 import makeBlockie from 'ethereum-blockies-base64';
+
+const Table = styled.table`
+  margin-bottom: 18px;
+`
 
 const TableBody = styled.tbody`
   margin-top: 8px;
@@ -45,6 +49,27 @@ const XPHeader = styled.th`
   width: 42%;
 `
 
+const Navigation = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+
+  & div {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  & button {
+    border: none;
+    background-color: #000000;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 10px;
+    width: 85%
+  }
+`
 const Profile = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -85,7 +110,8 @@ const shortenEthAddr = (str) => {
   return shortenStr;
 };
 
-const getRankedProfiles = (reputationHolders) => {
+const getRankedProfiles = (completeProfiles) => {
+  const reputationHolders = Object.values(completeProfiles);
   return reputationHolders.sort((a, b) => {
     const balanceA = parseInt(a.balance);
     const balanceB = parseInt(b.balance);
@@ -95,11 +121,12 @@ const getRankedProfiles = (reputationHolders) => {
   });
 };
 
-const assembleCompleteProfiles = (reputationHolders, fetchedProfiles, fetchedVerifiedAccounts) => {
+const assembleCompleteProfiles = (reputationHolders, fetchedProfiles, verifiedAccounts, ensNamesArray) => {
   const completeProfiles = {};
   reputationHolders.forEach((user, i) => {
     const { name, image } = fetchedProfiles[i];
-    const { twitter } = fetchedVerifiedAccounts[i];
+    const { twitter } = verifiedAccounts[i];
+    const ensName = ensNamesArray[i];
 
     completeProfiles[user.address] = {
       address: user.address,
@@ -107,6 +134,7 @@ const assembleCompleteProfiles = (reputationHolders, fetchedProfiles, fetchedVer
       name,
       image,
       twitter,
+      ensName,
     }
   });
   return completeProfiles;
@@ -131,26 +159,69 @@ const fetchDAOMembers = async (offset) => {
   return data.daos[0].reputationHolders;
 };
 
+// polling every five minutes for updates to the leaderboard
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
+const fetchENSNames = async (address) => {
+  const ensDomainRequest = {
+    query: ` {
+        domains(where:{ owner: "${address}" }) {
+          name
+        }
+      }`,
+  };
+
+  const res = await fetch('https://api.thegraph.com/subgraphs/name/ensdomains/ens', {
+    method: 'POST',
+    body: JSON.stringify(ensDomainRequest),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (res.status !== 200 && res.status !== 201) console.log('Failed', res);
+
+  const {
+    data,
+    errors,
+  } = await res.json();
+
+  if (errors) console.log('errors', errors);
+  if (data.domains.length) return data.domains[0].name;
+}
+
 const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents }) => {
   const { Page } = BurnerComponents;
-  const [profiles, setProfiles] = useState({});
   const [rankingOrder, setRankedProfiles] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [isReady, setReady] = useState(false);
+  useInterval(handleFetchDaoMembers, 300000);
 
   async function handleFetchDaoMembers() {
-    setReady(false);
     const reputationHolders = await fetchDAOMembers(offset);
 
     const fetchedProfiles = await Promise.all(reputationHolders.map(address => Box.getProfile(address)));
-    const fetchedVerifiedAccounts = await Promise.all(fetchedProfiles.map(address => Box.getVerifiedAccounts(address)));
+    const verifiedAccounts = await Promise.all(fetchedProfiles.map(address => Box.getVerifiedAccounts(address)));
+    const ensNamesArray = await Promise.all(fetchedProfiles.map(address => fetchENSNames(address)));
+    const completeProfiles = assembleCompleteProfiles(reputationHolders, fetchedProfiles, verifiedAccounts, ensNamesArray);
+    const rankedProfiles = getRankedProfiles(completeProfiles);
 
-    const completeProfiles = assembleCompleteProfiles(reputationHolders, fetchedProfiles, fetchedVerifiedAccounts);
-    const rankedProfiles = getRankedProfiles(reputationHolders);
-
-    setProfiles(completeProfiles);
     setRankedProfiles(rankedProfiles);
-    setReady(true);
   }
 
   useEffect(() => {
@@ -164,7 +235,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
   return (
     <Page title="Leaderboard">
-      <table>
+      <Table>
         <thead>
           <TableRow>
             <RankHeader>Rank</RankHeader>
@@ -173,32 +244,37 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
           </TableRow>
         </thead>
 
-        {isReady && (
-          <TableBody>
-            {console.log('profiles', profiles)}
-            {rankingOrder.map((account, i) => (
-              <LeaderRow
-                profile={profiles[account.address]}
-                xp={account.balance}
-                address={account.address}
-                key={account.address}
-                offset={offset}
-                rank={i + 1}
-              />
-            ))}
-          </TableBody>
-        )}
-      </table>
+        <TableBody>
+          {rankingOrder.map((account, i) => (
+            <LeaderRow
+              profile={account}
+              xp={account.balance}
+              address={account.address}
+              key={account.address}
+              offset={offset}
+              rank={i + 1}
+            />
+          ))}
+        </TableBody>
+      </Table>
 
-      {offset > 0 && (
-        <button onClick={() => loadMore(false)}>
-          Previous
-        </button>
-      )}
+      <Navigation>
+        <div>
+          {offset > 0 && (
+            <button onClick={() => loadMore(false)}>
+              Previous
+            </button>
+          )}
+        </div>
 
-      <button onClick={() => loadMore(true)}>
-        Next
-      </button>
+        <div>
+          {rankingOrder.length === 12 && (
+            <button onClick={() => loadMore(true)}>
+              Next
+            </button>
+          )}
+        </div>
+      </Navigation>
     </Page>
   );
 };
@@ -206,7 +282,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 export default LeaderboardPage;
 
 const LeaderRow = ({ profile, xp, address, rank, offset }) => {
-  const { image, name, twitter } = profile;
+  const { image, name, twitter, ensName } = profile;
   const src = image ? `https://ipfs.infura.io/ipfs/${image[0].contentUrl['/']}` : makeBlockie(address);
   return (
     <TableRow>
@@ -220,13 +296,15 @@ const LeaderRow = ({ profile, xp, address, rank, offset }) => {
             <h3>
               {name || shortenEthAddr(address)}
             </h3>
+
             {twitter && <p>{`@${twitter}`}</p>}
+            {ensName && <p>{ensName}</p>}
           </ProfileNames>
         </Profile>
       </td>
       <td>
         <p>
-          {`${xp / 10000000000000000000} pts`}
+          {`${(xp / 10000000000000000000).toFixed(2)} pts`}
         </p>
       </td>
     </TableRow>
