@@ -1,0 +1,9 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "openzeppelin-solidity": "^2.4.0"
+  }
+}
