@@ -14,10 +14,10 @@ const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number }>({
   z-index: 255;
   position: absolute;
   right: ${props => props.rightPos}px;
-  width: 300px;
+  width: 350px;
   padding-bottom: 66.66%;
   background-image: url(${pegabuff});
-
+  background-repeat: no-repeat;
   animation: ${buffiAnimate} 0.25s steps(2) infinite;
 `;
 

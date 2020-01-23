@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
 
@@ -20,9 +20,10 @@ const Container = styled.div`
   max-height: 100vh
 `;
 
-const STARTLOGGEDIN = false
+const STARTLOGGEDIN = true
 const SHOWOWOCKI = false
 const SHOWBOUNTIES = false
+
 
 const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   style: ({ boxWidth }) => ({
@@ -78,6 +79,19 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   const [scrollX, scrollY] = scroll;
 
+
+  const listener = e => {
+      setScroll([window.scrollX,window.scrollY])
+      console.log("SCROLL",e,scrollX,scrollY)
+    };
+
+  useEffect(() => {
+    window.addEventListener("scroll", listener);
+    return () => {
+      window.removeEventListener("scroll", listener);
+    };
+  });
+
   const [openedBuilding, setOpenedBuilding] = useState(STARTLOGGEDIN);
   const [loggedIn, setLoggedIn] = useState(STARTLOGGEDIN);
 
@@ -86,9 +100,9 @@ const ScrollingGame = () => {
 
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
-  let adjustedHeight = height*screenRatio
+  let totalHeight = height*screenRatio
   let bottom = height+scrollY
-  let scrollPercent = Math.round(scrollY / (adjustedHeight-height) * 100)
+  let scrollPercent = Math.floor(scrollY / height / screenRatio * 100)//Math.round(scrollY / (totalHeight-height) * 100)
   if(!scrollPercent) scrollPercent = 0
   scrollPercent = Math.max(scrollPercent,0)
   scrollPercent = Math.min(scrollPercent,100)
@@ -155,6 +169,8 @@ const ScrollingGame = () => {
   let sidewalkBottom = coverMax
   let lowbound = height*0.4
 
+
+
   if(loggedIn && sidewalkBottom < height*0.5){
     exploded = true
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
@@ -188,19 +204,20 @@ const ScrollingGame = () => {
   return (
     <Container
       ref={containerRef}
-      onScroll={(e: React.UIEvent<HTMLDivElement>) => setScroll([e.target.scrollLeft, e.target.scrollTop])}
+
     >
       <Title topPos={height * 0.09 - scrollY / 3}>
         <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
-        <div style={{color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
+        <div style={{lineHeight: "15pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
       </Title>
+
 
       <div style={{
         margin:"0 auto",
-        height:!loggedIn ? height*1.9 : height*screenRatio,
-        width:(width-1)*1.8,
-        position: 'relative',
-        overflow: 'hidden',
+        height:(!loggedIn ? height*1.9 : height*screenRatio)-scrollY,
+        width:Math.min(700,(width-1)*1.8)
+        position: 'fixed',
+        overflow: 'hidden'
       }}>
 
         <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
@@ -229,7 +246,6 @@ const ScrollingGame = () => {
           top:height*0.1,
           width:width,
           height:height*screenRatio,
-          overflow: 'hidden',
         }}>
 
           <Layer
@@ -415,11 +431,13 @@ const ScrollingGame = () => {
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
           />
-          <PegaBufficorn rightPos={scrollX/2} topPos={rangePercent(scrollPercent, 0, -height * 0.8)} />
+          <PegaBufficorn rightPos={scrollX/3} topPos={rangePercent(scrollPercent, 0, -height * 0.8)} />
         </div>
 
-        <div style={{position:"relative",width:width,height:adjustedHeight,overflow:"hidden"}}>
-        </div>
+
+      </div>
+      <div style={{
+        zIndex:100,position:"absolute",width:width*2,height:totalHeight,overflow:"hidden"}}>
       </div>
     </Container>
   );
