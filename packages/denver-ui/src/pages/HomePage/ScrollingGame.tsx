@@ -14,10 +14,15 @@ import trees from "../../images/trees.png"
 import mountainsFiles from '../../images/mountains';
 import castleFiles from '../../images/castle';
 
-const Container = styled.div`
+const Scrollable = styled.div`
   overflow: scroll;
   flex: 1;
-  max-height: 100vh
+  position: relative;
+`;
+const Fixed = styled.div`
+  margin: 0 auto;
+  position: fixed;
+  overflow: hidden;
 `;
 
 const STARTLOGGEDIN = true
@@ -64,7 +69,8 @@ const Title = styled.div.attrs<{ topPos: number }>({
 })<{ topPos: number }>`
   color: #efefef;
   width: 100%;
-  position: absolute;
+  position: fixed;
+  left: 0;
   overflow: hidden;
   transform-origin: top center;
   font-family: 'Squada One', Impact, Arial, Helvetica, sans-serif;
@@ -79,23 +85,9 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   const [scrollX, scrollY] = scroll;
 
-
-  const listener = e => {
-      setScroll([window.scrollX,window.scrollY])
-      console.log("SCROLL",e,scrollX,scrollY)
-    };
-
-  useEffect(() => {
-    window.addEventListener("scroll", listener);
-    return () => {
-      window.removeEventListener("scroll", listener);
-    };
-  });
-
   const [openedBuilding, setOpenedBuilding] = useState(STARTLOGGEDIN);
   const [loggedIn, setLoggedIn] = useState(STARTLOGGEDIN);
 
-  // const [width, height] = useWindowSize();
   const [containerRef, { height, width, }] = useDimensions();
 
   const screenRatio = 7/1
@@ -202,22 +194,15 @@ const ScrollingGame = () => {
 
 
   return (
-    <Container
-      ref={containerRef}
-
-    >
+    <Fragment>
       <Title topPos={height * 0.09 - scrollY / 3}>
         <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
         <div style={{lineHeight: "15pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
       </Title>
 
-
-      <div style={{
-        margin:"0 auto",
-        height:(!loggedIn ? height*1.9 : height*screenRatio)-scrollY,
-        width:Math.min(700,(width-1)*1.8)
-        position: 'fixed',
-        overflow: 'hidden'
+      <Fixed style={{
+        height: (!loggedIn ? height*2 : height*screenRatio)-scrollY,
+        width: Math.min(700,(width-1)*1.8),
       }}>
 
         <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
@@ -433,13 +418,22 @@ const ScrollingGame = () => {
           />
           <PegaBufficorn rightPos={scrollX/3} topPos={rangePercent(scrollPercent, 0, -height * 0.8)} />
         </div>
+      </Fixed>
 
-
-      </div>
-      <div style={{
-        zIndex:100,position:"absolute",width:width*2,height:totalHeight,overflow:"hidden"}}>
-      </div>
-    </Container>
+      <Scrollable
+        ref={containerRef}
+        onScroll={(e: any) => setScroll([e.target.scrollLeft, e.target.scrollTop])}
+      >
+        <div style={{
+          zIndex:100,
+          position:"absolute",
+          width:width*2,
+          overflow:"hidden",
+          height: (!loggedIn ? height*2 : height*screenRatio),
+        }}>
+        </div>
+      </Scrollable>
+    </Fragment>
   );
 };
 
