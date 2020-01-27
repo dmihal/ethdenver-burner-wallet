@@ -47,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-image: url('${stars}'), linear-gradient(to bottom, #0a1411 0%,#372e56 20%,#df5089 100%);
+    background-image: url('${stars}'), linear-gradient(to bottom, #111111 0%,#333333 20%,#222222 100%);
     background-attachment: fixed;
   }
 

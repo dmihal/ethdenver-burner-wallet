@@ -18,7 +18,7 @@ const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number }>({
   padding-bottom: 66.66%;
   background-image: url(${pegabuff});
   background-repeat: no-repeat;
-  animation: ${buffiAnimate} 0.25s steps(2) infinite;
+  animation: ${buffiAnimate} 0.15s steps(2) infinite;
 `;
 
 export default PegaBufficorn;

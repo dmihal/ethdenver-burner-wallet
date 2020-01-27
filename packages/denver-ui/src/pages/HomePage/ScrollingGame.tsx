@@ -81,9 +81,11 @@ const Title = styled.div.attrs<{ topPos: number }>({
 `;
 
 
+
 const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
-  const [scrollX, scrollY] = scroll;
+  let [scrollX, scrollY] = scroll;
+
 
   const [openedBuilding, setOpenedBuilding] = useState(STARTLOGGEDIN);
   const [loggedIn, setLoggedIn] = useState(STARTLOGGEDIN);
@@ -94,7 +96,10 @@ const ScrollingGame = () => {
   const rightScrollBarOffset = 15
   let totalHeight = height*screenRatio
   let bottom = height+scrollY
-  let scrollPercent = Math.floor(scrollY / height / screenRatio * 100)//Math.round(scrollY / (totalHeight-height) * 100)
+
+  const overScrollToMakeFloorsAtTheTopShowUpBetter = 1.25
+
+  let scrollPercent = Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter)//Math.round(scrollY / (totalHeight-height) * 100)
   if(!scrollPercent) scrollPercent = 0
   scrollPercent = Math.max(scrollPercent,0)
   scrollPercent = Math.min(scrollPercent,100)
@@ -107,11 +112,11 @@ const ScrollingGame = () => {
   let layerWidth = rangePercent(scrollPercent,width*2,width*1.1)
 
 
-  let layerLeft = rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
+  let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
 
 
   let mountainWidth = rangePercent(scrollPercent,width*1.6,width*1.1)
-  let mountainsTop = rangePercent(scrollPercent,height*0.35,height*0.01)
+  let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
   let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
 
   let layerCount = 1
@@ -125,7 +130,7 @@ const ScrollingGame = () => {
 
   let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
 
-  let foothillsTop = rangePercent(scrollPercent,height*0.24,-height*0.08)
+  let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
   let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
 
   let cityDistance = 0.6 - scrollPercent/100 * 0.3
@@ -136,7 +141,7 @@ const ScrollingGame = () => {
   let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
 
   let cityPerspective = rangePercent(scrollPercent,layerWidth*0.09,layerWidth*0.2)
-  let cityTop = rangePercent(scrollPercent,height*0.3,height*0.02)
+  let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
 
   let treesDistance = 0.8 - scrollPercent/100 * 0.2
 
@@ -163,20 +168,20 @@ const ScrollingGame = () => {
 
 
 
-  if(loggedIn && sidewalkBottom < height*0.5){
+  if(loggedIn && sidewalkBottom < height*0.3){
     exploded = true
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
   }
 
-  layerLeft += scrollX
+  //layerLeft += scrollX
 
 
   let castleBackTop = coverMax+scrollOffsetBuilding/2+15 // Math.max(height*0.2,coverMax+scrollOffsetBuilding/2+15)
 
   const buildingLayerSpread = 0.22
 
-  let layer1Bottom = coverMax < height * 0.5
+  let layer1Bottom = coverMax < height * 0.3
     ? Math.max(height*0.6,rangePercent(scrollPercent,height*0.82,-height*0.5))
     : coverMax;
 
@@ -192,6 +197,10 @@ const ScrollingGame = () => {
   const stickPointLayer5 = (coverMax < stickPointLayer4 ? stickPointLayer4 : coverMax) - height * buildingLayerSpread;
   const stickPointLayer6 = (coverMax < stickPointLayer5 ? stickPointLayer5 : coverMax) - height * buildingLayerSpread;
 
+  //console.log("scrollX",scrollX)
+
+  const castleOffset = 0.2
+  const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
 
   return (
     <Fragment>
@@ -237,7 +246,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={mountainsFiles.undermountains}
             width={mountainWidth}
-            left={-layerLeft - scrollX * mountainDistance}
+            left={-width*0.05-layerLeft - scrollX * mountainDistance}
             top={mountainsTop}
             perspective={mountainPerspective}
             opacity={rangePercent(scrollPercent,0.99,0)}
@@ -246,7 +255,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={mountainsFiles.mountainsFull}
             width={mountainWidth}
-            left={-layerLeft - scrollX * mountainDistance}
+            left={-width*0.05-layerLeft - scrollX * mountainDistance}
             top={mountainsTop}
             perspective={mountainPerspective}
             opacity={rangePercent(scrollPercent,0.99,0)}
@@ -255,7 +264,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={mountainsFiles.overmountains}
             width={mountainWidth}
-            left={-layerLeft - scrollX * mountainDistance}
+            left={-width*0.05-layerLeft - scrollX * mountainDistance}
             top={mountainsTop}
             perspective={mountainPerspective}
             opacity={mountainOverOpacity}
@@ -265,7 +274,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={mountainsFiles.foothills}
             width={layerWidth}
-            left={-layerLeft - scrollX * foothillsDistance}
+            left={-width*0.05-layerLeft - scrollX * foothillsDistance}
             top={foothillsTop}
             perspective={foothillsPerspective}
             brightness={rangePercent(scrollPercent,100,50)}
@@ -299,7 +308,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles.castleBack}
             width={layerWidth}
-            left={-layerLeft}
+            left={-width*castleOffset-castleScroll}
             top={castleBackTop}
             perspective={sidewalkPerspective}
           />
@@ -310,7 +319,7 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles._sidewalk_1}
             width={layerWidth}
-            left={-layerLeft}
+            left={-width*castleOffset-castleScroll}
             top={6 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
             perspective={sidewalkPerspective}
           />
@@ -320,7 +329,7 @@ const ScrollingGame = () => {
               index={layerCount++}
               img={castleFiles.floor1_preview}
               width={layerWidth}
-              left={-layerLeft}
+              left={-width*castleOffset-castleScroll}
               top={layer1Bottom + scrollOffsetBuilding}
               perspective={sidewalkPerspective}
             />
@@ -330,7 +339,7 @@ const ScrollingGame = () => {
                 index={layerCount++}
                 img={castleFiles.floor1}
                 width={layerWidth}
-                left={-layerLeft}
+                left={-width*castleOffset-castleScroll}
                 top={layer1Bottom + scrollOffsetBuilding}
                 perspective={sidewalkPerspective}
               >
@@ -345,7 +354,7 @@ const ScrollingGame = () => {
                 index={layerCount++}
                 img={SHOWOWOCKI ? castleFiles.floor2_owocki : castleFiles.floor2}
                 width={layerWidth}
-                left={-layerLeft}
+                left={-width*castleOffset-castleScroll}
                 top={stickPointLayer2 + scrollOffsetBuilding}
                 perspective={sidewalkPerspective}
               >
@@ -361,7 +370,7 @@ const ScrollingGame = () => {
                   index={layerCount++}
                   img={castleFiles.floor3}
                   width={layerWidth}
-                  left={-layerLeft}
+                  left={-width*castleOffset-castleScroll}
                   top={stickPointLayer3 + scrollOffsetBuilding}
                   perspective={sidewalkPerspective}
                 />
@@ -372,7 +381,7 @@ const ScrollingGame = () => {
                   index={layerCount++}
                   img={castleFiles.floor4}
                   width={layerWidth}
-                  left={-layerLeft}
+                  left={-width*castleOffset-castleScroll}
                   top={stickPointLayer4 + scrollOffsetBuilding}
                   perspective={sidewalkPerspective}
                 />
@@ -381,9 +390,9 @@ const ScrollingGame = () => {
               {coverMax < stickPointLayer5 && (
                 <Layer
                   index={layerCount++}
-                  img={SHOWBOUNTIES ? castleFiles.floor5 : castleFiles.floor5_wtf}
+                  img={!SHOWBOUNTIES ? castleFiles.floor5 : castleFiles.floor5_wtf}
                   width={layerWidth}
-                  left={-layerLeft}
+                  left={-width*castleOffset-castleScroll}
                   top={stickPointLayer5 + scrollOffsetBuilding}
                   perspective={sidewalkPerspective}
                 >
@@ -400,7 +409,7 @@ const ScrollingGame = () => {
                   index={layerCount++}
                   img={castleFiles.floor6}
                   width={layerWidth}
-                  left={-layerLeft}
+                  left={-width*castleOffset-castleScroll}
                   top={stickPointLayer6 + scrollOffsetBuilding}
                   perspective={sidewalkPerspective}
                 />
@@ -412,11 +421,11 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles.castleFull}
             width={layerWidth}
-            left={-layerLeft}
+            left={-width*castleOffset-castleScroll}
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
           />
-          <PegaBufficorn rightPos={scrollX/3} topPos={rangePercent(scrollPercent, 0, -height * 0.8)} />
+          <PegaBufficorn rightPos={-width*0.1+scrollX/3} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
         </div>
       </Fixed>
 
