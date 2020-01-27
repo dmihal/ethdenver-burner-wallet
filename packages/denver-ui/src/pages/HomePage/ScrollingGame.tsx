@@ -7,6 +7,10 @@ import Layer from './Layer';
 import StartButton from './StartButton';
 import PegaBufficorn from './PegaBufficorn';
 
+import profile from "../../images/profile.png"
+import xpmeter from "../../images/xpmeter.png"
+import valuehud from "../../images/valuehud.png"
+import qrscan from "../../images/qrscan.png";
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
 import trees from "../../images/trees.png"
@@ -14,6 +18,27 @@ import trees from "../../images/trees.png"
 import mountainsFiles from '../../images/mountains';
 import castleFiles from '../../images/castle';
 
+//console.log("CORES",navigator)
+//alert(navigator.hardwareConcurrency)
+
+const UIBar = styled.div`
+  position: fixed;
+  right: -5px;
+  bottom: -5px;
+  z-index: 999;
+`;
+
+const ScanButton = styled.button`
+  height: 100px;
+  width: 100px;
+  border-radius: 100px;
+  box-shadow: 0px 0px 4px #222222;
+  background-image: url(${qrscan}), linear-gradient(#b75fac, #a24c97);
+  margin: 0 auto;
+  display: block;
+  background-size: 90%;
+  background-position: center;
+`;
 const Scrollable = styled.div`
   overflow: scroll;
   flex: 1;
@@ -249,7 +274,7 @@ const ScrollingGame = () => {
             left={-width*0.05-layerLeft - scrollX * mountainDistance}
             top={mountainsTop}
             perspective={mountainPerspective}
-            opacity={rangePercent(scrollPercent,0.99,0)}
+            opacity={rangePercent(scrollPercent,0.99,0.00)}
           />
           <Layer
             index={layerCount++}
@@ -258,7 +283,7 @@ const ScrollingGame = () => {
             left={-width*0.05-layerLeft - scrollX * mountainDistance}
             top={mountainsTop}
             perspective={mountainPerspective}
-            opacity={rangePercent(scrollPercent,0.99,0)}
+            opacity={rangePercent(scrollPercent,0.99,0.1)}
           />
           <Layer
             index={layerCount++}
@@ -425,7 +450,7 @@ const ScrollingGame = () => {
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
           />
-          <PegaBufficorn rightPos={-width*0.1+scrollX/3} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
+
         </div>
       </Fixed>
 
@@ -442,6 +467,16 @@ const ScrollingGame = () => {
         }}>
         </div>
       </Scrollable>
+
+
+
+      <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:15,right:0}}></img>
+      <img src={xpmeter} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:69,right:0}}></img>
+      <img src={valuehud} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:10,left:0}}></img>
+
+      <UIBar>
+        <ScanButton />
+      </UIBar>
     </Fragment>
   );
 };

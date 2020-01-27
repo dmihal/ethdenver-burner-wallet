@@ -6,19 +6,20 @@ const buffiAnimate = keyframes`
   100% { background-position-x: -576px; }
 `
 
-const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number }>({
-  style: ({ topPos }) => ({
-    transform: `translate3d(0, ${topPos}px, 0)`,
+const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number , scale: number}>({
+  style: ({ topPos, scale }) => ({
+    transform: `translate3d(0, ${topPos}px, 0) scale( ${scale} )`,
   }),
 })<{ topPos: number, rightPos: number }>`
   z-index: 255;
   position: absolute;
   right: ${props => props.rightPos}px;
-  width: 350px;
+  width:  340px;
   padding-bottom: 66.66%;
   background-image: url(${pegabuff});
   background-repeat: no-repeat;
   animation: ${buffiAnimate} 0.15s steps(2) infinite;
 `;
+
 
 export default PegaBufficorn;
