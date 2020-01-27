@@ -45,16 +45,8 @@ const BurnerWallet = () =>
     plugins={[
       new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
-<<<<<<< HEAD
-      new ThreeBoxEditProfilePlugin(),
-=======
-<<<<<<< HEAD
-      new AdventurePlugin(),
-=======
       new ThreeBoxEditProfilePlugin(),
       new ContractWalletPlugin(),
->>>>>>> a673121... Clean up packages
->>>>>>> Clean up packages
     ]}
   />
 

@@ -52,7 +52,8 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, xp, keth, kdai],
+  assets: [buff, keth, kdai],
+  // assets: [buff, xp, keth, kdai],
 });
 
 const exchange = new Exchange({

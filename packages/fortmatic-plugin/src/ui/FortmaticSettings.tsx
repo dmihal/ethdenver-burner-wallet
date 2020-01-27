@@ -9,10 +9,14 @@ const FortmaticSettings: React.FC<PluginElementContext> = ({ accounts, actions, 
   useEffect(() => {
     const authenticated = !actions.canCallSigner('enable', 'fortmatic');
     setAuthenticated(authenticated);
-
-    if (authenticated) {
-      actions.callSigner('user', 'fortmatic').then((user: any) => setEmail(user.email));
+    const setEmailAsync = async () => {
+      if (authenticated) {
+        const user = await actions.callSigner('user', 'fortmatic')
+        setEmail(user)
+      }
     }
+    setEmailAsync();
+    
   }, [accounts]);
 
   const logout = () => actions.callSigner('logout', 'fortmatic');
