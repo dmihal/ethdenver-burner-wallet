@@ -363,9 +363,9 @@ const ScrollingGame = () => {
 
   return (
     <Fragment>
-      <Title topPos={height * 0.09 - scrollY / 10}>
+      <Title topPos={height * 0.12 - scrollY / 10}>
         <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
-        <div style={{lineHeight: "15pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
+        <div style={{lineHeight: "7pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
       </Title>
 
       <Fixed style={{
@@ -398,7 +398,7 @@ const ScrollingGame = () => {
           width:width,
           height:height*screenRatio,
         }}>
-          <PegaBufficorn scale={Math.max(1.0,1.0*(displayWidth-width)/300)} rightPos={0-(displayWidth-width)/2+scrollX/9} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
+          <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)} rightPos={0-(displayWidth-width)/2+scrollX/7} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
 
 
           {denverBackground}

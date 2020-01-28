@@ -15,6 +15,7 @@ const PegaBufficorn = styled.div.attrs<{ topPos: number, rightPos: number , scal
   position: absolute;
   right: ${props => props.rightPos}px;
   width:  340px;
+  height: 340px;
   padding-bottom: 66.66%;
   background-image: url(${pegabuff});
   background-repeat: no-repeat;
