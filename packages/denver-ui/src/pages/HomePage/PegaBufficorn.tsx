@@ -17,7 +17,7 @@ const PegaBufficorn = styled.div.attrs<PegaBufficornProps>({
     transform: `translate3d(0, ${topPos}px, 0) scale( ${scale} )`,
   }),
 })<PegaBufficornProps>`
-  z-index: 255;
+  z-index: 25;
   position: absolute;
   right: ${props => props.rightPos}px;
   width:  340px;

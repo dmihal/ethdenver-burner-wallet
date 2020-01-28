@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
 import Blockies from 'react-blockies';
@@ -7,10 +7,14 @@ import QRCode from 'qrcode.react';
 import QuestButton from './QuestButton';
 import Layer from './Layer';
 import StartButton from './StartButton';
-import PegaBufficorn from './PegaBufficorn';
 
+//import PegaBufficorn from './PegaBufficorn';
+import pegabuff from '../../images/pegabufficorn.png';
+import pegabuff2 from '../../images/pegabufficorn2.png';
 import profile from "../../images/profile.png"
 import xpmeter from "../../images/xpmeter.png"
+import startquesting from "../../images/startquesting.png"
+import startquesting2 from "../../images/startquesting2.png"
 import valuehud from "../../images/valuehud.png"
 import qrscan from "../../images/qrscan.png";
 import cityFull from "../../images/cityFull.png"
@@ -117,6 +121,8 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   let [scrollX, scrollY] = scroll;
 
+  let [stateAnimation,setStateAnimation] = useState(0);
+
   let [containerRef, { height, width, }] = useDimensions();
   let displayWidth = width
   width = Math.min(MAXWIDTH,width)
@@ -133,7 +139,7 @@ const ScrollingGame = () => {
     setTimeout(()=>{
       console.log("LAGGED ACTION")
       if( scrollX==0 && scrollY==0 ){
-        console.log("SCROLL")
+        console.log("SCROLL AT START IS THIS THE RIGHT WAY? WE NEED TO DETECT IMAGES LOADED")
         console.log("containerRef",containerRef)
         document.getElementById("scrollerThing").scrollTo({
           top: 250,
@@ -141,8 +147,22 @@ const ScrollingGame = () => {
           behavior: 'smooth',
         });
       }
-    },1000)
+    },1500)
   }, []);
+
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter(counter => counter + 1);
+    }, 250);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+
 
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
@@ -172,8 +192,6 @@ const ScrollingGame = () => {
     layerCount = amt;
     return null;
   }
-
-
 
   let denverBackground: React.ReactNode | null = null;
   if(showLOFI){
@@ -357,10 +375,10 @@ const ScrollingGame = () => {
 
   }else{
     sky = (
-      <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
+      <Sky topPos={rangePercent(scrollPercent, -height * 0.3, 0.05)} />
     )
   }
-
+//  <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)}  />
   return (
     <Fragment>
       <Title topPos={height * 0.12 - scrollY / 10}>
@@ -398,7 +416,10 @@ const ScrollingGame = () => {
           width:width,
           height:height*screenRatio,
         }}>
-          <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)} rightPos={0-(displayWidth-width)/2+scrollX/7} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
+
+
+          <img src={pegabuff} style={{zIndex:25,opacity:counter%2?0.1:0.99,position:'absolute',right:0-(displayWidth-width)/2+scrollX/7,top:rangePercent(scrollPercent, height * 0.2, -height * 0.5)}}/>
+          <img src={pegabuff2} style={{zIndex:25,opacity:counter%2?0.99:0.1,position:'absolute',right:0-(displayWidth-width)/2+scrollX/7,top:rangePercent(scrollPercent, height * 0.2, -height * 0.5)}}/>
 
 
           {denverBackground}
@@ -547,8 +568,8 @@ const ScrollingGame = () => {
         <div style={{position:"absolute",top:17,right:68,textAlign:"right"}}>
           HudsonHornet
         </div>
-        <div style={{position:"absolute",top:17,right:10,textAlign:'left',opacity:0.33}}>
-          .buffidao.io
+        <div style={{position:"absolute",top:17,right:8,textAlign:'left',opacity:0.33}}>
+          .buffidao.eth
         </div>
         <div style={{position:"absolute",top:-9,right:18,textAlign:'left'}}>
           <Blockies
@@ -577,6 +598,12 @@ const ScrollingGame = () => {
         </div>
       </div>
 
+      <div style={{opacity:Math.max(0,0.99*(1200-scrollY)/1200), width:"100%",position:"fixed",bottom:0,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
+        <img src={Math.floor(counter)%3!=0?startquesting:startquesting2} style={{width:"100%",filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
+        <div style={{position:"absolute",width:"100%",bottom:14,textAlign:"center",fontSize:16}}>
+          START QUESTING
+        </div>
+      </div>
 
       <UIBar>
         <ScanButton />
