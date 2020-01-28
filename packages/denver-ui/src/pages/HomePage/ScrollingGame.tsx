@@ -1,6 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
+import Blockies from 'react-blockies';
+import QRCode from 'qrcode.react';
 
 import QuestButton from './QuestButton';
 import Layer from './Layer';
@@ -126,6 +128,22 @@ const ScrollingGame = () => {
     showLOFI = LOFI
   }
 
+  useEffect(() => {
+    console.log("INIT",scrollX,scrollY)
+    setTimeout(()=>{
+      console.log("LAGGED ACTION")
+      if( scrollX==0 && scrollY==0 ){
+        console.log("SCROLL")
+        console.log("containerRef",containerRef)
+        document.getElementById("scrollerThing").scrollTo({
+          top: 250,
+          left: 120,
+          behavior: 'smooth',
+        });
+      }
+    },1000)
+  }, []);
+
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
   let totalHeight = height*screenRatio
@@ -157,30 +175,32 @@ const ScrollingGame = () => {
 
 
 
-  let denverBackground = ""
+  let denverBackground
   if(showLOFI){
 
     //console.log("LOFI WIDTH",width)
 
     denverBackground = (
       <Fragment>
-      <Layer
-        index={layerCount++}
-        img={lofiTitle}
-        width={displayWidth}
-        left={0}
-        top={-80}
-        opacity={scrollPercent<50?1:0}
-      />
-      <Layer
-        index={layerCount++}
-        img={lofiBack}
-        width={displayWidth}
-        left={0}
-        top={-80}
-        opacity={scrollPercent>=50?1:0}
-      />
-      {setLayerCount(10)}
+        <Layer
+          index={layerCount++}
+          img={lofiTitle}
+          width={displayWidth}
+          left={0}
+          top={-80}
+          perspective={0}
+          opacity={scrollPercent<50?1:0}
+        />
+        <Layer
+          index={layerCount++}
+          img={lofiBack}
+          width={displayWidth}
+          left={0}
+          top={-80}
+          perspective={0}
+          opacity={scrollPercent>=50?1:0}
+        />
+        {setLayerCount(10)}
       </Fragment>
     )
   }else{
@@ -199,7 +219,7 @@ const ScrollingGame = () => {
     let cityWidth = layerWidth
     let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
     let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
-    let cityPerspective = rangePercent(scrollPercent,layerWidth*0.09,layerWidth*0.2)
+    let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
     let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
     let treesDistance = 0.8 - scrollPercent/100 * 0.2
     let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
@@ -214,7 +234,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={mountainsFiles.undermountains}
-          width={mountainWidth}
+          width={fullLayerWidth}
           left={-width*0.05-layerLeft - scrollX * mountainDistance}
           top={mountainsTop}
           perspective={mountainPerspective}
@@ -223,7 +243,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={mountainsFiles.mountainsFull}
-          width={mountainWidth}
+          width={fullLayerWidth}
           left={-width*0.05-layerLeft - scrollX * mountainDistance}
           top={mountainsTop}
           perspective={mountainPerspective}
@@ -232,7 +252,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={mountainsFiles.overmountains}
-          width={mountainWidth}
+          width={fullLayerWidth}
           left={-width*0.05-layerLeft - scrollX * mountainDistance}
           top={mountainsTop}
           perspective={mountainPerspective}
@@ -332,7 +352,7 @@ const ScrollingGame = () => {
   const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
 
 
-  let sky = ""
+  let sky
   if(showLOFI){
 
   }else{
@@ -343,7 +363,7 @@ const ScrollingGame = () => {
 
   return (
     <Fragment>
-      <Title topPos={height * 0.09 - scrollY / 3}>
+      <Title topPos={height * 0.09 - scrollY / 10}>
         <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
         <div style={{lineHeight: "15pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
       </Title>
@@ -378,6 +398,8 @@ const ScrollingGame = () => {
           width:width,
           height:height*screenRatio,
         }}>
+          <PegaBufficorn scale={Math.max(1.0,1.0*(displayWidth-width)/300)} rightPos={0-(displayWidth-width)/2+scrollX/9} topPos={rangePercent(scrollPercent, height * 0.05, -height * 0.8)} />
+
 
           {denverBackground}
 
@@ -507,6 +529,7 @@ const ScrollingGame = () => {
       </Fixed>
 
       <Scrollable
+        id={"scrollerThing"}
         ref={containerRef}
         onScroll={(e: any) => setScroll([e.target.scrollLeft, e.target.scrollTop])}
       >
@@ -519,10 +542,41 @@ const ScrollingGame = () => {
         }}>
         </div>
       </Scrollable>
+      <div style={{position:"fixed",top:15,right:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
+        <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
+        <div style={{position:"absolute",top:17,right:68,textAlign:"right"}}>
+          HudsonHornet
+        </div>
+        <div style={{position:"absolute",top:17,right:10,textAlign:'left',opacity:0.33}}>
+          .buffidao.io
+        </div>
+        <div style={{position:"absolute",top:-9,right:18,textAlign:'left'}}>
+          <Blockies
+              seed="0x34aa3f359a9d614239015126635ce7732c18fdf3"
+              size={8}
+              scale={3}
+            />
+        </div>
+        <div style={{position:"absolute",top:-9,right:48,textAlign:'left',backgroundColor:"#ffffff",padding:1,height:25}}>
+            <QRCode width={23} height={23} value={"0x34aa3f359a9d614239015126635ce7732c18fdf3"} renderAs="svg"/>
+        </div>
 
-      <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:15,right:0}}></img>
-      <img src={xpmeter} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:69,right:0}}></img>
-      <img src={valuehud} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:10,left:0}}></img>
+      </div>
+
+      <div style={{position:"fixed",top:10,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
+        <img src={valuehud} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
+        <div style={{position:"absolute",top:15,right:72,textAlign:"right",fontSize:16}}>
+          $100.00
+        </div>
+      </div>
+
+      <div style={{position:"fixed",top:69,right:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
+        <img src={xpmeter} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
+        <div style={{position:"absolute",top:26,right:38,textAlign:"right",fontSize:14}}>
+          345615
+        </div>
+      </div>
+
 
       <UIBar>
         <ScanButton />
@@ -530,5 +584,10 @@ const ScrollingGame = () => {
     </Fragment>
   );
 };
+
+const HUD = styled.div`
+
+  background-color:#FF0000;
+`;
 
 export default ScrollingGame;
