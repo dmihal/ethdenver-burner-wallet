@@ -157,7 +157,7 @@ const ScrollingGame = () => {
 
 
 
-  let denverBackground = ""
+  let denverBackground: React.ReactNode | null = null;
   if(showLOFI){
 
     //console.log("LOFI WIDTH",width)
@@ -332,7 +332,7 @@ const ScrollingGame = () => {
   const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
 
 
-  let sky = ""
+  let sky: React.ReactNode | null = null;
   if(showLOFI){
 
   }else{

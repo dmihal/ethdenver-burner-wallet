@@ -5,7 +5,6 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
 import DenverUI from 'denver-ui';
-import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
@@ -47,10 +46,11 @@ const core = new BurnerCore({
 const BurnerWallet = () =>
   <DenverUI
     title="ETHDenver"
+    // @ts-ignore
     core={core}
     plugins={[
       new FortmaticPlugin(),
-      new TestHelpersPlugin(),
+      // new TestHelpersPlugin(),
       // new BurnableENSSubdomainPlugin('myburner.eth'),
       // new ThreeBoxEditProfilePlugin(),
       // new ContractWalletPlugin(),

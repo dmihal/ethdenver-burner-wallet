@@ -6,14 +6,14 @@ interface LayerProps {
   width: number;
   left: number;
   top: number;
-  perspective: number;
+  perspective?: number;
   opacity?: number;
   scaleY?: number;
   brightness?: number;
 }
 
 const Layer: React.FC<LayerProps> = ({
-  index, img, width, left, top, perspective, opacity = 0.99, scaleY = 1.0, brightness = 100, children
+  index, img, width, left, top, perspective=0, opacity = 0.99, scaleY = 1.0, brightness = 100, children
 }) => {
   const _opacity = opacity >= 1 ? 0.99 : opacity;
 
