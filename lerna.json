@@ -1,6 +1,7 @@
 {
   "packages": [
     "basic-wallet",
+    "contracts",
     "local-wallet",
     "test-wallet",
     "packages/*"

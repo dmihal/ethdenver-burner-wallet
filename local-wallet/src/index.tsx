@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { NativeAsset, ERC20Asset } from '@burner-wallet/assets';
+import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { HTTPGateway } from '@burner-wallet/core/gateways';
@@ -11,6 +11,7 @@ import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import TestHelpersPlugin from 'test-helpers-plugin';
 
 const core = new BurnerCore({
   signers: [
@@ -25,10 +26,15 @@ const core = new BurnerCore({
   assets: [
     new ERC20Asset({
       id: 'localerc20',
-      name: 'Local Token',
+      name: 'BuffiDai',
       network: '5777',
-      // @ts-ignore
-      address: process.env.REACT_APP_ERC20_ADDRESS,
+      address: process.env.REACT_APP_ERC20_ADDRESS!,
+    }),
+    new ERC777Asset({
+      id: 'xp',
+      name: 'XP',
+      network: '5777',
+      address: process.env.REACT_APP_XP_ADDRESS!,
     }),
     new NativeAsset({
       id: 'geth',
@@ -43,9 +49,11 @@ const BurnerWallet = () =>
     title="ETHDenver"
     core={core}
     plugins={[
-      new BurnableENSSubdomainPlugin('myburner.eth'),
       new FortmaticPlugin(),
-      new ContractWalletPlugin(),
+      new TestHelpersPlugin(),
+      // new BurnableENSSubdomainPlugin('myburner.eth'),
+      // new ThreeBoxEditProfilePlugin(),
+      // new ContractWalletPlugin(),
     ]}
   />
 

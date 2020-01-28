@@ -3,19 +3,22 @@ import ReactDOM from 'react-dom';
 import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
-import { InfuraGateway, InjectedGateway, XDaiGateway } from '@burner-wallet/core/gateways';
+import { InfuraGateway, InjectedGateway, XDaiGateway, GSNGateway } from '@burner-wallet/core/gateways';
+import ENSPlugin from '@burner-wallet/ens-plugin';
 import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import DenverUI from 'denver-ui';
+import BurnableENSPlugin from '@burner-factory/burnable-ens-plugin';
 import CollectablePlugin from '@burner-factory/collectable-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
-import BurnableENSSubdomainPlugin from 'burnable-ens-subdomain-plugin';
+
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import TestHelpersPlugin from 'test-helpers-plugin';
 
 
 const buff = new ERC777Asset({
@@ -24,6 +27,13 @@ const buff = new ERC777Asset({
   network: '42',
   address: '0x78D7ac51Ea53aF5E98EDe66DF28Ccb2f9BE59CE1',
   icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
+});
+
+const xp = new ERC777Asset({
+  id: 'xp',
+  name: 'XP',
+  network: '42',
+  address: '0xda0067da015674083dcad4e4431c00c273828fe5',
 });
 
 const keth = new NativeAsset({
@@ -42,12 +52,13 @@ const kdai = new ERC20Asset({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
-    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
+    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!, { gasMultiplier: 1.4 }),
     new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),
     new LocalSigner(),
   ],
   gateways: [
+    new GSNGateway(),
     new InjectedGateway(),
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
@@ -62,16 +73,23 @@ const exchange = new Exchange({
 const BurnerWallet = () =>
   <DenverUI
     title="ETHDenver"
+    // @ts-ignore
     core={core}
     plugins={[
       exchange,
-      new BurnableENSSubdomainPlugin('myburner.eth'),
+      new BurnableENSPlugin({
+        domain: 'myburner.test',
+        tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
+        network: '5',
+      }),
+      new ENSPlugin('5'),
       new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
       new SchedulePlugin(schedule),
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
+      new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
     ]}
   />
 

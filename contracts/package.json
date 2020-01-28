@@ -1,0 +1,12 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.4",
+    "@truffle/hdwallet-provider": "^1.0.29",
+    "dotenv": "^8.2.0",
+    "openzeppelin-solidity": "^2.4.0"
+  }
+}
