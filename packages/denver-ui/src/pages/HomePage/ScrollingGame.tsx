@@ -558,7 +558,7 @@ const ScrollingGame = () => {
             />
         </div>
         <div style={{position:"absolute",top:-9,right:48,textAlign:'left',backgroundColor:"#ffffff",padding:1,height:25}}>
-            <QRCode width={23} height={23} value={"0x34aa3f359a9d614239015126635ce7732c18fdf3"} renderAs="svg"/>
+            <QRCode size={23} value={"0x34aa3f359a9d614239015126635ce7732c18fdf3"} renderAs="svg"/>
         </div>
 
       </div>
