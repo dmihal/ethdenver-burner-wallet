@@ -21,8 +21,8 @@ import castleFiles from '../../images/castle';
 import lofiTitle from '../../images/lofi_title.png';
 import lofiBack from '../../images/lofi_back.png';
 
-
-const LOFI = true;
+const MAXWIDTH = 600;//put this *2 in Template.tsx   max-width
+const LOFI = false;
 
 const SHOWOWOCKI = false
 const SHOWBOUNTIES = false
@@ -114,7 +114,16 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   let [scrollX, scrollY] = scroll;
 
-  const [containerRef, { height, width, }] = useDimensions();
+  let [containerRef, { height, width, }] = useDimensions();
+  let displayWidth = width
+  width = Math.min(500,width)
+  console.log("displayWidth",displayWidth,"width",width)
+  let showLOFI
+  if(displayWidth>height){
+    showLOFI = true
+  }else{
+    showLOFI = LOFI
+  }
 
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
@@ -139,8 +148,6 @@ const ScrollingGame = () => {
   let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
 
 
-
-
   let layerCount = 1
   const setLayerCount = (amt: number) => {
     layerCount = amt;
@@ -150,14 +157,16 @@ const ScrollingGame = () => {
 
 
   let denverBackground = ""
-  if(LOFI){
+  if(showLOFI){
+
+    console.log("LOFI WIDTH",width)
 
     denverBackground = (
       <Fragment>
       <Layer
         index={layerCount++}
         img={lofiTitle}
-        width={width}
+        width={displayWidth}
         left={0}
         top={-80}
         opacity={scrollPercent<50?1:0}
@@ -165,7 +174,7 @@ const ScrollingGame = () => {
       <Layer
         index={layerCount++}
         img={lofiBack}
-        width={width}
+        width={displayWidth}
         left={0}
         top={-80}
         opacity={scrollPercent>=50?1:0}
@@ -174,8 +183,8 @@ const ScrollingGame = () => {
       </Fragment>
     )
   }else{
-
-    let mountainWidth = rangePercent(scrollPercent,width*1.6,width*1.1)
+    let fullLayerWidth = rangePercent(scrollPercent,displayWidth*2,displayWidth*1.1)
+    let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
     let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
     let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
     const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
@@ -227,7 +236,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={mountainsFiles.foothills}
-          width={layerWidth}
+          width={fullLayerWidth}
           left={-width*0.05-layerLeft - scrollX * foothillsDistance}
           top={foothillsTop}
           perspective={foothillsPerspective}
@@ -239,7 +248,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={cityFull}
-          width={cityWidth}
+          width={fullLayerWidth}
           left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
           top={cityTop}
           perspective={cityPerspective}
@@ -250,7 +259,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={trees}
-          width={layerWidth}
+          width={fullLayerWidth}
           left={rangePercent(scrollPercent, cityOffset-cityLeft-treesDistance*scrollX, -cityLeft)}
           top={treesTop}
           perspective={treesPerspective}
@@ -318,7 +327,7 @@ const ScrollingGame = () => {
 
 
   let sky = ""
-  if(LOFI){
+  if(showLOFI){
 
   }else{
     sky = (
@@ -335,7 +344,7 @@ const ScrollingGame = () => {
 
       <Fixed style={{
         height: (height*screenRatio)-scrollY,
-        width: Math.min(700,(width-1)*1.8),
+        width: Math.min(displayWidth,(width-1)*1.8),
       }}>
         {sky}
 
