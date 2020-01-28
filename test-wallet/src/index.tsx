@@ -16,6 +16,7 @@ import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import TestHelpersPlugin from 'test-helpers-plugin';
 
 
 const buff = new ERC777Asset({
@@ -24,6 +25,13 @@ const buff = new ERC777Asset({
   network: '42',
   address: '0x78D7ac51Ea53aF5E98EDe66DF28Ccb2f9BE59CE1',
   icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
+});
+
+const xp = new ERC777Asset({
+  id: 'xp',
+  name: 'XP',
+  network: '42',
+  address: '0xda0067da015674083dcad4e4431c00c273828fe5',
 });
 
 const keth = new NativeAsset({
@@ -72,6 +80,7 @@ const BurnerWallet = () =>
       new SchedulePlugin(schedule),
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
+      new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
     ]}
   />
 
