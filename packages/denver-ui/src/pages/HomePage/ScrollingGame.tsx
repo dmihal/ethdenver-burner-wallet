@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
-import Blockies from 'react-blockies';
 import QRCode from 'qrcode.react';
 
 import QuestButton from './QuestButton';
 import Layer from './Layer';
 import StartButton from './StartButton';
-
+import Blockies from 'react-blockies';
 //import PegaBufficorn from './PegaBufficorn';
 import pegabuff from '../../images/pegabufficorn.png';
 import pegabuff2 from '../../images/pegabufficorn2.png';
@@ -16,6 +15,7 @@ import xpmeter from "../../images/xpmeter.png"
 import startquesting from "../../images/startquesting.png"
 import startquesting2 from "../../images/startquesting2.png"
 import valuehud from "../../images/valuehud.png"
+import HUD from './HUD';
 import qrscan from "../../images/qrscan.png";
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
@@ -605,16 +605,13 @@ const ScrollingGame = () => {
         </div>
       </div>
 
+      <HUD />
+
       <UIBar>
         <ScanButton />
       </UIBar>
     </Fragment>
   );
 };
-
-const HUD = styled.div`
-
-  background-color:#FF0000;
-`;
 
 export default ScrollingGame;
