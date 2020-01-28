@@ -9,7 +9,7 @@ function useWindowSize() {
     function updateSize() {
       setSize([
         // @ts-ignore
-        Math.min(900, window.clientWidth || window.innerWidth),
+        window.clientWidth || window.innerWidth,
         // @ts-ignore
         window.clientHeight || window.innerHeight
       ]);

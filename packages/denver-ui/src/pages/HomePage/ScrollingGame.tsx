@@ -18,8 +18,14 @@ import trees from "../../images/trees.png"
 import mountainsFiles from '../../images/mountains';
 import castleFiles from '../../images/castle';
 
-//console.log("CORES",navigator)
-//alert(navigator.hardwareConcurrency)
+import lofiTitle from '../../images/lofi_title.png';
+import lofiBack from '../../images/lofi_back.png';
+
+
+const LOFI = true;
+
+const SHOWOWOCKI = false
+const SHOWBOUNTIES = false
 
 const UIBar = styled.div`
   position: fixed;
@@ -50,9 +56,6 @@ const Fixed = styled.div`
   overflow: hidden;
 `;
 
-const STARTLOGGEDIN = true
-const SHOWOWOCKI = false
-const SHOWBOUNTIES = false
 
 
 const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
@@ -111,10 +114,6 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   let [scrollX, scrollY] = scroll;
 
-
-  const [openedBuilding, setOpenedBuilding] = useState(STARTLOGGEDIN);
-  const [loggedIn, setLoggedIn] = useState(STARTLOGGEDIN);
-
   const [containerRef, { height, width, }] = useDimensions();
 
   const screenRatio = 7/1
@@ -140,9 +139,7 @@ const ScrollingGame = () => {
   let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
 
 
-  let mountainWidth = rangePercent(scrollPercent,width*1.6,width*1.1)
-  let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
-  let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
+
 
   let layerCount = 1
   const setLayerCount = (amt: number) => {
@@ -150,28 +147,120 @@ const ScrollingGame = () => {
     return null;
   }
 
-  const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
-  const mountainDistance = 0.08 - scrollPercent/100 * 0.08
 
-  let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
 
-  let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
-  let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
+  let denverBackground = ""
+  if(LOFI){
 
-  let cityDistance = 0.6 - scrollPercent/100 * 0.3
+    denverBackground = (
+      <Fragment>
+      <Layer
+        index={layerCount++}
+        img={lofiTitle}
+        width={width}
+        left={0}
+        top={-80}
+        opacity={scrollPercent<50?1:0}
+      />
+      <Layer
+        index={layerCount++}
+        img={lofiBack}
+        width={width}
+        left={0}
+        top={-80}
+        opacity={scrollPercent>=50?1:0}
+      />
+      {setLayerCount(10)}
+      </Fragment>
+    )
+  }else{
 
-  let cityWidth = layerWidth
+    let mountainWidth = rangePercent(scrollPercent,width*1.6,width*1.1)
+    let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
+    let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
+    const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
+    const mountainDistance = 0.08 - scrollPercent/100 * 0.08
+    let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
+    let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
+    let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
+    let cityDistance = 0.6 - scrollPercent/100 * 0.3
+    let cityWidth = layerWidth
+    let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
+    let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
+    let cityPerspective = rangePercent(scrollPercent,layerWidth*0.09,layerWidth*0.2)
+    let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
+    let treesDistance = 0.8 - scrollPercent/100 * 0.2
+    let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
+    let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
 
-  let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
-  let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
 
-  let cityPerspective = rangePercent(scrollPercent,layerWidth*0.09,layerWidth*0.2)
-  let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
+    denverBackground = (
+      <Fragment>
+        <Layer
+          index={layerCount++}
+          img={mountainsFiles.undermountains}
+          width={mountainWidth}
+          left={-width*0.05-layerLeft - scrollX * mountainDistance}
+          top={mountainsTop}
+          perspective={mountainPerspective}
+          opacity={rangePercent(scrollPercent,0.99,0.00)}
+        />
+        <Layer
+          index={layerCount++}
+          img={mountainsFiles.mountainsFull}
+          width={mountainWidth}
+          left={-width*0.05-layerLeft - scrollX * mountainDistance}
+          top={mountainsTop}
+          perspective={mountainPerspective}
+          opacity={rangePercent(scrollPercent,0.99,0.1)}
+        />
+        <Layer
+          index={layerCount++}
+          img={mountainsFiles.overmountains}
+          width={mountainWidth}
+          left={-width*0.05-layerLeft - scrollX * mountainDistance}
+          top={mountainsTop}
+          perspective={mountainPerspective}
+          opacity={mountainOverOpacity}
+        />
 
-  let treesDistance = 0.8 - scrollPercent/100 * 0.2
+        <Layer
+          index={layerCount++}
+          img={mountainsFiles.foothills}
+          width={layerWidth}
+          left={-width*0.05-layerLeft - scrollX * foothillsDistance}
+          top={foothillsTop}
+          perspective={foothillsPerspective}
+          brightness={rangePercent(scrollPercent,100,50)}
+        />
 
-  let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
-  let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
+        {setLayerCount(10)}
+
+        <Layer
+          index={layerCount++}
+          img={cityFull}
+          width={cityWidth}
+          left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
+          top={cityTop}
+          perspective={cityPerspective}
+          scaleY={rangePercent(scrollPercent,1.2,0.8)}
+          brightness={rangePercent(scrollPercent,100,70)}
+        />
+
+        <Layer
+          index={layerCount++}
+          img={trees}
+          width={layerWidth}
+          left={rangePercent(scrollPercent, cityOffset-cityLeft-treesDistance*scrollX, -cityLeft)}
+          top={treesTop}
+          perspective={treesPerspective}
+          scaleY={0.88}
+          brightness={rangePercent(scrollPercent, 100, 20)}
+        />
+
+      </Fragment>
+    )
+  }
 
   const sidewalkPerspective = rangePercent(scrollPercent*1.2,layerWidth*0.15,layerWidth)
 
@@ -193,7 +282,7 @@ const ScrollingGame = () => {
 
 
 
-  if(loggedIn && sidewalkBottom < height*0.3){
+  if(sidewalkBottom < height*0.3){
     exploded = true
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
@@ -227,6 +316,16 @@ const ScrollingGame = () => {
   const castleOffset = 0.2
   const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
 
+
+  let sky = ""
+  if(LOFI){
+
+  }else{
+    sky = (
+      <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
+    )
+  }
+
   return (
     <Fragment>
       <Title topPos={height * 0.09 - scrollY / 3}>
@@ -235,14 +334,12 @@ const ScrollingGame = () => {
       </Title>
 
       <Fixed style={{
-        height: (!loggedIn ? height*2 : height*screenRatio)-scrollY,
+        height: (height*screenRatio)-scrollY,
         width: Math.min(700,(width-1)*1.8),
       }}>
+        {sky}
 
-        <Sky topPos={rangePercent(scrollPercent, -height * 0.2, 0)} />
-
-
-        {!loggedIn && (
+        {/*!loggedIn && (
           <StartButton
             scrollX={scrollX}
             height={height}
@@ -258,7 +355,7 @@ const ScrollingGame = () => {
               }, 30);
             }}
           />
-        )}
+        )*/}
 
         <div style={{
           position:"absolute",
@@ -267,67 +364,7 @@ const ScrollingGame = () => {
           height:height*screenRatio,
         }}>
 
-          <Layer
-            index={layerCount++}
-            img={mountainsFiles.undermountains}
-            width={mountainWidth}
-            left={-width*0.05-layerLeft - scrollX * mountainDistance}
-            top={mountainsTop}
-            perspective={mountainPerspective}
-            opacity={rangePercent(scrollPercent,0.99,0.00)}
-          />
-          <Layer
-            index={layerCount++}
-            img={mountainsFiles.mountainsFull}
-            width={mountainWidth}
-            left={-width*0.05-layerLeft - scrollX * mountainDistance}
-            top={mountainsTop}
-            perspective={mountainPerspective}
-            opacity={rangePercent(scrollPercent,0.99,0.1)}
-          />
-          <Layer
-            index={layerCount++}
-            img={mountainsFiles.overmountains}
-            width={mountainWidth}
-            left={-width*0.05-layerLeft - scrollX * mountainDistance}
-            top={mountainsTop}
-            perspective={mountainPerspective}
-            opacity={mountainOverOpacity}
-          />
-
-          <Layer
-            index={layerCount++}
-            img={mountainsFiles.foothills}
-            width={layerWidth}
-            left={-width*0.05-layerLeft - scrollX * foothillsDistance}
-            top={foothillsTop}
-            perspective={foothillsPerspective}
-            brightness={rangePercent(scrollPercent,100,50)}
-          />
-
-          {setLayerCount(10)}
-
-          <Layer
-            index={layerCount++}
-            img={cityFull}
-            width={cityWidth}
-            left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
-            top={cityTop}
-            perspective={cityPerspective}
-            scaleY={rangePercent(scrollPercent,1.2,0.8)}
-            brightness={rangePercent(scrollPercent,100,70)}
-          />
-
-          <Layer
-            index={layerCount++}
-            img={trees}
-            width={layerWidth}
-            left={rangePercent(scrollPercent, cityOffset-cityLeft-treesDistance*scrollX, -cityLeft)}
-            top={treesTop}
-            perspective={treesPerspective}
-            scaleY={0.88}
-            brightness={rangePercent(scrollPercent, 100, 20)}
-          />
+          {denverBackground}
 
           <Layer
             index={layerCount++}
@@ -349,7 +386,7 @@ const ScrollingGame = () => {
             perspective={sidewalkPerspective}
           />
 
-          {!openedBuilding || !exploded ? (
+          {!exploded ? (
             <Layer
               index={layerCount++}
               img={castleFiles.floor1_preview}
@@ -463,12 +500,10 @@ const ScrollingGame = () => {
           position:"absolute",
           width:width*2,
           overflow:"hidden",
-          height: (!loggedIn ? height*2 : height*screenRatio),
+          height: (height*screenRatio),
         }}>
         </div>
       </Scrollable>
-
-
 
       <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:15,right:0}}></img>
       <img src={xpmeter} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1,position:"fixed",top:69,right:0}}></img>
