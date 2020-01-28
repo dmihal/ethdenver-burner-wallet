@@ -26,10 +26,10 @@ const OverlayAccount = () => {
   return (
     <div style={{fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
       <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-      <div style={{position:"absolute",top:17,right:68,textAlign:"right"}}>
+      <div style={{position:"absolute",top:18,right:68,textAlign:"right"}}>
         HudsonHornet
       </div>
-      <div style={{position:"absolute",top:17,right:10,textAlign:'left',opacity:0.33}}>
+      <div style={{position:"absolute",top:18,right:10,textAlign:'left',opacity:0.33}}>
         .buffidao.io
       </div>
       <QRContainer>

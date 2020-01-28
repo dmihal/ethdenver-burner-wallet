@@ -563,40 +563,6 @@ const ScrollingGame = () => {
         }}>
         </div>
       </Scrollable>
-      <div style={{position:"fixed",top:15,right:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
-        <img src={profile} style={{maxWidth:180,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-        <div style={{position:"absolute",top:17,right:68,textAlign:"right"}}>
-          HudsonHornet
-        </div>
-        <div style={{position:"absolute",top:17,right:8,textAlign:'left',opacity:0.33}}>
-          .buffidao.eth
-        </div>
-        <div style={{position:"absolute",top:-9,right:18,textAlign:'left'}}>
-          <Blockies
-              seed="0x34aa3f359a9d614239015126635ce7732c18fdf3"
-              size={8}
-              scale={3}
-            />
-        </div>
-        <div style={{position:"absolute",top:-9,right:48,textAlign:'left',backgroundColor:"#ffffff",padding:1,height:25}}>
-            <QRCode size={23} value={"0x34aa3f359a9d614239015126635ce7732c18fdf3"} renderAs="svg"/>
-        </div>
-
-      </div>
-
-      <div style={{position:"fixed",top:10,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
-        <img src={valuehud} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-        <div style={{position:"absolute",top:15,right:72,textAlign:"right",fontSize:16}}>
-          $100.00
-        </div>
-      </div>
-
-      <div style={{position:"fixed",top:69,right:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
-        <img src={xpmeter} style={{maxWidth:130,filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-        <div style={{position:"absolute",top:26,right:38,textAlign:"right",fontSize:14}}>
-          345615
-        </div>
-      </div>
 
       <div style={{opacity:Math.max(0,0.99*(1200-scrollY)/1200), width:"100%",position:"fixed",bottom:0,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
         <img src={Math.floor(counter)%3!=0?startquesting:startquesting2} style={{width:"100%",filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
