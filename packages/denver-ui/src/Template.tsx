@@ -14,7 +14,7 @@ const defaultTheme = {
 
 const Container = styled.div`
   min-height: 100%;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

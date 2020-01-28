@@ -21,7 +21,7 @@ import castleFiles from '../../images/castle';
 import lofiTitle from '../../images/lofi_title.png';
 import lofiBack from '../../images/lofi_back.png';
 
-const MAXWIDTH = 600;//put this *2 in Template.tsx   max-width
+const MAXWIDTH = 500;//put this *2 in Template.tsx   max-width
 const LOFI = false;
 
 const SHOWOWOCKI = false
@@ -62,6 +62,7 @@ const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   style: ({ boxWidth }) => ({
     left: boxWidth * 1.1 + 'px',
     height: boxWidth * 0.9 + 'px',
+    width:"95%"
   }),
 })<{ boxWidth: number }>`
   z-index: 999;
@@ -116,8 +117,8 @@ const ScrollingGame = () => {
 
   let [containerRef, { height, width, }] = useDimensions();
   let displayWidth = width
-  width = Math.min(500,width)
-  console.log("displayWidth",displayWidth,"width",width)
+  width = Math.min(MAXWIDTH,width)
+  //console.log("displayWidth",displayWidth,"width",width)
   let showLOFI
   if(displayWidth>height){
     showLOFI = true
@@ -136,7 +137,7 @@ const ScrollingGame = () => {
   if(!scrollPercent) scrollPercent = 0
   scrollPercent = Math.max(scrollPercent,0)
   scrollPercent = Math.min(scrollPercent,100)
-  console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
+  //console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
 
   const rangePercent = (percent,finish,start) => {
     return ((start-finish)*(percent/100))+finish
@@ -159,7 +160,7 @@ const ScrollingGame = () => {
   let denverBackground = ""
   if(showLOFI){
 
-    console.log("LOFI WIDTH",width)
+    //console.log("LOFI WIDTH",width)
 
     denverBackground = (
       <Fragment>
@@ -184,6 +185,8 @@ const ScrollingGame = () => {
     )
   }else{
     let fullLayerWidth = rangePercent(scrollPercent,displayWidth*2,displayWidth*1.1)
+    fullLayerWidth = Math.min(fullLayerWidth,1200)
+
     let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
     let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
     let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
@@ -201,6 +204,9 @@ const ScrollingGame = () => {
     let treesDistance = 0.8 - scrollPercent/100 * 0.2
     let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
     let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
+
+
+
 
 
     denverBackground = (
