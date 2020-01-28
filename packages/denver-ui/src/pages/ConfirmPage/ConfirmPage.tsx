@@ -6,7 +6,17 @@ import Button from '../../components/Button';
 import Page from '../../components/Page';
 import LineItem from '../../components/LineItem';
 
-const ConfirmPage: React.FC<BurnerContext & RouteComponentProps> = ({
+export interface ConfirmState {
+  to: string;
+  from: string;
+  ether?: string;
+  value?: string;
+  asset: string;
+  message?: string | null;
+  id: any;
+}
+
+const ConfirmPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, ConfirmState>> = ({
   history, assets, actions, pluginData, t
 }) => {
   const [sending, setSending] = useState(false);

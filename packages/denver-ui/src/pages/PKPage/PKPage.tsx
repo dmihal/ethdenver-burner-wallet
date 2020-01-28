@@ -29,7 +29,11 @@ const moveAll = async (assets: Asset[], sender: string, recipient: string) => {
   }
 };
 
-const PKPage: React.FC<BurnerContext & RouteComponentProps> = ({ history, assets, actions, defaultAccount }) => {
+export interface PKPageState {
+  newPK?: string;
+}
+
+const PKPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, PKPageState>> = ({ history, assets, actions, defaultAccount }) => {
   const getPK = () => {
     if (window.location.hash.length > 1) {
       const hash = window.location.hash.substr(1);

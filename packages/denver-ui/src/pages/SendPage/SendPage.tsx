@@ -126,7 +126,11 @@ const MessageField = styled.div`
 
 const { AccountBalance } = DataProviders;
 
-type SendPageProps = BurnerContext & RouteComponentProps<{ to?: string }>;
+export interface SendPageState {
+  to?: string;
+}
+
+type SendPageProps = BurnerContext & RouteComponentProps<{}, {}, SendPageState>;
 
 const SendPage: React.FC<SendPageProps> = ({ actions, assets, location, t }) => {
   const [to, setTo] = useState(location.state && location.state.to || '');
