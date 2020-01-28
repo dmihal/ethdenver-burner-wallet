@@ -22,8 +22,9 @@ export default class FortmaticSigner extends Signer {
     return this.isLoggedIn;
   }
 
-  signTx(tx: any): Promise<string> {
-    throw new Error('Not implemented');
+  async signTx(tx: any): Promise<any> {
+    const signedTransaction = await this.web3.eth.signTransaction(tx);
+    return { ...tx, signedTransaction };
   }
 
   // @ts-ignore
