@@ -31,6 +31,7 @@
     "clipboard": "^2.0.4",
     "ethereumjs-util": "^6.1.0",
     "qrcode.react": "^0.9.3",
+    "react-blockies": "^1.4.1",
     "react-qr-reader": "^2.2.1",
     "react-use-dimensions": "^1.2.1",
     "styled-components": "^4.4.0"
