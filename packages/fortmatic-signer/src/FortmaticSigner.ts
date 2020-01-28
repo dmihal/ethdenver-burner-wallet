@@ -41,7 +41,7 @@ export default class FortmaticSigner extends Signer {
       case 'enable':
         return this.enable();
       case 'logout':
-        return this.fortmatic.user.logout();
+        return this.fortmatic.user.logout().then(() => this.updateAccounts());
       case 'user':
         return this.fortmatic.user.getUser();
       default:
