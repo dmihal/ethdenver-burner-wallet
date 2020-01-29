@@ -205,7 +205,7 @@ const ScrollingGame = () => {
           img={lofiTitle}
           width={displayWidth}
           left={0}
-          top={-80}
+          top={-100}
           perspective={0}
           opacity={scrollPercent<50?1:0}
         />
@@ -214,7 +214,7 @@ const ScrollingGame = () => {
           img={lofiBack}
           width={displayWidth}
           left={0}
-          top={-80}
+          top={-100}
           perspective={0}
           opacity={scrollPercent>=50?1:0}
         />
@@ -564,9 +564,9 @@ const ScrollingGame = () => {
         </div>
       </Scrollable>
 
-      <div style={{opacity:Math.max(0,0.99*(1200-scrollY)/1200), width:"100%",position:"fixed",bottom:0,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-1,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
+      <div style={{opacity:Math.max(0,0.99*(1200-scrollY)/1200), width:"100%",position:"fixed",bottom:0,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.5,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
         <img src={Math.floor(counter)%3!=0?startquesting:startquesting2} style={{width:"100%",filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-        <div style={{position:"absolute",width:"100%",bottom:14,textAlign:"center",fontSize:16}}>
+        <div style={{position:"absolute",width:"100%",bottom:20,textAlign:"center",fontSize:16}}>
           START QUESTING
         </div>
       </div>
