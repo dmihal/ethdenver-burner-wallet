@@ -24,7 +24,7 @@ const core = new BurnerCore({
   ],
   assets: [
     new ERC20Asset({
-      id: 'localerc20',
+      id: 'buffidai',
       name: 'BuffiDai',
       network: '5777',
       address: process.env.REACT_APP_ERC20_ADDRESS!,
@@ -50,6 +50,7 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       new FortmaticPlugin(),
+      new ContractWalletPlugin(),
       // new TestHelpersPlugin(),
       // new BurnableENSSubdomainPlugin('myburner.eth'),
       // new ThreeBoxEditProfilePlugin(),
