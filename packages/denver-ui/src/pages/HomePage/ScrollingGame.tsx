@@ -16,7 +16,6 @@ import startquesting from "../../images/startquesting.png"
 import startquesting2 from "../../images/startquesting2.png"
 import valuehud from "../../images/valuehud.png"
 import HUD from './HUD';
-import qrscan from "../../images/qrscan.png";
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
 import trees from "../../images/trees.png"
@@ -33,24 +32,6 @@ const LOFI = false;
 const SHOWOWOCKI = false
 const SHOWBOUNTIES = false
 
-const UIBar = styled.div`
-  position: fixed;
-  right: -5px;
-  bottom: -5px;
-  z-index: 999;
-`;
-
-const ScanButton = styled.button`
-  height: 100px;
-  width: 100px;
-  border-radius: 100px;
-  box-shadow: 0px 0px 4px #222222;
-  background-image: url(${qrscan}), linear-gradient(#b75fac, #a24c97);
-  margin: 0 auto;
-  display: block;
-  background-size: 90%;
-  background-position: center;
-`;
 const Scrollable = styled.div`
   overflow: scroll;
   flex: 1;
@@ -572,10 +553,6 @@ const ScrollingGame = () => {
       </div>
 
       <HUD />
-
-      <UIBar>
-        <ScanButton />
-      </UIBar>
     </Fragment>
   );
 };
