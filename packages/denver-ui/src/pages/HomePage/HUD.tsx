@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
 import OverlayBuffidai from './OverlayBuffidai';
 import OverlayXP from './OverlayXP';
+import SideMenu from './SideMenu';
 import qrscan from "../../images/qrscan.png";
 
 const OuterContainer = styled.div`
@@ -49,12 +50,17 @@ const ScanButton = styled.button`
 `;
 
 const HUD: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const { actions } = useBurner();
   return (
       <OuterContainer>
         <InnerContainer>
           <Overlay top={24} side="left">
             <OverlayBuffidai />
+          </Overlay>
+
+          <Overlay top={100} side="left" style={{ zIndex: 170 }}>
+            <button onClick={() => setMenuOpen(!menuOpen)}>Menu</button>
           </Overlay>
 
           <Overlay top={24} side="right">
@@ -65,6 +71,7 @@ const HUD: React.FC = () => {
             <OverlayXP />
           </Overlay>
 
+          <SideMenu isOpen={menuOpen} />
 
           <UIBar>
             <ScanButton onClick={() => actions.openDefaultQRScanner()} />
