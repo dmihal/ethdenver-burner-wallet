@@ -2,20 +2,18 @@ import React, { useState, useEffect, useRef, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
 import QRCode from 'qrcode.react';
+import Blockies from 'react-blockies';
 
 import QuestButton from './QuestButton';
 import Layer from './Layer';
 import StartButton from './StartButton';
-import Blockies from 'react-blockies';
-//import PegaBufficorn from './PegaBufficorn';
-import pegabuff from '../../images/pegabufficorn.png';
-import pegabuff2 from '../../images/pegabufficorn2.png';
+import PegaBufficorn2 from './PegaBufficorn2';
+import StartQuesting from './StartQuesting';
+import HUD from './HUD';
+
 import profile from "../../images/profile.png"
 import xpmeter from "../../images/xpmeter.png"
-import startquesting from "../../images/startquesting.png"
-import startquesting2 from "../../images/startquesting2.png"
 import valuehud from "../../images/valuehud.png"
-import HUD from './HUD';
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
 import trees from "../../images/trees.png"
@@ -130,20 +128,6 @@ const ScrollingGame = () => {
       }
     },1500)
   }, []);
-
-  const [counter, setCounter] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCounter(counter => counter + 1);
-    }, 250);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-
 
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
@@ -399,9 +383,7 @@ const ScrollingGame = () => {
         }}>
 
 
-          <img src={pegabuff} style={{zIndex:25,opacity:counter%2?0.1:0.99,position:'absolute',right:0-(displayWidth-width)/2+scrollX/7,top:rangePercent(scrollPercent, height * 0.2, -height * 0.5)}}/>
-          <img src={pegabuff2} style={{zIndex:25,opacity:counter%2?0.99:0.1,position:'absolute',right:0-(displayWidth-width)/2+scrollX/7,top:rangePercent(scrollPercent, height * 0.2, -height * 0.5)}}/>
-
+          <PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
 
           {denverBackground}
 
@@ -545,12 +527,7 @@ const ScrollingGame = () => {
         </div>
       </Scrollable>
 
-      <div style={{opacity:Math.max(0,0.99*(1200-scrollY)/1200), width:"100%",position:"fixed",bottom:0,left:0,fontSize:13,color:"#DDDDDD",letterSpacing:-0.5,fontFamily:"'Squada One', Impact, Arial, Helvetica, sans-serif"}}>
-        <img src={Math.floor(counter)%3!=0?startquesting:startquesting2} style={{width:"100%",filter:"drop-shadow(0px 0px 4px #222222)",zIndex:1}}></img>
-        <div style={{position:"absolute",width:"100%",bottom:20,textAlign:"center",fontSize:16}}>
-          START QUESTING
-        </div>
-      </div>
+      <StartQuesting opacity={Math.max(0, 0.99*(1200-scrollY)/1200)} />
 
       <HUD />
     </Fragment>
