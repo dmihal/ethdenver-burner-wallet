@@ -8,7 +8,7 @@ import QuestButton from './QuestButton';
 import Layer from './Layer';
 import StartButton from './StartButton';
 import PegaBufficorn2 from './PegaBufficorn2';
-import StartQuesting from './StartQuesting';
+
 import HUD from './HUD';
 
 import profile from "../../images/profile.png"
@@ -526,8 +526,6 @@ const ScrollingGame = () => {
         }}>
         </div>
       </Scrollable>
-
-      <StartQuesting opacity={Math.max(0, 0.99*(1200-scrollY)/1200)} />
 
       <HUD />
     </Fragment>
