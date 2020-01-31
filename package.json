@@ -9,11 +9,13 @@
     "install": "lerna bootstrap",
     "build": "lerna run --ignore local-wallet --ignore basic-wallet --ignore test-wallet build",
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
+    "start-admin": "lerna run --parallel start-admin",
     "start-basic": "lerna run --parallel start-basic",
     "start-test": "lerna run --parallel start-test",
     "start-local": "lerna run --parallel start-local"
   },
   "workspaces": [
+    "admin-wallet",
     "basic-wallet",
     "contracts",
     "local-wallet",
