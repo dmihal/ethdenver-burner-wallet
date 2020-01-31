@@ -5,7 +5,14 @@ import Box from '3box';
 import makeBlockie from 'ethereum-blockies-base64';
 
 const Table = styled.table`
+  @import url('https://fonts.googleapis.com/css?family=Germania+One');
+
   margin-bottom: 18px;
+  border-collapse: collapse;
+
+  & h2 {
+    width: fit-content;
+  }
 `
 
 const TableBody = styled.tbody`
@@ -14,7 +21,7 @@ const TableBody = styled.tbody`
 
 const TableRow = styled.tr`
   width: 100%;
-  
+
   & th {
     text-align: left;
     height: 40px;
@@ -22,10 +29,10 @@ const TableRow = styled.tr`
 
   & td {
     text-align: left;
-    padding: 0;
+    padding: 6px 0 0 0;
     margin-top: 15px;
-    vertical-align: center;
-    height: 58px
+    height: 56px
+    vertical-align: top;
 
     & h3 {
       margin: 0;
@@ -36,40 +43,53 @@ const TableRow = styled.tr`
       white-space:nowrap;
     }
   }
+
+  ${({ isTopFive }) => {
+    if (isTopFive) {
+      return `
+        & h3 {
+          font-family: 'Germania One';
+          font-size: 24px;
+        }
+      `;
+    } else {
+      return `
+      border-bottom: 1px solid #ffffff2e;
+    `;
+    }
+  }
+  }
 `
 
-const RankHeader = styled.th`
+const DataRank = styled.td`
   width: 8%;
-`
-
-const UserHeader = styled.th`
-  width: 50%;
-`
-const XPHeader = styled.th`
-  width: 42%;
-`
-
-const Navigation = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-
-  & div {
-    width: 50%;
-    display: flex;
-    justify-content: space-around;
-  }
-
-  & button {
-    border: none;
-    background-color: #000000;
-    color: white;
-    border-radius: 5px;
-    padding: 10px 10px;
-    width: 85%
+  & p {
+    opacity: .6
   }
 `
+
+const DataUser = styled.td`
+  width: 67%;
+`
+
+const DataXP = styled.td`
+  width: 25%;
+
+  ${({ isTopFive }) => {
+    if (isTopFive) {
+      return `
+        font-family: 'Germania One';
+        
+        & p {
+          font-size: 24px;
+        }
+      `;
+    }
+  }
+  }
+  
+`
+
 const Profile = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -90,13 +110,58 @@ const ProfileNames = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  height: 45px;
+  min-height: 45px;
+
+  & h3 {
+    height: 65%;
+  }
+`
+
+const ProfileMetaNames = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 35%;
+
+  & p {
+    opacity: .6;
+    font-size: 13px;
+  }
+
+  & p:first-of-type {
+    margin-right: 6px;
+  }
+
+  & a {
+    text-decoration: none;
+    color: white;
+  }
+`
+
+const LoadingAnimation = styled.div`
+  background-image: url('https://svgshare.com/i/Hdi.svg');
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: center;
+  height: 40px;
+  width: 40px;
+  background-size: 40px 40px;
+`
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 100%;
 `
 
 const daoMemberRequest = (offset) => {
   return {
     query: `{
     daos(where: {id: "0x294f999356ed03347c7a23bcbcf8d33fa41dc830"}) {
-      reputationHolders(first: 12, skip: ${offset}, orderBy: balance, orderDirection: desc) {
+      reputationHolders(first: 10, skip: ${offset}, orderBy: balance, orderDirection: desc) {
         address
         balance
       }
@@ -105,12 +170,37 @@ const daoMemberRequest = (offset) => {
   }
 };
 
+const topFiveDaoMemberRequest = () => {
+  return {
+    query: `{
+    daos(where: {id: "0x294f999356ed03347c7a23bcbcf8d33fa41dc830"}) {
+      reputationHolders(first: 5, skip: 0, orderBy: balance, orderDirection: desc) {
+        address
+        balance
+      }
+    }
+  }`,
+  }
+};
+
+const createProfiles = async (reputationHolders) => {
+  const fetchedProfiles = await Promise.all(reputationHolders.map(address => Box.getProfile(address)));
+  const verifiedAccounts = await Promise.all(fetchedProfiles.map(address => Box.getVerifiedAccounts(address)));
+  const ensNamesArray = await Promise.all(fetchedProfiles.map(address => fetchENSNames(address)));
+
+  return {
+    fetchedProfiles,
+    verifiedAccounts,
+    ensNamesArray,
+  }
+}
+
 const shortenEthAddr = (str) => {
   const shortenStr = str && `${str.substring(0, 5)}...${str.substring(str.length - 5, str.length)}`;
   return shortenStr;
 };
 
-const getRankedProfiles = (completeProfiles) => {
+const handleRankProfiles = (completeProfiles) => {
   const reputationHolders = Object.values(completeProfiles);
   return reputationHolders.sort((a, b) => {
     const balanceA = parseInt(a.balance);
@@ -121,7 +211,8 @@ const getRankedProfiles = (completeProfiles) => {
   });
 };
 
-const assembleCompleteProfiles = (reputationHolders, fetchedProfiles, verifiedAccounts, ensNamesArray) => {
+const assembleCompleteProfiles = (reputationHolders, userList) => {
+  const { fetchedProfiles, verifiedAccounts, ensNamesArray } = userList;
   const completeProfiles = {};
   reputationHolders.forEach((user, i) => {
     const { name, image } = fetchedProfiles[i];
@@ -140,10 +231,10 @@ const assembleCompleteProfiles = (reputationHolders, fetchedProfiles, verifiedAc
   return completeProfiles;
 }
 
-const fetchDAOMembers = async (offset) => {
+const fetchDAOMembers = async (requestShape, offset) => {
   const res = await fetch('https://api.thegraph.com/subgraphs/name/daostack/alchemy', {
     method: 'POST',
-    body: JSON.stringify(daoMemberRequest(offset)),
+    body: JSON.stringify(requestShape(offset)),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -195,6 +286,7 @@ const fetchENSNames = async (address) => {
       'Content-Type': 'application/json',
     },
   });
+
   if (res.status !== 200 && res.status !== 201) console.log('Failed', res);
 
   const {
@@ -208,42 +300,100 @@ const fetchENSNames = async (address) => {
 
 const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents }) => {
   const { Page } = BurnerComponents;
+  const StyledPage = styled(Page)`
+  background-color: #231047;
+  
+  & svg {
+    fill: white;
+  }
+`
   const [rankingOrder, setRankedProfiles] = useState([]);
-  const [offset, setOffset] = useState(0);
+  const [topFiveOrder, setTopFiveProfiles] = useState([]);
+  const [showLoading, setShowLoading] = useState(false);
+  const [offset, setOffset] = useState(5);
+
   useInterval(handleFetchDaoMembers, 300000);
+  useInterval(handleTopFive, 300000);
+
+  async function handleTopFive() {
+    const topFiveHolders = await fetchDAOMembers(topFiveDaoMemberRequest, null);
+    const topFive = await createProfiles(topFiveHolders);
+    const topFiveProfiles = assembleCompleteProfiles(topFiveHolders, topFive);
+    const topFiveProfilesRanked = handleRankProfiles(topFiveProfiles);
+
+    setTopFiveProfiles(topFiveProfilesRanked);
+  }
 
   async function handleFetchDaoMembers() {
-    const reputationHolders = await fetchDAOMembers(offset);
+    setShowLoading(true);
+    const reputationHolders = await fetchDAOMembers(daoMemberRequest, offset);
+    const mainList = await createProfiles(reputationHolders);
+    const completeProfiles = assembleCompleteProfiles(reputationHolders, mainList);
+    const allProfilesRanked = handleRankProfiles(completeProfiles);
 
-    const fetchedProfiles = await Promise.all(reputationHolders.map(address => Box.getProfile(address)));
-    const verifiedAccounts = await Promise.all(fetchedProfiles.map(address => Box.getVerifiedAccounts(address)));
-    const ensNamesArray = await Promise.all(fetchedProfiles.map(address => fetchENSNames(address)));
-    const completeProfiles = assembleCompleteProfiles(reputationHolders, fetchedProfiles, verifiedAccounts, ensNamesArray);
-    const rankedProfiles = getRankedProfiles(completeProfiles);
-
-    setRankedProfiles(rankedProfiles);
+    setRankedProfiles(prevOrder => [...prevOrder, ...allProfilesRanked]);
+    setShowLoading(false);
   }
+
+  useEffect(() => {
+    handleTopFive();
+
+    window.addEventListener('scroll', () => {
+      const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
+      const { body } = document;
+      const html = document.documentElement;
+      const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      const windowBottom = windowHeight + window.pageYOffset;
+
+      if (windowBottom >= docHeight) setOffset(prevOffset => prevOffset + 10);
+    });
+
+    return () => window.removeEventListener('scroll', () => { });
+  }, []);
 
   useEffect(() => {
     handleFetchDaoMembers();
   }, [offset]);
 
-  const loadMore = async (next) => {
-    const offsetDelta = next ? 12 : -12;
-    setOffset(offset + offsetDelta);
-  }
-
   return (
-    <Page title="Leaderboard">
+    <StyledPage title="Leaderboard">
+      <h2>Top Five</h2>
       <Table>
-        <thead>
-          <TableRow>
-            <RankHeader>Rank</RankHeader>
-            <UserHeader>User</UserHeader>
-            <XPHeader>XP</XPHeader>
-          </TableRow>
-        </thead>
+        <TableBody>
+          {topFiveOrder.map((account, i) => (
+            <LeaderRow
+              profile={account}
+              xp={account.balance}
+              address={account.address}
+              key={account.address}
+              offset={offset}
+              rank={i + 1}
+              isTopFive={true}
+            />
+          ))}
+        </TableBody>
+      </Table>
 
+      {/* <h2>Me</h2>
+      <Table>
+        <TableBody>
+          <LeaderRow
+            profile={me}
+            xp={me.balance}
+            address={me.address}
+            key={me.address}
+            rank={me.rank}
+            isTopFive={false}
+            offset={null}
+          />
+        </TableBody>
+      </Table> */}
+      {/* <button onClick={handleFetchDaoMembers}>
+        click
+      </button> */}
+
+      <h2>Everybody else</h2>
+      <Table>
         <TableBody>
           {rankingOrder.map((account, i) => (
             <LeaderRow
@@ -253,60 +403,71 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
               key={account.address}
               offset={offset}
               rank={i + 1}
+              isTopFive={false}
             />
           ))}
         </TableBody>
       </Table>
 
-      <Navigation>
-        <div>
-          {offset > 0 && (
-            <button onClick={() => loadMore(false)}>
-              Previous
-            </button>
-          )}
-        </div>
-
-        <div>
-          {rankingOrder.length === 12 && (
-            <button onClick={() => loadMore(true)}>
-              Next
-            </button>
-          )}
-        </div>
-      </Navigation>
-    </Page>
+      <LoadingWrapper>
+        {showLoading && (
+          <LoadingAnimation />
+        )}
+      </LoadingWrapper>
+    </StyledPage>
   );
 };
 
 export default LeaderboardPage;
 
-const LeaderRow = ({ profile, xp, address, rank, offset }) => {
+const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
   const { image, name, twitter, ensName } = profile;
   const src = image ? `https://ipfs.infura.io/ipfs/${image[0].contentUrl['/']}` : makeBlockie(address);
+
   return (
-    <TableRow>
-      <td>
-        <p>{rank + offset}</p>
-      </td>
-      <td>
+    <TableRow isTopFive={isTopFive}>
+      {!isTopFive && (
+        <DataRank>
+          <p>{rank + 5}</p>
+        </DataRank>
+      )}
+
+      <DataUser>
         <Profile>
-          <ProfilePicture src={src} alt="Profile" />
-          <ProfileNames>
+          {isTopFive && <ProfilePicture src={src} alt="Profile" />}
+          <ProfileNames isTopFive={isTopFive}>
             <h3>
               {name || shortenEthAddr(address)}
             </h3>
 
-            {twitter && <p>{`@${twitter}`}</p>}
-            {ensName && <p>{ensName}</p>}
+            <ProfileMetaNames>
+
+              {ensName ? (
+                <a href={`https://${ensName}`}>
+                  <p>{ensName}</p>
+                </a>
+              ) : twitter && (
+                <a href={`https://twitter.com/${twitter}`}>
+                  <p>{`@${twitter}`}</p>
+                </a>
+              )}
+
+              {/* <a href={`https://twitter.com/oznekenzo`}>
+                <p>@oznekenzo</p>
+              </a>
+              <a href="oznekenzo.buffidao.eth">
+                <p>oznekenzo.buffidao.eth</p>
+              </a> */}
+            </ProfileMetaNames>
           </ProfileNames>
         </Profile>
-      </td>
-      <td>
+      </DataUser>
+
+      <DataXP isTopFive={isTopFive}>
         <p>
-          {`${(xp / 10000000000000000000).toFixed(2)} pts`}
+          {`${(xp / 1000000000000000000).toFixed(0)} pts`}
         </p>
-      </td>
+      </DataXP>
     </TableRow>
   )
 }
