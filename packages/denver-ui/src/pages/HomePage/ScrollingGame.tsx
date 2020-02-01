@@ -30,6 +30,11 @@ const LOFI = false;
 const SHOWOWOCKI = false
 const SHOWBOUNTIES = false
 
+const SHOWHUD = true
+
+
+const HEIGHT_TO_EXPLODE_AT = 0.3
+
 const Scrollable = styled.div`
   overflow: scroll;
   flex: 1;
@@ -40,8 +45,6 @@ const Fixed = styled.div`
   position: fixed;
   overflow: hidden;
 `;
-
-
 
 const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   style: ({ boxWidth }) => ({
@@ -100,34 +103,20 @@ const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
   let [scrollX, scrollY] = scroll;
 
-  let [stateAnimation,setStateAnimation] = useState(0);
+  const [coverMax, setCoverMax] = useState(10000);
+  const [scrollPercent, setScrollPercent] = useState(0);
+  const [exploded, setExploded] = useState(0);
 
   let [containerRef, { height, width, }] = useDimensions();
   let displayWidth = width
   width = Math.min(MAXWIDTH,width)
-  //console.log("displayWidth",displayWidth,"width",width)
+
   let showLOFI
   if(displayWidth>height){
     showLOFI = true
   }else{
     showLOFI = LOFI
   }
-
-  useEffect(() => {
-    console.log("INIT",scrollX,scrollY)
-    setTimeout(()=>{
-      console.log("LAGGED ACTION")
-      if( scrollX==0 && scrollY==0 ){
-        console.log("SCROLL AT START IS THIS THE RIGHT WAY? WE NEED TO DETECT IMAGES LOADED")
-        console.log("containerRef",containerRef)
-        document.getElementById("scrollerThing").scrollTo({
-          top: 250,
-          left: 120,
-          behavior: 'smooth',
-        });
-      }
-    },1500)
-  }, []);
 
   const screenRatio = 7/1
   const rightScrollBarOffset = 15
@@ -136,10 +125,66 @@ const ScrollingGame = () => {
 
   const overScrollToMakeFloorsAtTheTopShowUpBetter = 1.25
 
-  let scrollPercent = Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter)//Math.round(scrollY / (totalHeight-height) * 100)
-  if(!scrollPercent) scrollPercent = 0
-  scrollPercent = Math.max(scrollPercent,0)
-  scrollPercent = Math.min(scrollPercent,100)
+  useEffect(() => {
+    console.log("INIT",scrollX,scrollY)
+    setTimeout(()=>{
+      console.log("LAGGED ACTION")
+
+        console.log("SCROLL AT START IS THIS THE RIGHT WAY? WE NEED TO DETECT IMAGES LOADED")
+        console.log("containerRef",containerRef)
+        let scrollerThing = document.getElementById("scrollerThing")
+        if(scrollerThing){
+          if( scrollX==0 && scrollY==0 ){
+            scrollerThing.scrollTo({
+              top: 250,
+              left: 120,
+              behavior: 'smooth',
+            });
+          }
+        }
+
+    },1500)
+  }, []);
+
+  useEffect(()=>{
+    //console.log("CHECKING IN ON scrollY",scrollY,height,screenRatio,overScrollToMakeFloorsAtTheTopShowUpBetter)
+    if(!height){
+      setCoverMax(10000)
+    }else{
+      let scrollPercent = Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter)//Math.round(scrollY / (totalHeight-height) * 100)
+      if(!scrollPercent) scrollPercent = 0
+      scrollPercent = Math.max(scrollPercent,0)
+      scrollPercent = Math.min(scrollPercent,100)
+      let coverMax = rangePercent(scrollPercent, height*0.8, -height);
+
+      setScrollPercent(scrollPercent)
+      //console.log("coverMax",coverMax)
+      setCoverMax(coverMax)
+
+      if(coverMax < height*HEIGHT_TO_EXPLODE_AT{
+        console.log("YEEEESSS")
+        setExploded(true)
+
+        let amount = width/2
+
+
+
+        setTimeout(()=>{
+          window.scrollTo({
+            top: 3000,
+            left: 500,
+            behavior: 'smooth',
+          });
+        },1200)
+
+      }
+    }
+
+  },[scrollY])
+
+
+
+
   //console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
 
   const rangePercent = (percent,finish,start) => {
@@ -160,7 +205,6 @@ const ScrollingGame = () => {
 
   let denverBackground: React.ReactNode | null = null;
   if(showLOFI){
-
     //console.log("LOFI WIDTH",width)
 
     denverBackground = (
@@ -168,7 +212,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={lofiTitle}
-          width={displayWidth}
+          width={Math.max(displayWidth,height)}
           left={0}
           top={-100}
           perspective={0}
@@ -199,7 +243,7 @@ const ScrollingGame = () => {
     let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
     let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
     let cityDistance = 0.6 - scrollPercent/100 * 0.3
-    let cityWidth = layerWidth
+    let cityWidth = fullLayerWidth *1.2
     let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
     let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
     let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
@@ -207,10 +251,6 @@ const ScrollingGame = () => {
     let treesDistance = 0.8 - scrollPercent/100 * 0.2
     let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
     let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
-
-
-
-
 
     denverBackground = (
       <Fragment>
@@ -257,7 +297,7 @@ const ScrollingGame = () => {
         <Layer
           index={layerCount++}
           img={cityFull}
-          width={fullLayerWidth}
+          width={cityWidth}
           left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
           top={cityTop}
           perspective={cityPerspective}
@@ -284,6 +324,8 @@ const ScrollingGame = () => {
 
   let scrollOffsetBuilding = -50
 
+  let floors = []
+
   const STARTSCROLLINGAT = 65;
 
   if(scrollPercent > STARTSCROLLINGAT){
@@ -292,23 +334,61 @@ const ScrollingGame = () => {
   }
 
   let sidewalkDivider = 2;
-  let exploded = false;
 
-  let coverMax = rangePercent(scrollPercent, height*0.8, -height);
+
+  const FLOOR_PADDING = width
   let sidewalkBottom = coverMax
   let lowbound = height*0.4
 
+  if(exploded){///////CHANGE THIS FOR EASIER/HARDER EXPLOSION
+    //exploded = true
 
-
-  if(sidewalkBottom < height*0.3){
-    exploded = true
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
+
+
+    for(let f=6;f>0;f--){
+      console.log("floor"+f)
+      floors.push(
+        <Layer
+          key={"floor"+f}
+          index={f+10}
+          img={castleFiles['floor'+f]}
+          width={width*2}
+          left={0}
+          top={(7-f)*(FLOOR_PADDING)}
+        >
+          <ButtonBox boxWidth={width}>
+
+            <QuestButton location="Front Desk" color="#575b87" task="Check in to venue" xp={50} />
+            <QuestButton location="Art Gallery" color="#cfa286" task="Bid on artwork" xp={100} />
+            <QuestButton location="Coat Check" color="#57877b" task="Check Coat" xp={25} />
+          </ButtonBox>
+        </Layer>
+      )
+    }
+
+
+
+    //bizzaro map world
+    return (
+      <Fragment>
+
+        <div onScroll={(e: any) => {
+          setScroll([e.target.scrollLeft, e.target.scrollTop])
+          console.log(scrollX,scrollY)
+        }}>
+        {floors}
+        </div>
+
+        {SHOWHUD?<HUD />:""}
+
+
+      </Fragment>
+    )
   }
 
   //layerLeft += scrollX
-
-
   let castleBackTop = coverMax+scrollOffsetBuilding/2+15 // Math.max(height*0.2,coverMax+scrollOffsetBuilding/2+15)
 
   const buildingLayerSpread = 0.22
@@ -333,7 +413,6 @@ const ScrollingGame = () => {
 
   const castleOffset = 0.2
   const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
-
 
   let sky: React.ReactNode | null = null;
   if(showLOFI){
@@ -383,7 +462,9 @@ const ScrollingGame = () => {
         }}>
 
 
-          <PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
+          {showLOFI?
+            "":<PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
+          }
 
           {denverBackground}
 
@@ -418,85 +499,8 @@ const ScrollingGame = () => {
             />
           ) : (
             <Fragment>
-              <Layer
-                index={layerCount++}
-                img={castleFiles.floor1}
-                width={layerWidth}
-                left={-width*castleOffset-castleScroll}
-                top={layer1Bottom + scrollOffsetBuilding}
-                perspective={sidewalkPerspective}
-              >
-                <ButtonBox boxWidth={width}>
-                  <QuestButton location="Front Desk" color="#575b87" task="Check in to venue" xp={50} />
-                  <QuestButton location="Art Gallery" color="#cfa286" task="Bid on artwork" xp={100} />
-                  <QuestButton location="Coat Check" color="#57877b" task="Check Coat" xp={25} />
-                </ButtonBox>
-              </Layer>
+              {floors}
 
-              <Layer
-                index={layerCount++}
-                img={SHOWOWOCKI ? castleFiles.floor2_owocki : castleFiles.floor2}
-                width={layerWidth}
-                left={-width*castleOffset-castleScroll}
-                top={stickPointLayer2 + scrollOffsetBuilding}
-                perspective={sidewalkPerspective}
-              >
-                <ButtonBox boxWidth={width}>
-                  {SHOWOWOCKI && (
-                    <QuestButton location="Owacki Sacki" color="#7381b5" task="Talk OSS" xp={75} />
-                  )}
-                </ButtonBox>
-              </Layer>
-
-              {coverMax < stickPointLayer3 && (
-                <Layer
-                  index={layerCount++}
-                  img={castleFiles.floor3}
-                  width={layerWidth}
-                  left={-width*castleOffset-castleScroll}
-                  top={stickPointLayer3 + scrollOffsetBuilding}
-                  perspective={sidewalkPerspective}
-                />
-              )}
-
-              {coverMax < stickPointLayer4 && (
-                <Layer
-                  index={layerCount++}
-                  img={castleFiles.floor4}
-                  width={layerWidth}
-                  left={-width*castleOffset-castleScroll}
-                  top={stickPointLayer4 + scrollOffsetBuilding}
-                  perspective={sidewalkPerspective}
-                />
-              )}
-
-              {coverMax < stickPointLayer5 && (
-                <Layer
-                  index={layerCount++}
-                  img={!SHOWBOUNTIES ? castleFiles.floor5 : castleFiles.floor5_wtf}
-                  width={layerWidth}
-                  left={-width*castleOffset-castleScroll}
-                  top={stickPointLayer5 + scrollOffsetBuilding}
-                  perspective={sidewalkPerspective}
-                >
-                  <ButtonBox boxWidth={width}>
-                    {SHOWBOUNTIES && (
-                      <QuestButton location="Bounties Network" color="#f1c673" task="Mimosas with Simona" xp={95} />
-                    )}
-                  </ButtonBox>
-                </Layer>
-              )}
-
-              {coverMax < stickPointLayer6 && (
-                <Layer
-                  index={layerCount++}
-                  img={castleFiles.floor6}
-                  width={layerWidth}
-                  left={-width*castleOffset-castleScroll}
-                  top={stickPointLayer6 + scrollOffsetBuilding}
-                  perspective={sidewalkPerspective}
-                />
-              )}
             </Fragment>
           )}
 
@@ -527,7 +531,7 @@ const ScrollingGame = () => {
         </div>
       </Scrollable>
 
-      <HUD />
+      {SHOWHUD?<HUD />:""}
     </Fragment>
   );
 };

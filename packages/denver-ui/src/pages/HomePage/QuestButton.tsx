@@ -9,7 +9,7 @@ interface QuestButtonProps {
 
 const QuestButton: React.FC<QuestButtonProps> = ({ location, color, task, xp }) => {
   return (
-    <div style={{zIndex:1,cursor:"pointer",width:"80%"}} onClick={()=>{
+    <div style={{zIndex:1,cursor:"pointer",width:"80%",marginLeft:"50%"}} onClick={()=>{
         alert("click")
     }}>
 
