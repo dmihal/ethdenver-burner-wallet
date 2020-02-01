@@ -11,7 +11,7 @@ const FortmaticSettings: React.FC<PluginElementContext> = ({ accounts, actions, 
     setAuthenticated(authenticated);
 
     if (authenticated) {
-      actions.callSigner('user', 'fortmatic').then((user: any) => setEmail(user.email));
+      Promise.resolve(actions.callSigner('user', 'fortmatic')).then((user: any) => setEmail(user.email));
     }
   }, [accounts]);
 
