@@ -111,9 +111,25 @@ const ScrollingGame = () => {
     scrollX: 0,
     scrollY: 0,
     scrollPercent: 0,
+    layerWidth: width * 2,
+
+    bufficornLeft: 0,
+    bufficornTop: 0,
 
     mountainsTop: 0,
     mountainLeft: 0,
+    underMountainOpacity: 1,
+    mountainFullOpacity: 1,
+    mountainOverOpacity: 1,
+
+    foothillsLeft: 0,
+    foothillsTop: 0,
+    cityLeft: 0,
+    cityTop: 0,
+    cityOffset: 0,
+    cityDistance: 0,
+    treesLeft: 0,
+    treesTop: 0,
   });
 
   let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
@@ -125,17 +141,41 @@ const ScrollingGame = () => {
 
     const scrollPercent = Math.min(Math.max(Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter), 0), 100);
     positionVars.current.scrollPercent = scrollPercent;
+    positionVars.current.layerWidth = rangePercent(scrollPercent, width*2, width*1.1);
+
+    positionVars.current.bufficornLeft = (displayWidth-width)/2+scrollX/7;
+    positionVars.current.bufficornTop = rangePercent(scrollPercent, height * 0.2, -height * 0.5);
 
     positionVars.current.mountainsTop = rangePercent(scrollPercent, height * 0.30, height * 0.01);
     const mountainDistance = 0.08 - scrollPercent/100 * 0.08;
     positionVars.current.mountainLeft = -width*0.05-layerLeft - scrollX * mountainDistance;
+    positionVars.current.underMountainOpacity = rangePercent(scrollPercent, 0.99, 0.00);
+    positionVars.current.mountainFullOpacity = rangePercent(scrollPercent,0.99,0.1);
+    positionVars.current.mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
+
+    const foothillsDistance = 0.16 - scrollPercent/100 * 0.16
+    positionVars.current.foothillsLeft = -width*0.05-layerLeft - scrollX * foothillsDistance;
+    positionVars.current.foothillsTop = rangePercent(scrollPercent, height*0.16, -height*0.08);
+
+    positionVars.current.cityLeft = rangePercent(scrollPercent, positionVars.current.layerWidth*0.08, positionVars.current.layerWidth*0.05);
+    positionVars.current.cityTop = rangePercent(scrollPercent, height*0.2, height*0.02);
+    positionVars.current.cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05);
+    positionVars.current.cityDistance = 0.6 - scrollPercent/100 * 0.3;
+
+    const treesDistance = 0.8 - scrollPercent/100 * 0.2
+    positionVars.current.treesLeft = rangePercent(scrollPercent, positionVars.current.cityOffset - positionVars.current.cityLeft - treesDistance * scrollX, -positionVars.current.cityLeft)
+    positionVars.current.treesTop = rangePercent(scrollPercent, height*0.75, height*0.2);
   };
 
 
   // Layer refs
+  const bufficorn = useRef();
   const undermountains = useRef();
   const mountainsFull = useRef();
   const overmountains = useRef();
+  const foothills = useRef();
+  const city = useRef();
+  const treesRef = useRef();
 
   const drawPositions = () => {
     const setStyle = (ref: React.RefObject<HTMLElement>, prop: string, val: any) => {
@@ -146,11 +186,22 @@ const ScrollingGame = () => {
     const setTransform = (ref: React.RefObject<HTMLElement>, x: number, y: number) =>
       setStyle(ref, 'transform', `translate3d(${x}px, ${y}px, 0)`);
 
-    const { mountainsTop, mountainLeft } = positionVars.current;
+    const {
+      mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
+      scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
+      bufficornLeft, bufficornTop
+    } = positionVars.current;
 
+    setTransform(bufficorn, bufficornLeft, bufficornTop);
     setTransform(undermountains, mountainLeft, mountainsTop);
+    setStyle(undermountains, 'opacity', underMountainOpacity);
     setTransform(mountainsFull, mountainLeft, mountainsTop);
+    setStyle(mountainsFull, 'opacity', mountainFullOpacity);
     setTransform(overmountains, mountainLeft, mountainsTop);
+    setStyle(overmountains, 'opacity', mountainOverOpacity);
+    setTransform(foothills, foothillsLeft, foothillsTop);
+    setTransform(city, rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft), cityTop);
+    setTransform(treesRef, treesLeft, treesTop);
   };
 
 
@@ -186,10 +237,9 @@ const ScrollingGame = () => {
   let totalHeight = height*screenRatio
   let bottom = height+scrollY
 
-  const { scrollPercent, mountainsTop } = positionVars.current;
-
-  let layerWidth = rangePercent(scrollPercent,width*2,width*1.1)
-
+  const {
+    scrollPercent, mountainsTop, layerWidth, cityTop, cityLeft, cityOffset, cityDistance
+  } = positionVars.current;
 
 
   let layerCount = 1
@@ -232,18 +282,9 @@ const ScrollingGame = () => {
 
     let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
     let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
-    const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
-    let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
-    let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
     let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
-    let cityDistance = 0.6 - scrollPercent/100 * 0.3
     let cityWidth = layerWidth
-    let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
-    let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
     let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
-    let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
-    let treesDistance = 0.8 - scrollPercent/100 * 0.2
-    let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
     let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
 
 
@@ -259,7 +300,7 @@ const ScrollingGame = () => {
           left={positionVars.current.mountainLeft}
           top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
-          opacity={rangePercent(scrollPercent,0.99,0.00)}
+          opacity={positionVars.current.underMountainOpacity}
           ref={undermountains}
         />
         <Layer
@@ -269,7 +310,7 @@ const ScrollingGame = () => {
           left={positionVars.current.mountainLeft}
           top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
-          opacity={rangePercent(scrollPercent,0.99,0.1)}
+          opacity={positionVars.current.mountainFullOpacity}
           ref={mountainsFull}
         />
         <Layer
@@ -279,7 +320,7 @@ const ScrollingGame = () => {
           left={positionVars.current.mountainLeft}
           top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
-          opacity={mountainOverOpacity}
+          opacity={positionVars.current.mountainOverOpacity}
           ref={overmountains}
         />
 
@@ -287,10 +328,11 @@ const ScrollingGame = () => {
           index={layerCount++}
           img={mountainsFiles.foothills}
           width={fullLayerWidth}
-          left={-width*0.05-layerLeft - scrollX * foothillsDistance}
-          top={foothillsTop}
+          left={positionVars.current.foothillsLeft}
+          top={positionVars.current.foothillsTop}
           perspective={foothillsPerspective}
           brightness={rangePercent(scrollPercent,100,50)}
+          ref={foothills}
         />
 
         {setLayerCount(10)}
@@ -300,21 +342,23 @@ const ScrollingGame = () => {
           img={cityFull}
           width={fullLayerWidth}
           left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
-          top={cityTop}
+          top={positionVars.current.cityTop}
           perspective={cityPerspective}
           scaleY={rangePercent(scrollPercent,1.2,0.8)}
           brightness={rangePercent(scrollPercent,100,70)}
+          ref={city}
         />
 
         <Layer
           index={layerCount++}
           img={trees}
           width={fullLayerWidth}
-          left={rangePercent(scrollPercent, cityOffset-cityLeft-treesDistance*scrollX, -cityLeft)}
-          top={treesTop}
+          left={positionVars.current.treesLeft}
+          top={positionVars.current.treesTop}
           perspective={treesPerspective}
           scaleY={0.88}
           brightness={rangePercent(scrollPercent, 100, 20)}
+          ref={treesRef}
         />
 
       </Fragment>
@@ -433,7 +477,7 @@ const ScrollingGame = () => {
         }}>
 
 
-          <PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
+          <PegaBufficorn2 ref={bufficorn} left={positionVars.current.buficornLeft} top={positionVars.current.bufficornTop}/>
 
           {denverBackground}
 

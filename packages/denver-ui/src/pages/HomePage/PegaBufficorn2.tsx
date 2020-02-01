@@ -5,11 +5,11 @@ import pegabuff2 from '../../images/pegabufficorn2.png';
 
 const SPEED = 4;
 
-const BufficornContainer = styled.div.attrs<{ right: number; top: number; }>(({ right, top }) => ({
+const BufficornContainer = styled.div.attrs<{ left: number; top: number; }>(({ left, top }) => ({
   style: {
-    transform: `translate3d(${right * -1}px, ${top}px, 0)`,
+    transform: `translate3d(${left}px, ${top}px, 0)`,
   },
-}))<{ right: number; top: number; }>`
+}))<{ left: number; top: number; }>`
   z-index: 25;
   position: absolute;
   right: 0;
@@ -30,7 +30,13 @@ const Image = styled.img.attrs<{ hide?: boolean }>(({ hide }) => ({
   right: 0;
 `;
 
-const PegaBufficorn2: React.FC<{ top: number, right: number }> = ({ top, right }) => {
+interface BuffiProps {
+  top: number;
+  left: number;
+  ref: React.Ref<HTMLDivElement>;
+}
+
+const PegaBufficorn2: React.FC<BuffiProps> = React.forwardRef(({ top, left }, ref: React.RefObject<HTMLDivElement>) => {
   const img1 = useRef();
   const img2 = useRef();
   const stepNum = useRef(0);
@@ -65,11 +71,11 @@ const PegaBufficorn2: React.FC<{ top: number, right: number }> = ({ top, right }
   }, []);
 
   return (
-    <BufficornContainer top={top} right={right}>
+    <BufficornContainer ref={ref} top={top} left={left}>
       <Image src={pegabuff} ref={img1} />
       <Image src={pegabuff2} ref={img2} hide />
     </BufficornContainer>
   )
-}
+});
 
 export default PegaBufficorn2;
