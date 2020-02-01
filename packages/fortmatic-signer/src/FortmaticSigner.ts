@@ -33,7 +33,7 @@ export default class FortmaticSigner extends Signer {
   }
 
   permissions() {
-    return this.isLoggedIn ? [] : ['enable'];
+    return this.isLoggedIn ? [] : ['enable', 'logout', 'user'];
   }
 
   invoke(action: string) {
