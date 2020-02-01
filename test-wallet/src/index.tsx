@@ -13,6 +13,8 @@ import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
+import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
+import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
@@ -90,6 +92,7 @@ const BurnerWallet = () =>
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
       new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
+      new BurnerConnectPlugin('ETHDenver test wallet'),
     ]}
   />
 

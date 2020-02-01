@@ -11,6 +11,7 @@
     "@burner-factory/push-notification-plugin": "^0.1.0",
     "@burner-factory/schedule-plugin": "^1.0.0",
     "@burner-wallet/assets": "^1.1.0",
+    "@burner-wallet/burner-connect-wallet": "^0.1.4",
     "@burner-wallet/core": "^1.1.0",
     "@burner-wallet/ens-plugin": "^1.0.1",
     "@burner-wallet/exchange": "^1.0.0",
