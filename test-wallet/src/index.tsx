@@ -54,7 +54,7 @@ const kdai = new ERC20Asset({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
-    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!, { gasMultiplier: 1.4 }),
+    new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
     new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),
     new LocalSigner(),
