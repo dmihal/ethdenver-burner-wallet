@@ -8,13 +8,14 @@ import SideMenu from './SideMenu';
 import qrscan from "../../images/qrscan.png";
 
 const OuterContainer = styled.div`
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   display: flex;
   justify-content: center;
+  transform: translateX(-20000px);
 `;
 
 const InnerContainer = styled.div`
@@ -27,6 +28,7 @@ const Overlay = styled.div<{ top: number; side: string }>`
   position: absolute;
   ${({ side }) => side}: 0;
   top: ${({ top }) => top}px;
+  transform: translateX(20000px);
 `;
 
 const UIBar = styled.div`
@@ -34,6 +36,7 @@ const UIBar = styled.div`
   right: 20px;
   bottom: 20px;
   z-index: 150;
+  transform: translateX(20000px);
 `;
 
 const ScanButton = styled.button`
