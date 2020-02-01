@@ -95,6 +95,8 @@ const Title = styled.div.attrs<{ topPos: number }>({
 `;
 
 
+const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 100)) + finish;
+const overScrollToMakeFloorsAtTheTopShowUpBetter = 1.25
 
 const ScrollingGame = () => {
   const [scroll, setScroll] = useState([0, 0]);
@@ -103,6 +105,55 @@ const ScrollingGame = () => {
   let [stateAnimation,setStateAnimation] = useState(0);
 
   let [containerRef, { height, width, }] = useDimensions();
+
+  // Variables:
+  const positionVars = useRef<any>({
+    scrollX: 0,
+    scrollY: 0,
+    scrollPercent: 0,
+
+    mountainsTop: 0,
+    mountainLeft: 0,
+  });
+
+  let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
+  const screenRatio = 7/1
+
+  const updatePosition = (scrollX: number, scrollY: number) => {
+    positionVars.current.scrollX = scrollX;
+    positionVars.current.scrollY = scrollY;
+
+    const scrollPercent = Math.min(Math.max(Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter), 0), 100);
+    positionVars.current.scrollPercent = scrollPercent;
+
+    positionVars.current.mountainsTop = rangePercent(scrollPercent, height * 0.30, height * 0.01);
+    const mountainDistance = 0.08 - scrollPercent/100 * 0.08;
+    positionVars.current.mountainLeft = -width*0.05-layerLeft - scrollX * mountainDistance;
+  };
+
+
+  // Layer refs
+  const undermountains = useRef();
+  const mountainsFull = useRef();
+  const overmountains = useRef();
+
+  const drawPositions = () => {
+    const setStyle = (ref: React.RefObject<HTMLElement>, prop: string, val: any) => {
+      if (ref.current) {
+        ref.current.style[prop] = val;
+      }
+    };
+    const setTransform = (ref: React.RefObject<HTMLElement>, x: number, y: number) =>
+      setStyle(ref, 'transform', `translate3d(${x}px, ${y}px, 0)`);
+
+    const { mountainsTop, mountainLeft } = positionVars.current;
+
+    setTransform(undermountains, mountainLeft, mountainsTop);
+    setTransform(mountainsFull, mountainLeft, mountainsTop);
+    setTransform(overmountains, mountainLeft, mountainsTop);
+  };
+
+
   let displayWidth = width
   width = Math.min(MAXWIDTH,width)
   //console.log("displayWidth",displayWidth,"width",width)
@@ -114,6 +165,8 @@ const ScrollingGame = () => {
   }
 
   useEffect(() => {
+    updatePosition(0, 0);
+
     console.log("INIT",scrollX,scrollY)
     setTimeout(()=>{
       console.log("LAGGED ACTION")
@@ -129,27 +182,14 @@ const ScrollingGame = () => {
     },1500)
   }, []);
 
-  const screenRatio = 7/1
   const rightScrollBarOffset = 15
   let totalHeight = height*screenRatio
   let bottom = height+scrollY
 
-  const overScrollToMakeFloorsAtTheTopShowUpBetter = 1.25
-
-  let scrollPercent = Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter)//Math.round(scrollY / (totalHeight-height) * 100)
-  if(!scrollPercent) scrollPercent = 0
-  scrollPercent = Math.max(scrollPercent,0)
-  scrollPercent = Math.min(scrollPercent,100)
-  //console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
-
-  const rangePercent = (percent,finish,start) => {
-    return ((start-finish)*(percent/100))+finish
-  }
+  const { scrollPercent, mountainsTop } = positionVars.current;
 
   let layerWidth = rangePercent(scrollPercent,width*2,width*1.1)
 
-
-  let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
 
 
   let layerCount = 1
@@ -191,10 +231,8 @@ const ScrollingGame = () => {
     fullLayerWidth = Math.min(fullLayerWidth,1200)
 
     let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
-    let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
     let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
     const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
-    const mountainDistance = 0.08 - scrollPercent/100 * 0.08
     let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
     let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
     let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
@@ -218,28 +256,31 @@ const ScrollingGame = () => {
           index={layerCount++}
           img={mountainsFiles.undermountains}
           width={fullLayerWidth}
-          left={-width*0.05-layerLeft - scrollX * mountainDistance}
-          top={mountainsTop}
+          left={positionVars.current.mountainLeft}
+          top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
           opacity={rangePercent(scrollPercent,0.99,0.00)}
+          ref={undermountains}
         />
         <Layer
           index={layerCount++}
           img={mountainsFiles.mountainsFull}
           width={fullLayerWidth}
-          left={-width*0.05-layerLeft - scrollX * mountainDistance}
-          top={mountainsTop}
+          left={positionVars.current.mountainLeft}
+          top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
           opacity={rangePercent(scrollPercent,0.99,0.1)}
+          ref={mountainsFull}
         />
         <Layer
           index={layerCount++}
           img={mountainsFiles.overmountains}
           width={fullLayerWidth}
-          left={-width*0.05-layerLeft - scrollX * mountainDistance}
-          top={mountainsTop}
+          left={positionVars.current.mountainLeft}
+          top={positionVars.current.mountainsTop}
           perspective={mountainPerspective}
           opacity={mountainOverOpacity}
+          ref={overmountains}
         />
 
         <Layer
@@ -343,6 +384,15 @@ const ScrollingGame = () => {
       <Sky topPos={rangePercent(scrollPercent, -height * 0.3, 0.05)} />
     )
   }
+
+
+  const scrollListener = (e: any) => {
+    const [x, y] = [e.target.scrollLeft, e.target.scrollTop];
+    updatePosition(x, y);
+    drawPositions();
+  }
+
+
 //  <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)}  />
   return (
     <Fragment>
@@ -515,7 +565,7 @@ const ScrollingGame = () => {
       <Scrollable
         id={"scrollerThing"}
         ref={containerRef}
-        onScroll={(e: any) => setScroll([e.target.scrollLeft, e.target.scrollTop])}
+        onScroll={scrollListener}
       >
         <div style={{
           zIndex:100,
