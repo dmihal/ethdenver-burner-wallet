@@ -11,7 +11,7 @@ export default class FortmaticSigner extends Signer {
 
   constructor(key: string) {
     super({ id: 'fortmatic' });
-    this.fortmatic = new Fortmatic(key, 'kovan');
+    this.fortmatic = new Fortmatic(key, 'mainnet');
     this.isLoggedIn = false;
     this.web3 = new Web3(this.fortmatic.getProvider());
 
@@ -33,7 +33,7 @@ export default class FortmaticSigner extends Signer {
   }
 
   permissions() {
-    return this.isLoggedIn ? [] : ['enable'];
+    return this.isLoggedIn ? [] : ['enable', 'logout', 'user'];
   }
 
   invoke(action: string) {
