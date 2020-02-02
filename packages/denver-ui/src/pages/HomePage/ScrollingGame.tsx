@@ -390,7 +390,7 @@ const ScrollingGame = () => {
           game_x_coord:2,
           game_y_coord:3,
           button:true,
-          fn:()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")
+          fn:()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")}
         },
         {
           image:"npcscan",

@@ -79,8 +79,8 @@ const HUD: React.FC = () => {
           <UIBar>
             <ScanButton onClick={() => {
               window.scrollTo({
-                top: 0,
-                left: 0,
+                top: 1,
+                left: 1,
               });
               actions.openDefaultQRScanner()
             }} />
