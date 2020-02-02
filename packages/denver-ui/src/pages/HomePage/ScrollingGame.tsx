@@ -457,7 +457,7 @@ const ScrollingGame = () => {
           index={0}
           img={castleFiles.castleFull}
           width={layerWidth}
-          left=[0}
+          left={0}
           top={0}
           perspective={sidewalkPerspective}
         />
