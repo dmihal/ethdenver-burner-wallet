@@ -1195,10 +1195,10 @@
     "@burner-wallet/types" "^1.0.0"
     "@types/react" "*"
 
-"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.1.0":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.1.4.tgz#48fdeaa1812412bfcdd9d9300b07c916b04e654a"
-  integrity sha512-HMuFFxyLHMRPFFUunahmgkDyJeS1zhUzIE+MOo5vk9fF0ZTf+/FCIuT+TG6MBj+xleND6sUUiofFylJ8o2qigA==
+"@burner-wallet/core@^1.0.0", "@burner-wallet/core@^1.1.0", "@burner-wallet/core@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/core/-/core-1.1.6.tgz#b25d6cf4c45600e366fe53cf6203a19743833ccc"
+  integrity sha512-uTnOcFCZTblkyV1VbyjnWxtTeDTIawqy0/o5g8Rm8He6QJWgMSuaRI5AMb++ZIm46LT1vfcaIQwSoT0pzVILNw==
   dependencies:
     "@burner-wallet/assets" "^1.1.0"
     "@dmihal/tabookey-gasless" "^0.4.1"
