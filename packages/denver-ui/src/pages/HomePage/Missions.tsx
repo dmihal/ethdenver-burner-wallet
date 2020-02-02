@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
-import { PluginButtonProps } from '@burner-wallet/types';
+import { PluginButtonProps, Actions } from '@burner-wallet/types';
+import QuestButton from './QuestButton';
 import QuestInfo from './QuestInfo';
 import styled from 'styled-components';
 
@@ -23,9 +24,18 @@ interface MissionProps extends PluginButtonProps {
   to: string | null;
   color: string;
   xp: number;
+  onClick?: (actions?: Actions) => void;
 }
 
-const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, xp }) => {
+const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, xp, onClick }) => {
+  const { actions } = useBurner();
+
+  if (onClick) {
+    return (
+      <QuestButton location={title} task={description} color={color} xp={xp} onClick={() => onClick(actions)} />
+    );
+  }
+
   return (
     <QuestInfo location={title} task={description} color={color} xp={xp} />
   );

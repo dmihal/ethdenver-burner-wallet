@@ -6,18 +6,6 @@ import owocki from './images/owocki.png';
 
 const missions: Mission[] = [
   {
-    image: fortmatic,
-    title:"Fortmatic",
-    color:"#6951ff",
-    task:"Login with Fortmatic to claim BuffiDAI!",
-    xp:"50",
-    game_x_coord:2,
-    game_y_coord:3,
-    button:true,
-    floor: 1,
-  },
-
-  {
     image: npcscan,
     title:"Scan In",
     color:"#57877b",
