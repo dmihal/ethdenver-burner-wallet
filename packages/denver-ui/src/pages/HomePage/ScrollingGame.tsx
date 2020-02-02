@@ -342,7 +342,7 @@ const ScrollingGame = () => {
       console.log("RENDERING MISSION",mission)
       missionRender.push(
         <div key={"image_"+floor+"_"+m}>
-          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission.game_x_coord*106-mission.game_y_coord*69,bottom:238+mission.game_x_coord*21+mission.game_y_coord*43}} src={mapFiles[mission.image} />
+          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission.game_x_coord*106-mission.game_y_coord*69,bottom:238+mission.game_x_coord*21+mission.game_y_coord*43}} src={mapFiles[mission.image]} />
         </div>
       )
       if(mission.button){
@@ -354,7 +354,7 @@ const ScrollingGame = () => {
       }else{
         missionList.push(
           <div key={"questinfo_"+floor+"_"+m}>
-            <QuestInfo location={mission.title color={mission.color} task={mission.task} xp={mission.xp} />
+            <QuestInfo location={mission.title} color={mission.color} task={mission.task} xp={mission.xp} />
           </div>
         )
       }
