@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
 import QRCode from 'qrcode.react';
@@ -175,8 +175,34 @@ const ScrollingGame = () => {
 
   },[scrollY])
 
-
-
+  ///////adding this so we can catch the scroll back up and show the intro screen
+  useLayoutEffect(() => {
+    const handleScroll = (event) => {
+      if(exploded && window.scrollY==0){
+        setExploded(false)
+        let scrollerThing = document.getElementById("scrollerThing")
+        console.log(scrollerThing)
+        if(scrollerThing){
+          scrollerThing.scrollTo({
+            top: width*HEIGHT_TO_EXPLODE_AT*0.95,
+            left: 120,
+          });
+        }
+        setTimeout(()=>{
+          let scrollerThing = document.getElementById("scrollerThing")
+          console.log(scrollerThing)
+          if(scrollerThing){
+            scrollerThing.scrollTo({
+              top: width*HEIGHT_TO_EXPLODE_AT,
+              left: 120,
+            });
+          }
+        },1000)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [exploded])
 
   //console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
 
@@ -319,7 +345,7 @@ const ScrollingGame = () => {
           <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission.game_x_coord*106-mission.game_y_coord*69,bottom:238+mission.game_x_coord*21+mission.game_y_coord*43}} src={mapFiles[mission.image} />
         </div>
       )
-      if(mission[7]){
+      if(mission.button){
         missionList.push(
           <div key={"questbutton_"+floor+"_"+m}>
             <QuestButton location={mission.title} color={mission.color} task={mission.task} xp={mission.xp} fn={mission.fn}/>
@@ -344,9 +370,10 @@ const ScrollingGame = () => {
     )
   }
 
-    const castleOffset = 0.2
+  const castleOffset = 0.2
 
   if(exploded){
+    /////////////////////////////////////////////////////////////////////////////// MAP VIEW, TILES ETC
 
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
@@ -421,6 +448,8 @@ const ScrollingGame = () => {
       )
     }
 
+
+
     //bizzaro map world
     return (
       <Fragment>
@@ -445,6 +474,7 @@ const ScrollingGame = () => {
       </Fragment>
     )
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  INTRO MOUNTAIN VIEW:
 
   //layerLeft += scrollX
   let castleBackTop = coverMax+scrollOffsetBuilding/2+15 // Math.max(height*0.2,coverMax+scrollOffsetBuilding/2+15)
@@ -455,7 +485,18 @@ const ScrollingGame = () => {
     ? Math.max(height*0.6,rangePercent(scrollPercent,height*0.82,-height*0.5))
     : coverMax;
 
-  if(exploded){
+
+
+  let showingPreExplosion = false
+
+  if(sidewalkBottom < height*0.5){
+    showingPreExplosion = true
+    sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
+    sidewalkDivider = 1
+  }
+
+
+  if(showingPreExplosion){
     layer1Bottom -= 3*screenRatio
   }else{
     layer1Bottom += 7*screenRatio
@@ -543,7 +584,7 @@ const ScrollingGame = () => {
             perspective={sidewalkPerspective}
           />
 
-          {!exploded ? (
+          {!showingPreExplosion ? (
             <Layer
               index={layerCount++}
               img={castleFiles.floor1_preview}
@@ -554,7 +595,15 @@ const ScrollingGame = () => {
             />
           ) : (
             <Fragment>
-              {floors}
+              <Layer
+                  index={layerCount++}
+                  img={castleFiles.floor1}
+                  width={layerWidth}
+                  left={-width*castleOffset-castleScroll}
+                  top={-12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
+                  perspective={sidewalkPerspective}
+                >
+                </Layer>
 
             </Fragment>
           )}
