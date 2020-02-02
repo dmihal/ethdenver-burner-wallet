@@ -77,7 +77,13 @@ const HUD: React.FC = () => {
           <SideMenu isOpen={menuOpen} />
 
           <UIBar>
-            <ScanButton onClick={() => actions.openDefaultQRScanner()} />
+            <ScanButton onClick={() => {
+              window.scrollTo({
+                top: 0,
+                left: 0,
+              });
+              actions.openDefaultQRScanner()
+            }} />
           </UIBar>
         </InnerContainer>
       </OuterContainer>
