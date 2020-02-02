@@ -316,19 +316,19 @@ const ScrollingGame = () => {
       console.log("RENDERING MISSION",mission)
       missionRender.push(
         <div key={"image_"+floor+"_"+m}>
-          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission[5]*106-mission[6]*69,bottom:238+mission[5]*21+mission[6]*43}} src={mapFiles[mission[0]]} />
+          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission.game_x_coord*106-mission.game_y_coord*69,bottom:238+mission.game_x_coord*21+mission.game_y_coord*43}} src={mapFiles[mission.image} />
         </div>
       )
       if(mission[7]){
         missionList.push(
           <div key={"questbutton_"+floor+"_"+m}>
-            <QuestButton location={mission[1]} color={mission[2]} task={mission[3]} xp={mission[4]} fn={mission[8]}/>
+            <QuestButton location={mission.title} color={mission.color} task={mission.task} xp={mission.xp} fn={mission.fn}/>
           </div>
         )
       }else{
         missionList.push(
           <div key={"questinfo_"+floor+"_"+m}>
-            <QuestInfo location={mission[1]} color={mission[2]} task={mission[3]} xp={mission[4]} />
+            <QuestInfo location={mission.title color={mission.color} task={mission.task} xp={mission.xp} />
           </div>
         )
       }
@@ -344,6 +344,8 @@ const ScrollingGame = () => {
     )
   }
 
+    const castleOffset = 0.2
+
   if(exploded){
 
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
@@ -352,12 +354,49 @@ const ScrollingGame = () => {
 
     const MAP_JSON_LOADED_BY_USER_ADDRESS = [
       [
-        ["fortmatic","Fortmatic","#6951ff","Login with Fortmatic to claim BuffiDAI!","50",2,3,true,()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")}],
-        ["npcscan","Scan In","#57877b","Scan your badge for first XP!","25",1,2,false],
-        ["frontdesk","Front Desk","#57877b","Get your badge and swag bag!","0",1,1,false],
+        {
+          image:"fortmatic",
+          title:"Fortmatic",
+          color:"#6951ff",
+          task:"Login with Fortmatic to claim BuffiDAI!",
+          xp:"50",
+          game_x_coord:2,
+          game_y_coord:3,
+          button:true,
+          fn:()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")
+        },
+        {
+          image:"npcscan",
+          title:"Scan In",
+          color:"#57877b",
+          task:"Scan your badge for first XP!",
+          xp:"25",
+          game_x_coord:1,
+          game_y_coord:2,
+          button: false,
+        },
+        {
+          image:"frontdesk",
+          title:"Front Desk",
+          color:"#577b87",
+          task:"Get your badge and swag bag!",
+          xp:"0",
+          game_x_coord:1,
+          game_y_coord:1,
+          button: false,
+        },
       ],
       [
-        ["owocki","Bullrun Owocki","#ff0000","Talk OSS with Owocki!","50",3,3],
+        {
+          image:"owocki",
+          title:"Bullrun Owocki",
+          color:"#ff0000",
+          task:"Talk OSS with Owocki!",
+          xp:"50",
+          game_x_coord:3,
+          game_y_coord:3,
+          button: false,
+        },
       ],
       [],//floor 3
       [],//floor 4
@@ -382,18 +421,21 @@ const ScrollingGame = () => {
       )
     }
 
-
-
     //bizzaro map world
     return (
       <Fragment>
+        <Layer
+          index={0}
+          img={castleFiles.castleFull}
+          width={layerWidth}
+          left=[0}
+          top={0}
+          perspective={sidewalkPerspective}
+        />
 
         <div
           style={{transform:"scale(0.5)",position:"absolute",left:0}}
-          onScroll={(e: any) => {
-          setScroll([e.target.scrollLeft, e.target.scrollTop])
-          console.log(scrollX,scrollY)
-        }}>
+        >
         {floors}
         </div>
 
@@ -427,7 +469,7 @@ const ScrollingGame = () => {
 
   //console.log("scrollX",scrollX)
 
-  const castleOffset = 0.2
+
   const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
 
   let sky: React.ReactNode | null = null;
