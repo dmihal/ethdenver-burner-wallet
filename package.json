@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "install": "lerna bootstrap",
-    "build": "lerna run --ignore local-wallet --ignore basic-wallet --ignore test-wallet build",
+    "build": "lerna run --ignore local-wallet --ignore basic-wallet --ignore test-wallet --ignore admin-wallet build",
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
     "start-admin": "lerna run --parallel start-admin",
     "start-basic": "lerna run --parallel start-basic",
