@@ -442,6 +442,7 @@ const ScrollingGame = () => {
           img={castleFiles['floor'+f]}
           left={0}
           top={floorLocation}
+          width={layerWidth}
         >
           {displayMissions(f, MAP_JSON_LOADED_BY_USER_ADDRESS[f-1])}
         </Floor>

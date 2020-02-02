@@ -5,7 +5,7 @@ interface QuestButtonProps {
   color: string;
   task: string;
   xp: number;
-  fn: function;
+  fn: () => any;
 }
 
 const QuestButton: React.FC<QuestButtonProps> = ({ location, color, task, xp, fn }) => {
