@@ -18,6 +18,7 @@ import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable
 
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
+import MissionPlugin from 'mission-plugin';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import TestHelpersPlugin from 'test-helpers-plugin';
@@ -84,6 +85,7 @@ const BurnerWallet = () =>
         tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
         network: '5',
       }),
+      new MissionPlugin(),
       new ENSPlugin('5'),
       new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),

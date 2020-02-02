@@ -11,6 +11,8 @@ import Layer from './Layer';
 import Floor from './Floor';
 import StartButton from './StartButton';
 import PegaBufficorn2 from './PegaBufficorn2';
+import Missions from './Missions';
+import Tiles from './Tiles';
 
 import HUD from './HUD';
 
@@ -31,9 +33,6 @@ const SHOWOWOCKI = false
 const SHOWBOUNTIES = false
 
 const SHOWHUD = true
-
-import mapFiles from '../../images/map';
-
 
 const HEIGHT_TO_EXPLODE_AT = 0.3
 
@@ -333,43 +332,6 @@ const ScrollingGame = () => {
   let lowbound = height*0.4
 
 
-  const displayMissions = (floor, missions)=>{
-    console.log("displayMissions",floor, missions)
-    let missionRender = []
-    let missionList = []
-    for( let m in missions ){
-      let mission = missions[m]
-      console.log("RENDERING MISSION",mission)
-      missionRender.push(
-        <div key={"image_"+floor+"_"+m}>
-          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission.game_x_coord*106-mission.game_y_coord*69,bottom:238+mission.game_x_coord*21+mission.game_y_coord*43}} src={mapFiles[mission.image]} />
-        </div>
-      )
-      if(mission.button){
-        missionList.push(
-          <div key={"questbutton_"+floor+"_"+m}>
-            <QuestButton location={mission.title} color={mission.color} task={mission.task} xp={mission.xp} fn={mission.fn}/>
-          </div>
-        )
-      }else{
-        missionList.push(
-          <div key={"questinfo_"+floor+"_"+m}>
-            <QuestInfo location={mission.title} color={mission.color} task={mission.task} xp={mission.xp} />
-          </div>
-        )
-      }
-
-    }
-    return (
-      <div>
-        <div style={{position:"absolute",right:-width*0.9,bottom:400-missions.length*30,width:width*1.5}}>
-          {missionList}
-        </div>
-        {missionRender}
-      </div>
-    )
-  }
-
   const castleOffset = 0.2
 
   if(exploded){
@@ -377,60 +339,6 @@ const ScrollingGame = () => {
 
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
-
-
-    const MAP_JSON_LOADED_BY_USER_ADDRESS = [
-      [
-        {
-          image:"fortmatic",
-          title:"Fortmatic",
-          color:"#6951ff",
-          task:"Login with Fortmatic to claim BuffiDAI!",
-          xp:"50",
-          game_x_coord:2,
-          game_y_coord:3,
-          button:true,
-          fn:()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")}
-        },
-        {
-          image:"npcscan",
-          title:"Scan In",
-          color:"#57877b",
-          task:"Scan your badge for first XP!",
-          xp:"25",
-          game_x_coord:1,
-          game_y_coord:2,
-          button: false,
-        },
-        {
-          image:"frontdesk",
-          title:"Front Desk",
-          color:"#577b87",
-          task:"Get your badge and swag bag!",
-          xp:"0",
-          game_x_coord:1,
-          game_y_coord:1,
-          button: false,
-        },
-      ],
-      [
-        {
-          image:"owocki",
-          title:"Bullrun Owocki",
-          color:"#ff0000",
-          task:"Talk OSS with Owocki!",
-          xp:"50",
-          game_x_coord:3,
-          game_y_coord:3,
-          button: false,
-        },
-      ],
-      [],//floor 3
-      [],//floor 4
-      [],//floor 5
-      [],//floor 6
-    ]
-
 
     for(let f=6;f>0;f--){
       console.log("floor"+f)
@@ -442,9 +350,9 @@ const ScrollingGame = () => {
           img={castleFiles['floor'+f]}
           left={0}
           top={floorLocation}
-          width={layerWidth}
         >
-          {displayMissions(f, MAP_JSON_LOADED_BY_USER_ADDRESS[f-1])}
+          <Missions floor={f} />
+          <Tiles floor={f} />
         </Floor>
       )
     }

@@ -1,0 +1,46 @@
+Arguments: 
+  /Users/dmihal/.nvm/versions/node/v10.15.2/bin/node /Users/dmihal/.nvm/versions/node/v10.15.2/bin/yarn build
+
+PATH: 
+  /Users/dmihal/go/bin:/Users/dmihal/.cargo/bin:/Users/dmihal/.nvm/versions/node/v10.15.2/bin:/Users/dmihal/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dmihal/.rvm/bin:/Users/dmihal/.rvm/bin:/Users/dmihal/Library/Android/sdk/platform-tools/:/Users/dmihal/Library/Android/sdk/tools:/Users/dmihal/Library/Android/sdk/platform-tools
+
+Yarn version: 
+  1.19.1
+
+Node version: 
+  10.15.2
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/dmihal/keystone/burner/events/ethdenver-burner-wallet/packages/mission-plugin/package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at /Users/dmihal/.nvm/versions/node/v10.15.2/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/dmihal/.nvm/versions/node/v10.15.2/lib/node_modules/yarn/lib/cli.js:304:30)
+      at /Users/dmihal/.nvm/versions/node/v10.15.2/lib/node_modules/yarn/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "mission-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "dist/MissionPlugin.js",
+    "types": "dist/MissionPlugin.d.ts",
+    "scripts": {
+      "build": "tsc && yarn images",
+      "images": "copyfiles -u 1 \"src/**/*.png\" dist/",
+      "start-basic": "tsc -w",
+      "start-test": "tsc -w",
+      "start-local": "tsc -w"
+    },
+    "dependencies": {
+      "@burner-wallet/types": "^1.0.5"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

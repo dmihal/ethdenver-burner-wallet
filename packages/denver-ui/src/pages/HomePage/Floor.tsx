@@ -3,7 +3,6 @@ import React from 'react';
 interface LayerProps {
   index: number;
   img: string;
-  width: number;
   left: number;
   top: number;
   perspective?: number;
@@ -13,7 +12,7 @@ interface LayerProps {
 }
 
 const Layer: React.FC<LayerProps> = ({
-  index, img, width, left, top, perspective=0, opacity = 0.99, scaleY = 1.0, brightness = 100, children
+  index, img, left, top, perspective=0, opacity = 0.99, scaleY = 1.0, brightness = 100, children
 }) => {
   const _opacity = opacity >= 1 ? 0.99 : opacity;
 
@@ -26,9 +25,6 @@ const Layer: React.FC<LayerProps> = ({
     }}>
       <img
         src={img}
-        style={{
-          width: Math.floor(width)
-        }}
       />
       {children}
     </div>
