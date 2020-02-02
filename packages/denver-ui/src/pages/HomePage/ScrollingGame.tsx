@@ -202,21 +202,21 @@ const ScrollingGame = () => {
   fullLayerWidth = Math.min(fullLayerWidth,1200)
 
   let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
-  let mountainsTop = rangePercent(scrollPercent,height*0.30,height*0.01)
+  let mountainsTop = rangePercent(scrollPercent,height*0.2,height*0.01)
   let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
   const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
   const mountainDistance = 0.08 - scrollPercent/100 * 0.08
   let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
-  let foothillsTop = rangePercent(scrollPercent,height*0.16,-height*0.08)
+  let foothillsTop = rangePercent(scrollPercent,height*0.1,-height*0.08)
   let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
   let cityDistance = 0.6 - scrollPercent/100 * 0.3
-  let cityWidth = fullLayerWidth *1.2
+  let cityWidth = fullLayerWidth *1.05
   let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
   let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
   let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
   let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
   let treesDistance = 0.8 - scrollPercent/100 * 0.2
-  let treesTop = rangePercent(scrollPercent,height*0.75,height*0.2)
+  let treesTop = rangePercent(scrollPercent,height*0.70,height*0.2)
   let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
 
   denverBackground = (
@@ -252,8 +252,8 @@ const ScrollingGame = () => {
       <Layer
         index={layerCount++}
         img={mountainsFiles.foothills}
-        width={fullLayerWidth}
-        left={-width*0.05-layerLeft - scrollX * foothillsDistance}
+        width={fullLayerWidth*1.1}
+        left={-width*0.3-layerLeft - scrollX * foothillsDistance}
         top={foothillsTop}
         perspective={foothillsPerspective}
         brightness={rangePercent(scrollPercent,100,50)}
@@ -477,7 +477,7 @@ const ScrollingGame = () => {
 
 
           <PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
-          
+
 
           {denverBackground}
 
