@@ -7,16 +7,15 @@ interface QuestButtonProps {
   xp: number;
 }
 
-const QuestButton: React.FC<QuestButtonProps> = ({ location, color, task, xp }) => {
+const QuestButton: React.FC<QuestButtonProps> = ({ location, color, task, xp, fn }) => {
   return (
-    <div style={{zIndex:1,cursor:"pointer",width:"80%",marginLeft:"50%"}} onClick={()=>{
-        alert("click")
-    }}>
+    <div style={{zIndex:1,cursor:"pointer",width:"100%",height:60}} onClick={fn}>
 
-      <div style={{margin:4,zIndex:1,padding:6,backgroundColor:"#EEEEEE",borderRadius:6,borderBottom:"4px solid #9d9d9d"}}>
-        <span style={{verticalAlign:"middle",color:"#444444",fontSize:"26"}} className={"title"}>
-        <span style={{paddingRight:10,opacity:0.5}}>+{xp} XP</span>
-        <span style={{color:color}}>{location}: </span> {task}</span>
+      <div style={{height:60,fontSize:26,margin:6,zIndex:1,padding:6,backgroundColor:color,borderRadius:8,borderBottom:"8px solid #9d9d9d"}}>
+        <span style={{paddingLeft:10,verticalAlign:"middle",color:"#EEEEEE",fontSize:"26"}} className={"title"}>
+          {task}
+          <span style={{paddingLeft:10,opacity:0.5}}>+{xp} XP</span>
+        </span>
       </div>
 
     </div>

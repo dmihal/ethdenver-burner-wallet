@@ -5,7 +5,10 @@ import QRCode from 'qrcode.react';
 import Blockies from 'react-blockies';
 
 import QuestButton from './QuestButton';
+import QuestInfo from './QuestInfo';
+
 import Layer from './Layer';
+import Floor from './Floor';
 import StartButton from './StartButton';
 import PegaBufficorn2 from './PegaBufficorn2';
 
@@ -32,6 +35,8 @@ const SHOWBOUNTIES = false
 
 const SHOWHUD = true
 
+import mapFiles from '../../images/map';
+
 
 const HEIGHT_TO_EXPLODE_AT = 0.3
 
@@ -50,7 +55,7 @@ const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   style: ({ boxWidth }) => ({
     left: boxWidth * 1.1 + 'px',
     height: boxWidth * 0.9 + 'px',
-    width:"95%"
+    width:"100%"
   }),
 })<{ boxWidth: number }>`
   z-index: 999;
@@ -105,7 +110,7 @@ const ScrollingGame = () => {
 
   const [coverMax, setCoverMax] = useState(10000);
   const [scrollPercent, setScrollPercent] = useState(0);
-  const [exploded, setExploded] = useState(0);
+  const [exploded, setExploded] = useState(false);
 
   let [containerRef, { height, width, }] = useDimensions();
   let displayWidth = width
@@ -143,7 +148,7 @@ const ScrollingGame = () => {
           }
         }
 
-    },1500)
+    },500)
   }, []);
 
   useEffect(()=>{
@@ -161,21 +166,19 @@ const ScrollingGame = () => {
       //console.log("coverMax",coverMax)
       setCoverMax(coverMax)
 
-      if(coverMax < height*HEIGHT_TO_EXPLODE_AT{
+      if(coverMax < height*HEIGHT_TO_EXPLODE_AT){
         console.log("YEEEESSS")
         setExploded(true)
 
         let amount = width/2
 
-
-
         setTimeout(()=>{
           window.scrollTo({
             top: 3000,
-            left: 500,
+            left: width*0.777,
             behavior: 'smooth',
           });
-        },1200)
+        },900)
 
       }
     }
@@ -336,35 +339,83 @@ const ScrollingGame = () => {
   let sidewalkDivider = 2;
 
 
-  const FLOOR_PADDING = width
+  const FLOOR_PADDING = 600
   let sidewalkBottom = coverMax
   let lowbound = height*0.4
 
-  if(exploded){///////CHANGE THIS FOR EASIER/HARDER EXPLOSION
-    //exploded = true
+
+  const displayMissions = (floor, missions)=>{
+    console.log("displayMissions",floor, missions)
+    let missionRender = []
+    let missionList = []
+    for( let m in missions ){
+      let mission = missions[m]
+      console.log("RENDERING MISSION",mission)
+      missionRender.push(
+        <div key={"image_"+floor+"_"+m}>
+          <img style={{opacity:0.99,maxWidth:175,position:"absolute",right:346+mission[5]*106-mission[6]*69,bottom:238+mission[5]*21+mission[6]*43}} src={mapFiles[mission[0]]} />
+        </div>
+      )
+      if(mission[7]){
+        missionList.push(
+          <div key={"questbutton_"+floor+"_"+m}>
+            <QuestButton location={mission[1]} color={mission[2]} task={mission[3]} xp={mission[4]} fn={mission[8]}/>
+          </div>
+        )
+      }else{
+        missionList.push(
+          <div key={"questinfo_"+floor+"_"+m}>
+            <QuestInfo location={mission[1]} color={mission[2]} task={mission[3]} xp={mission[4]} />
+          </div>
+        )
+      }
+
+    }
+    return (
+      <div>
+        <div style={{position:"absolute",right:-width*0.9,bottom:400-missions.length*30,width:width*1.5}}>
+          {missionList}
+        </div>
+        {missionRender}
+      </div>
+    )
+  }
+
+  if(exploded){
 
     sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
     sidewalkDivider = 1
 
 
+    const MAP_JSON_LOADED_BY_USER_ADDRESS = [
+      [
+        ["fortmatic","Fortmatic","#6951ff","Login with Fortmatic to claim BuffiDAI!","50",2,3,true,()=>{alert("this is a function but here is an alert with some link haha https://dashboard.fortmatic.com/login")}],
+        ["npcscan","Scan In","#57877b","Scan your badge for first XP!","25",1,2,false],
+        ["frontdesk","Front Desk","#57877b","Get your badge and swag bag!","0",1,1,false],
+      ],
+      [
+        ["owocki","Bullrun Owocki","#ff0000","Talk OSS with Owocki!","50",3,3],
+      ],
+      [],//floor 3
+      [],//floor 4
+      [],//floor 5
+      [],//floor 6
+    ]
+
+
     for(let f=6;f>0;f--){
       console.log("floor"+f)
+      let floorLocation = (7-f)*(FLOOR_PADDING)
       floors.push(
-        <Layer
+        <Floor
           key={"floor"+f}
-          index={f+10}
+          index={0}
           img={castleFiles['floor'+f]}
-          width={width*2}
           left={0}
-          top={(7-f)*(FLOOR_PADDING)}
+          top={floorLocation}
         >
-          <ButtonBox boxWidth={width}>
-
-            <QuestButton location="Front Desk" color="#575b87" task="Check in to venue" xp={50} />
-            <QuestButton location="Art Gallery" color="#cfa286" task="Bid on artwork" xp={100} />
-            <QuestButton location="Coat Check" color="#57877b" task="Check Coat" xp={25} />
-          </ButtonBox>
-        </Layer>
+          {displayMissions(f, MAP_JSON_LOADED_BY_USER_ADDRESS[f-1])}
+        </Floor>
       )
     }
 
@@ -374,7 +425,9 @@ const ScrollingGame = () => {
     return (
       <Fragment>
 
-        <div onScroll={(e: any) => {
+        <div
+          style={{transform:"scale(0.5)",position:"absolute",left:0}}
+          onScroll={(e: any) => {
           setScroll([e.target.scrollLeft, e.target.scrollTop])
           console.log(scrollX,scrollY)
         }}>
