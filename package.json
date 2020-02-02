@@ -11,7 +11,8 @@
     "lint": "eslint '*/**/*.{js,ts,tsx}'",
     "start-admin": "lerna run --parallel start-admin",
     "start-basic": "lerna run --parallel start-basic",
-    "start-test": "lerna run --parallel start-test",
+    "start-test": "lerna run --ignore test-sponsor-wallet --parallel start-test",
+    "start-test-sponsor": "lerna run --ignore test-wallet --parallel start-test",
     "start-local": "lerna run --parallel start-local"
   },
   "workspaces": [
@@ -19,6 +20,7 @@
     "basic-wallet",
     "contracts",
     "local-wallet",
+    "test-sponsor-wallet",
     "test-wallet",
     "packages/*"
   ],

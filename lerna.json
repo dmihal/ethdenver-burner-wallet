@@ -4,6 +4,7 @@
     "basic-wallet",
     "contracts",
     "local-wallet",
+    "test-sponsor-wallet",
     "test-wallet",
     "packages/*"
   ],
