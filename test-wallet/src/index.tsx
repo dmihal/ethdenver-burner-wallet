@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
+import { NativeAsset, ERC20Asset, ERC777Asset, xdai } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, GSNGateway } from '@burner-wallet/core/gateways';
@@ -22,6 +22,7 @@ import MissionPlugin from 'mission-plugin';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import TestHelpersPlugin from 'test-helpers-plugin';
+import buffIcon from './buff.png';
 
 
 const buff = new ERC777Asset({
@@ -29,7 +30,8 @@ const buff = new ERC777Asset({
   name: 'BuffiDai',
   network: '42',
   address: '0x78D7ac51Ea53aF5E98EDe66DF28Ccb2f9BE59CE1',
-  icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
+  icon: buffIcon,
+  usdPrice: 1,
 });
 
 const xp = new ERC777Asset({
@@ -66,7 +68,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, xp, keth, kdai],
+  assets: [buff, xdai, xp, keth, kdai],
 });
 
 const exchange = new Exchange({

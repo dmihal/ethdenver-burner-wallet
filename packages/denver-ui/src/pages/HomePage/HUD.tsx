@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
-import OverlayBuffidai from './OverlayBuffidai';
+import OverlayBalance from './OverlayBalance';
 import OverlayXP from './OverlayXP';
 import SideMenu from './SideMenu';
 import qrscan from "../../images/qrscan.png";
@@ -60,7 +60,11 @@ const HUD: React.FC = () => {
       <OuterContainer>
         <InnerContainer>
           <Overlay top={24} side="left">
-            <OverlayBuffidai />
+            <OverlayBalance asset="buff" />
+          </Overlay>
+
+          <Overlay top={64} side="left">
+            <OverlayBalance asset="xdai" />
           </Overlay>
 
           <Overlay top={100} side="left" style={{ zIndex: 170 }}>
