@@ -1,0 +1,34 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and Deploy to Surge
+    env:
+      REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY }}
+      REACT_APP_VAPID_KEY: ${{ secrets.REACT_APP_VAPID_KEY }}
+      REACT_APP_WALLET_ID: ${{ secrets.REACT_APP_WALLET_ID }}
+      REACT_APP_FORTMATIC_KEY: ${{ secrets.REACT_APP_FORTMATIC_KEY }}
+      REACT_APP_WALLET_FACTORY_ADDRESS: ${{ secrets.REACT_APP_WALLET_FACTORY_ADDRESS }}
+      REACT_APP_TEST_ADAPTER: ${{ secrets.REACT_APP_TEST_ADAPTER }}
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Surge and deploy
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - run: yarn install
+      - run: yarn build
+      - run: |
+          cd test-wallet/
+          yarn build
+          cd build/
+          mv index.html 200.html
+          npm install -g surge
+          surge ./ ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
