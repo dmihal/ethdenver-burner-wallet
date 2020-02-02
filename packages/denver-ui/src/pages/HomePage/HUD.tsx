@@ -16,6 +16,7 @@ const OuterContainer = styled.div`
   display: flex;
   justify-content: center;
   transform: translateX(-20000px);
+  z-index: 150;
 `;
 
 const InnerContainer = styled.div`
