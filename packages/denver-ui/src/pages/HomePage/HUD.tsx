@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
 import OverlayBalance from './OverlayBalance';
 import OverlayXP from './OverlayXP';
-import SideMenu from './SideMenu';
 import qrscan from "../../images/qrscan.png";
 
 const OuterContainer = styled.div`
@@ -54,7 +53,6 @@ const ScanButton = styled.button`
 `;
 
 const HUD: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const { actions } = useBurner();
   return (
       <OuterContainer>
@@ -67,10 +65,6 @@ const HUD: React.FC = () => {
             <OverlayBalance asset="xdai" />
           </Overlay>
 
-          <Overlay top={100} side="left" style={{ zIndex: 170 }}>
-            <button onClick={() => setMenuOpen(!menuOpen)}>Menu</button>
-          </Overlay>
-
           <Overlay top={24} side="right">
             <OverlayAccount />
           </Overlay>
@@ -78,8 +72,6 @@ const HUD: React.FC = () => {
           <Overlay top={70} side="right">
             <OverlayXP />
           </Overlay>
-
-          <SideMenu isOpen={menuOpen} />
 
           <UIBar>
             <ScanButton onClick={() => {
