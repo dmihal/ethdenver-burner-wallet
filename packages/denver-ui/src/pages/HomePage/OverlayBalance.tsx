@@ -14,6 +14,7 @@ const Container = styled.div<{ icon: string | null }>`
   filter: drop-shadow(0px 0px 4px #222222);
   background-image: url('${valuehud}');
   background-size: contain;
+  background-repeat: no-repeat;
 
   ${({ icon }) => icon ? `
     :after {
