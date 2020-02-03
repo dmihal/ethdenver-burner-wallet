@@ -13,6 +13,7 @@ import ActivityPage from './pages/ActivityPage';
 import AdvancedPage from './pages/AdvancedPage';
 import ConfirmPage from './pages/ConfirmPage';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 import PKPage from './pages/PKPage';
 import ReceiptPage from './pages/ReceiptPage';
 import ReceivePage from './pages/ReceivePage';
@@ -29,6 +30,7 @@ export default class DenverUI extends BurnerUICore {
       { path: '/send', component: SendPage },
       { path: '/confirm', component: ConfirmPage },
       { path: '/receipt/:asset/:txHash', component: ReceiptPage },
+      { path: '/account', component: ProfilePage },
       { path: '/advanced', component: AdvancedPage },
     ];
   }
