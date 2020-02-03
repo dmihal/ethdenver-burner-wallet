@@ -14,8 +14,10 @@ import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
+import LegacyPlugin from '@burner-wallet/legacy-plugin';
 import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
+import DenverMiscPlugin from 'denver-misc-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import MissionPlugin from 'mission-plugin';
@@ -82,6 +84,10 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       exchange,
+      new DenverMiscPlugin({
+        dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B',
+        dispenserNetwork: '42',
+      }),
       new BurnableENSPlugin({
         domain: 'myburner.test',
         tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
@@ -97,6 +103,7 @@ const BurnerWallet = () =>
       new ThreeBoxEditProfilePlugin(),
       new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
       new BurnerConnectPlugin('ETHDenver test wallet'),
+      new LegacyPlugin(),
     ]}
   />
 
