@@ -4,9 +4,27 @@ import { PluginPageContext } from '@burner-wallet/types';
 import Box from '3box';
 import makeBlockie from 'ethereum-blockies-base64';
 
-const Table = styled.table`
-  @import url('https://fonts.googleapis.com/css?family=Germania+One');
+const TopFive = styled.div`
+  background-image: url('https://i.imgur.com/hiE3eK7.png');
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: left;
+  height: 50px;
+  width: 100%;
+  background-size: auto 26px;
+`
 
+const EveryBodyElse = styled.div`
+  background-image: url('https://i.imgur.com/7AKwc5A.png');
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: left;
+  height: 50px;
+  width: 100%;
+  background-size: auto 26px;
+`
+
+const Table = styled.table`
   margin-bottom: 18px;
   border-collapse: collapse;
 
@@ -48,14 +66,13 @@ const TableRow = styled.tr`
     if (isTopFive) {
       return `
         & h3 {
-          font-family: 'Germania One';
-          font-size: 24px;
+          font-size: 20px;
         }
       `;
     } else {
       return `
       border-bottom: 1px solid #ffffff2e;
-    `;
+      `
     }
   }
   }
@@ -69,7 +86,17 @@ const DataRank = styled.td`
 `
 
 const DataUser = styled.td`
-  width: 67%;
+
+  ${({ isTopFive }) => {
+    if (isTopFive) {
+      return `
+      width: 75%;
+      `;
+    } else {
+      'width: 67%;'
+    }
+  }
+  }
 `
 
 const DataXP = styled.td`
@@ -78,10 +105,8 @@ const DataXP = styled.td`
   ${({ isTopFive }) => {
     if (isTopFive) {
       return `
-        font-family: 'Germania One';
-        
         & p {
-          font-size: 24px;
+          font-size: 16px;
         }
       `;
     }
@@ -115,6 +140,7 @@ const ProfileNames = styled.div`
 
   & h3 {
     height: 65%;
+    font-weight: 800;
   }
 `
 
@@ -302,7 +328,23 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
   const { Page } = BurnerComponents;
   const StyledPage = styled(Page)`
   background-color: #231047;
-  
+  color: white;
+
+  & rect {
+    fill: #ffffff;
+  }
+
+  & h1 {
+    background-image: url('https://i.imgur.com/cNaIE8G.png');
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: left;
+    height: 50px;
+    width: 100%;
+    background-size: auto 30px;
+    color: transparent;
+  }
+
   & svg {
     fill: white;
   }
@@ -357,7 +399,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
   return (
     <StyledPage title="Leaderboard">
-      <h2>Top Five</h2>
+      <TopFive />
       <Table>
         <TableBody>
           {topFiveOrder.map((account, i) => (
@@ -392,7 +434,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
         click
       </button> */}
 
-      <h2>Everybody else</h2>
+      <EveryBodyElse />
       <Table>
         <TableBody>
           {rankingOrder.map((account, i) => (
@@ -410,9 +452,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
       </Table>
 
       <LoadingWrapper>
-        {showLoading && (
-          <LoadingAnimation />
-        )}
+        {showLoading && <LoadingAnimation />}
       </LoadingWrapper>
     </StyledPage>
   );
@@ -432,7 +472,7 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
         </DataRank>
       )}
 
-      <DataUser>
+      <DataUser isTopFive={isTopFive}>
         <Profile>
           {isTopFive && <ProfilePicture src={src} alt="Profile" />}
           <ProfileNames isTopFive={isTopFive}>
