@@ -31,7 +31,7 @@ export default class DenverUI extends BurnerUICore {
       { path: '/confirm', component: ConfirmPage },
       { path: '/receipt/:asset/:txHash', component: ReceiptPage },
       { path: '/account', component: ProfilePage },
-      { path: '/advanced', component: AdvancedPage },
+      { path: '/settings', component: AdvancedPage },
     ];
   }
 

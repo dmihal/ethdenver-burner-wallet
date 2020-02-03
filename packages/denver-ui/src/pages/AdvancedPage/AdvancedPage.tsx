@@ -6,7 +6,7 @@ const { PluginElements } = DataProviders;
 
 const AdvancedPage: React.FC = () => {
   return (
-    <Page title="Advanced">
+    <Page title="Settings">
       <PluginElements position='advanced' />
     </Page>
   );

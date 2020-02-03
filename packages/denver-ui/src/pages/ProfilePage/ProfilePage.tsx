@@ -54,7 +54,7 @@ const StyledInput = styled.input`
 `;
 
 const ProfilePage: React.FC = () => {
-  const { defaultAccount } = useBurner();
+  const { defaultAccount, actions } = useBurner();
   return (
     <Page title="Account">
       <PluginElements position='home-top' />
@@ -77,6 +77,8 @@ const ProfilePage: React.FC = () => {
       </AddressInputContainer>
 
       <PluginElements position='home-middle' />
+
+      <Button onClick={() => actions.navigateTo('/settings')}>Settings</Button>
     </Page>
   )
 }
