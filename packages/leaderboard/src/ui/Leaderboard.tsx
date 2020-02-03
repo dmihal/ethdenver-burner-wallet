@@ -86,7 +86,6 @@ const DataRank = styled.td`
 `
 
 const DataUser = styled.td`
-
   ${({ isTopFive }) => {
     if (isTopFive) {
       return `
@@ -416,24 +415,6 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
         </TableBody>
       </Table>
 
-      {/* <h2>Me</h2>
-      <Table>
-        <TableBody>
-          <LeaderRow
-            profile={me}
-            xp={me.balance}
-            address={me.address}
-            key={me.address}
-            rank={me.rank}
-            isTopFive={false}
-            offset={null}
-          />
-        </TableBody>
-      </Table> */}
-      {/* <button onClick={handleFetchDaoMembers}>
-        click
-      </button> */}
-
       <EveryBodyElse />
       <Table>
         <TableBody>
@@ -481,7 +462,6 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
             </h3>
 
             <ProfileMetaNames>
-
               {ensName ? (
                 <a href={`https://${ensName}`}>
                   <p>{ensName}</p>
@@ -491,13 +471,6 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
                   <p>{`@${twitter}`}</p>
                 </a>
               )}
-
-              {/* <a href={`https://twitter.com/oznekenzo`}>
-                <p>@oznekenzo</p>
-              </a>
-              <a href="oznekenzo.buffidao.eth">
-                <p>oznekenzo.buffidao.eth</p>
-              </a> */}
             </ProfileMetaNames>
           </ProfileNames>
         </Profile>
