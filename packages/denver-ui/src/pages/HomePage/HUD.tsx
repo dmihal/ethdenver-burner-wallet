@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
+import OverlayTokens from './OverlayTokens';
 import OverlayBalance from './OverlayBalance';
 import OverlayXP from './OverlayXP';
 import qrscan from "../../images/qrscan.png";
@@ -63,6 +64,10 @@ const HUD: React.FC = () => {
 
           <Overlay top={64} side="left">
             <OverlayBalance asset="xdai" />
+          </Overlay>
+
+          <Overlay top={104} side="left">
+            <OverlayTokens />
           </Overlay>
 
           <Overlay top={24} side="right">
