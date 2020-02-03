@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { NativeAsset, ERC20Asset, ERC777Asset } from '@burner-wallet/assets';
+import { NativeAsset, ERC20Asset, ERC777Asset, xdai } from '@burner-wallet/assets';
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, GSNGateway } from '@burner-wallet/core/gateways';
@@ -21,6 +21,7 @@ import FortmaticSigner from 'fortmatic-signer';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import TestHelpersPlugin from 'test-helpers-plugin';
+import ChingPlugin from 'ching-plugin';
 
 
 const buff = new ERC777Asset({
@@ -65,7 +66,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, xp, keth, kdai],
+  assets: [buff, xp, xdai, keth, kdai],
 });
 
 const exchange = new Exchange({
@@ -93,6 +94,7 @@ const BurnerWallet = () =>
       new ThreeBoxEditProfilePlugin(),
       new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
       new BurnerConnectPlugin('ETHDenver test wallet'),
+      new ChingPlugin(),
     ]}
   />
 
