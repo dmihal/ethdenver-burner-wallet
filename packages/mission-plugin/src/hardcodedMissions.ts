@@ -28,18 +28,6 @@ const missions: Mission[] = [
     button: false,
     floor: 1,
   },
-
-  {
-    image: owocki,
-    title:"Bullrun Owocki",
-    color:"#ff0000",
-    task:"Talk OSS with Owocki!",
-    xp:"50",
-    game_x_coord:3,
-    game_y_coord:3,
-    button: false,
-    floor: 2,
-  },
 ];
 
 export default missions;
