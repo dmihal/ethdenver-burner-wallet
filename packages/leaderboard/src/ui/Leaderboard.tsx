@@ -47,7 +47,7 @@ const TableRow = styled.tr`
 
   & td {
     text-align: left;
-    padding: 6px 0 0 0;
+    padding: 6px 0 ;
     margin-top: 15px;
     height: 56px
     vertical-align: top;
@@ -122,7 +122,7 @@ const Profile = styled.div`
 
 const ProfilePicture = styled.img`
   min-width: 45px;
-  min-height: 45px;
+  min-height: fit-content;
   width: 45px;
   height: 45px;
   border-radius: 50%;
@@ -134,7 +134,7 @@ const ProfileNames = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  height: 45px;
+  height: fit-content;
   min-height: 45px;
 
   & h3 {
@@ -146,8 +146,9 @@ const ProfileNames = styled.div`
 const ProfileMetaNames = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  height: 35%;
+  align-items: flex-start;
+  flex-direction: column;
+  height: fit-content;
 
   & p {
     opacity: .6;
@@ -462,11 +463,13 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
             </h3>
 
             <ProfileMetaNames>
-              {ensName ? (
+              {name && <p>{shortenEthAddr(address)}</p>}
+              {ensName && (
                 <a href={`https://${ensName}`}>
                   <p>{ensName}</p>
                 </a>
-              ) : twitter && (
+              )}
+              {twitter && (
                 <a href={`https://twitter.com/${twitter}`}>
                   <p>{`@${twitter}`}</p>
                 </a>
