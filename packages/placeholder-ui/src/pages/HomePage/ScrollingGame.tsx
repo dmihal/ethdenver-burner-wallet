@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import useDimensions from 'react-use-dimensions';
 
 import Layer from './Layer';
-import PegaBufficorn2 from './PegaBufficorn2';
 
 import cityFull from "../../images/cityFull.png"
 import stars from "../../images/stars.png"
@@ -84,9 +83,18 @@ const Title = styled.div.attrs<{ topPos: number }>({
   z-index: 100;
 `;
 
+const Content = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 110;
+`;
+
 const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 100)) + finish;
 
-const ScrollingGame = () => {
+const ScrollingGame: React.FC = ({ children }) => {
   const [exploded, setExploded] = useState(false);
   let [containerRef, { height, width, }] = useDimensions();
   height = height || window.innerHeight;
@@ -428,7 +436,6 @@ const ScrollingGame = () => {
     drawPositions();
   }
 
-//  <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)}  />
   return (
     <Fragment>
       <Title ref={title} topPos={positionVars.current.titlePos}>
@@ -442,24 +449,6 @@ const ScrollingGame = () => {
       }}>
         <Sky topPos={positionVars.current.skyPos} ref={sky} />
 
-        {/*!loggedIn && (
-          <StartButton
-            scrollX={scrollX}
-            height={height}
-            onClick={()=>{
-              setLoggedIn(true)
-              setTimeout(() => {
-                window.scrollTo({
-                  top: height*1.33,
-                  left: width*0.1,
-                  behavior: 'smooth',
-                });
-                setOpenedBuilding(true);
-              }, 30);
-            }}
-          />
-        )*/}
-
         <div style={{
           position:"absolute",
           top:height*0.1,
@@ -467,67 +456,13 @@ const ScrollingGame = () => {
           height:height*screenRatio,
         }}>
 
-
-          <PegaBufficorn2 ref={bufficorn} left={positionVars.current.buficornLeft} top={positionVars.current.bufficornTop}/>
-
           {denverBackground}
-
-          <Layer
-            index={layerCount++}
-            img={castleFiles.castleBack}
-            width={layerWidth}
-            left={positionVars.current.castleLeft}
-            top={positionVars.current.castleBackTop}
-            perspective={sidewalkPerspective}
-            ref={castleBack}
-          />
-
-          {setLayerCount(50)}
-
-          <Layer
-            index={layerCount++}
-            img={castleFiles._sidewalk_1}
-            width={layerWidth}
-            left={positionVars.current.castleLeft}
-            top={positionVars.current.sidewalkTop}
-            perspective={sidewalkPerspective}
-            ref={sidewalk}
-          />
-
-          {!showingPreExplosion ? (
-            <Layer
-              index={layerCount++}
-              img={castleFiles.floor1_preview}
-              width={layerWidth}
-              left={positionVars.current.castleLeft}
-              top={layer1Bottom + scrollOffsetBuilding}
-              perspective={sidewalkPerspective}
-              ref={floor1Preview}
-            />
-          ) : (
-            <Layer
-              index={layerCount++}
-              img={castleFiles.floor1}
-              width={layerWidth}
-              left={positionVars.current.castleLeft}
-              top={-12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
-              perspective={sidewalkPerspective}
-              ref={floor1}
-            />
-          )}
-
-          <Layer
-            index={layerCount++}
-            img={castleFiles.castleFull}
-            width={layerWidth}
-            left={positionVars.current.castleLeft}
-            top={coverMax + scrollOffsetBuilding/2}
-            perspective={sidewalkPerspective}
-            ref={castleFull}
-          />
-
         </div>
       </Fixed>
+
+      <Content>
+        {children}
+      </Content>
 
       <Scrollable ref={containerRef} onScroll={scrollListener}>
         <div style={{
