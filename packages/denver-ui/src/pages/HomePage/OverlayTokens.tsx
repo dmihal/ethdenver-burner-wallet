@@ -15,7 +15,7 @@ background-size: contain;
 background-repeat: no-repeat;
  */
 
-const Container = styled.div<{ icon: string | null }>`
+const Container = styled.div`
   height: 100px;
   width: 100px;
   font-size: 13px;
@@ -23,27 +23,10 @@ const Container = styled.div<{ icon: string | null }>`
   letter-spacing: -0.1;
   font-family: 'Squada One', Impact, Arial, Helvetica, sans-serif;
   filter: drop-shadow(0px 0px 4px #222222);
-
-
-  ${({ icon }) => icon ? `
-    :after {
-      content: '';
-      position: absolute;
-      right: 0;
-      display: block;
-      background-image: url('${icon}');
-      background-size: contain;
-      height: 30px;
-      width: 30px;
-      right: 37px;
-      background-repeat: no-repeat;
-      top: 7px;
-  ` : ''}
-  }
 `;
 
 
-const OverlayBalance: React.FC<{ asset: string }> = ({ asset }) => {
+const OverlayBalance: React.FC = () => {
   const { BurnerComponents } = useBurner();
   const [image,setImage] = useState(0)
 
@@ -71,19 +54,11 @@ const OverlayBalance: React.FC<{ asset: string }> = ({ asset }) => {
   },[]);
 
   return (
-    <BurnerComponents.AccountBalance
-      asset={asset}
-      render={(data: AccountBalanceData | null) => {
-
-        return (
-          <Container icon={data && data.asset.icon}>
-            <div style={{position:"absolute",top:17,right:26,textAlign:"right",fontSize:16}}>
-              <img src={possibleImage[image]} />
-            </div>
-          </Container>
-        );
-      }}
-    />
+    <Container>
+      <div style={{position:"absolute",top:17,right:26,textAlign:"right",fontSize:16}}>
+        <img src={possibleImage[image]} />
+      </div>
+    </Container>
   )
 }
 
