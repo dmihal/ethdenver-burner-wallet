@@ -98,38 +98,236 @@ const Title = styled.div.attrs<{ topPos: number }>({
   z-index: 100;
 `;
 
-
+const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 100)) + finish;
 
 const ScrollingGame = () => {
-  const [scroll, setScroll] = useState([0, 0]);
-  let [scrollX, scrollY] = scroll;
-
-  const [coverMax, setCoverMax] = useState(10000);
-  const [scrollPercent, setScrollPercent] = useState(0);
   const [exploded, setExploded] = useState(false);
-
   let [containerRef, { height, width, }] = useDimensions();
+  height = height || window.innerHeight;
+  width = width || window.innerWidth;
+
   let displayWidth = width
   width = Math.min(MAXWIDTH,width)
+  console.log({ height, width });
 
   const screenRatio = 7/1
-  const rightScrollBarOffset = 15
-  let totalHeight = height*screenRatio
-  let bottom = height+scrollY
-
   const overScrollToMakeFloorsAtTheTopShowUpBetter = 1.25
 
+  const positionVars = useRef<any>({
+    scrollX: 0,
+    scrollY: 0,
+    scrollPercent: 0,
+
+    coverMax: 10000,
+    layerWidth: width * 2,
+    fullLayerWidth: Math.min(displayWidth * 2, 1200),
+
+    exploding: false,
+
+
+
+    bufficornLeft: 0,
+    bufficornTop: 0,
+
+    skyPos: -height * 0.3,
+    mountainsTop: 0,
+    mountainLeft: 0,
+    underMountainOpacity: 1,
+    mountainFullOpacity: 1,
+    mountainOverOpacity: 1,
+
+    foothillsLeft: 0,
+    foothillsTop: 0,
+    cityLeft: 0,
+    cityTop: 0,
+    cityOffset: 0,
+    cityDistance: 0,
+    treesLeft: 0,
+    treesTop: 0,
+
+    castleLeft: 0,
+    scrollOffsetBuilding: 0,
+    sidewalkTop: 0,
+    sidewalkBottom: 0,
+    showingPreExplosion: false,
+  });
+
+  const updatePosition = (scrollX: number, scrollY: number) => {
+    positionVars.current.scrollX = scrollX;
+    positionVars.current.scrollY = scrollY;
+
+    const scrollPercent = Math.min(Math.max(Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter), 0), 100);
+    positionVars.current.scrollPercent = scrollPercent;
+    positionVars.current.coverMax = rangePercent(scrollPercent, height*0.8, -height);
+
+    positionVars.current.layerWidth = rangePercent(scrollPercent, width*2, width*1.1);
+    positionVars.current.fullLayerWidth = Math.min(rangePercent(scrollPercent, displayWidth*2, displayWidth*1.1), 1200);
+
+    positionVars.current.bufficornLeft = 0-(displayWidth - width) / 2 + scrollX / 7;
+    positionVars.current.bufficornTop = rangePercent(scrollPercent, height * 0.2, -height * 0.5);
+    positionVars.current.titlePos = height * 0.12 - scrollY / 10;
+
+    positionVars.current.skyPos = rangePercent(scrollPercent, -height * 0.3, 0.05);
+    positionVars.current.mountainsTop = rangePercent(scrollPercent, height * 0.20, height * 0.01);
+    const mountainDistance = 0.08 - scrollPercent/100 * 0.08;
+    positionVars.current.mountainLeft = -width*0.05-layerLeft - scrollX * mountainDistance;
+    positionVars.current.underMountainOpacity = rangePercent(scrollPercent, 0.99, 0.00);
+    positionVars.current.mountainFullOpacity = rangePercent(scrollPercent,0.99,0.1);
+    positionVars.current.mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
+
+    const foothillsDistance = 0.16 - scrollPercent/100 * 0.16
+    positionVars.current.foothillsLeft = -width*0.05-layerLeft - scrollX * foothillsDistance;
+    positionVars.current.foothillsTop = rangePercent(scrollPercent, height*0.1, -height*0.08);
+
+    positionVars.current.cityLeft = rangePercent(scrollPercent, positionVars.current.layerWidth*0.08, positionVars.current.layerWidth*0.05);
+    positionVars.current.cityTop = rangePercent(scrollPercent, height*0.2, height*0.02);
+    positionVars.current.cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05);
+    positionVars.current.cityDistance = 0.6 - scrollPercent/100 * 0.3;
+
+    const treesDistance = 0.8 - scrollPercent/100 * 0.2
+    positionVars.current.treesLeft = rangePercent(scrollPercent, positionVars.current.cityOffset - positionVars.current.cityLeft - treesDistance * scrollX, -positionVars.current.cityLeft)
+    positionVars.current.treesTop = rangePercent(scrollPercent, height*0.7, height*0.2);
+
+
+    const castleOffset = 0.2;
+    const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
+    positionVars.current.castleLeft = -width * castleOffset - castleScroll;
+
+
+
+    let scrollOffsetBuilding = -50;
+    const STARTSCROLLINGAT = 65;
+    if(scrollPercent > STARTSCROLLINGAT){
+      const thisScroll = (scrollPercent - STARTSCROLLINGAT) * 100 / (100 - STARTSCROLLINGAT);
+      scrollOffsetBuilding += thisScroll * 6.2;
+    }
+    positionVars.current.scrollOffsetBuilding = scrollOffsetBuilding;
+
+
+    positionVars.current.castleBackTop = positionVars.current.coverMax + scrollOffsetBuilding/2+15 // Math.max(height*0.2,coverMax+scrollOffsetBuilding/2+15)
+
+
+    positionVars.current.layer1Bottom = coverMax < height * 0.3
+      ? Math.max(height*0.6,rangePercent(scrollPercent,height*0.82,-height*0.5))
+      : coverMax;
+
+    let sidewalkDivider = 2;
+    let sidewalkBottom = coverMax;
+    positionVars.current.showingPreExplosion = false;
+
+    if (exploded || sidewalkBottom < height*0.5) {
+      sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
+      sidewalkDivider = 1;
+    }
+
+    if(sidewalkBottom < height*0.5){
+      positionVars.current.showingPreExplosion = true
+    }
+    if (positionVars.current.showingPreExplosion){
+      positionVars.current.layer1Bottom -= 3 * screenRatio
+    } else {
+      positionVars.current.layer1Bottom += 7 * screenRatio
+    }
+
+    positionVars.current.sidewalkTop = 6 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider;
+    positionVars.current.sidewalkBottom = sidewalkBottom;
+    positionVars.current.sidewalkDivider = sidewalkDivider;
+  };
+
+
+  // Layer refs
+  const bufficorn = useRef();
+  const title = useRef();
+  const sky = useRef();
+  const undermountains = useRef();
+  const mountainsFull = useRef();
+  const overmountains = useRef();
+  const foothills = useRef();
+  const city = useRef();
+  const treesRef = useRef();
+
+  const castleBack = useRef();
+  const sidewalk = useRef();
+  const floor1Preview = useRef();
+  const floor1 = useRef();
+  const castleFull = useRef();
+
+  const drawPositions = () => {
+    const setStyle = (ref: React.RefObject<HTMLElement>, prop: string, val: any) => {
+      if (ref.current) {
+        ref.current.style[prop] = val;
+      }
+    };
+    const setTransform = (ref: React.RefObject<HTMLElement>, x: number, y: number) =>
+      setStyle(ref, 'transform', `translate3d(${x}px, ${y}px, 0)`);
+    const setLayerWidth = (ref: React.RefObject<HTMLElement>, width: number) => {
+      if (ref.current) {
+        ref.current.querySelector('img').style.width = `${width}px`;
+      }
+    }
+
+    const {
+      mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
+      scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
+      bufficornLeft, bufficornTop, coverMax, titlePos, castleBackTop, castleLeft, fullLayerWidth,
+      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding
+    } = positionVars.current;
+
+    setTransform(bufficorn, bufficornLeft, bufficornTop);
+    setStyle(title, 'transform', `translate3d(0, ${titlePos}px, 0) scaleY(2) scaleX(0.85)`);
+    setTransform(undermountains, mountainLeft, mountainsTop);
+    setStyle(undermountains, 'opacity', underMountainOpacity);
+    setLayerWidth(undermountains, fullLayerWidth);
+    setTransform(mountainsFull, mountainLeft, mountainsTop);
+    setStyle(mountainsFull, 'opacity', mountainFullOpacity);
+    setLayerWidth(mountainsFull, fullLayerWidth);
+    setTransform(overmountains, mountainLeft, mountainsTop);
+    setStyle(overmountains, 'opacity', mountainOverOpacity);
+    setLayerWidth(overmountains, fullLayerWidth);
+    setTransform(foothills, foothillsLeft, foothillsTop);
+    setLayerWidth(foothills, fullLayerWidth);
+    setTransform(city, rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft), cityTop);
+    setLayerWidth(city, fullLayerWidth);
+    setTransform(treesRef, treesLeft, treesTop);
+    setLayerWidth(treesRef, fullLayerWidth);
+
+    setTransform(castleBack, castleLeft, castleBackTop);
+    setTransform(sidewalk, castleLeft, castleBackTop);
+    setTransform(floor1Preview, castleLeft, layer1Bottom + scrollOffsetBuilding);
+    setTransform(floor1, castleLeft, -12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider);
+    setTransform(castleFull, castleLeft, coverMax + (scrollOffsetBuilding / 2));
+
+    if(!exploding && coverMax < (height * HEIGHT_TO_EXPLODE_AT)){
+      positionVars.current.exploding = true;
+      setExploded(true);
+
+      setTimeout(() => {
+        window.scrollTo({
+          top: 3000,
+          left: width * 0.777,
+          behavior: 'smooth',
+        });
+        positionVars.current.exploding = false;
+      }, 900);
+    }
+  };
+
+  const {
+    scrollPercent, coverMax, mountainsTop, layerWidth, cityTop, cityLeft, cityOffset, cityDistance,
+    fullLayerWidth, scrollOffsetBuilding, layer1Bottom, showingPreExplosion, sidewalkTop, sidewalkBottom,
+    sidewalkDivider
+  } = positionVars.current;
+
+
   useEffect(() => {
-    console.log("INIT",scrollX,scrollY)
     setTimeout(()=>{
       console.log("LAGGED ACTION")
 
         console.log("SCROLL AT START IS THIS THE RIGHT WAY? WE NEED TO DETECT IMAGES LOADED")
-        console.log("containerRef",containerRef)
-        let scrollerThing = document.getElementById("scrollerThing")
-        if(scrollerThing){
+        if(containerRef.current){
+          const { scaleX, scrollY } = positionVars.current;
           if( scrollX==0 && scrollY==0 ){
-            scrollerThing.scrollTo({
+            containerRef.current.scrollTo({
               top: 250,
               left: 120,
               behavior: 'smooth',
@@ -137,79 +335,49 @@ const ScrollingGame = () => {
           }
         }
 
-    },500)
+    },500);
   }, []);
 
-  useEffect(()=>{
-    //console.log("CHECKING IN ON scrollY",scrollY,height,screenRatio,overScrollToMakeFloorsAtTheTopShowUpBetter)
-    if(!height){
-      setCoverMax(10000)
-    }else{
-      let scrollPercent = Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter)//Math.round(scrollY / (totalHeight-height) * 100)
-      if(!scrollPercent) scrollPercent = 0
-      scrollPercent = Math.max(scrollPercent,0)
-      scrollPercent = Math.min(scrollPercent,100)
-      let coverMax = rangePercent(scrollPercent, height*0.8, -height);
-
-      setScrollPercent(scrollPercent)
-      //console.log("coverMax",coverMax)
-      setCoverMax(coverMax)
-
-      if(coverMax < height*HEIGHT_TO_EXPLODE_AT){
-        console.log("YEEEESSS")
-        setExploded(true)
-
-        let amount = width/2
-
-        setTimeout(()=>{
-          window.scrollTo({
-            top: 3000,
-            left: width*0.777,
-            behavior: 'smooth',
-          });
-        },900)
-
-      }
+  useLayoutEffect(() => {
+    if (!height || !width) {
+      setExploded(exploded);
     }
-
-  },[scrollY])
+    updatePosition(positionVars.current.scrollX, positionVars.current.scrollY);
+    drawPositions();
+  }, [exploded, height, width]);
 
   ///////adding this so we can catch the scroll back up and show the intro screen
   useLayoutEffect(() => {
-    const handleScroll = (event) => {
-      if(exploded && window.scrollY==0){
-        setExploded(false)
-        let scrollerThing = document.getElementById("scrollerThing")
-        console.log(scrollerThing)
-        if(scrollerThing){
-          scrollerThing.scrollTo({
+    const handleScroll = () => {
+      if(!positionVars.current.exploding && exploded && window.scrollY < 10){
+        positionVars.current.exploding = true;
+        setExploded(false);
+        console.log('deplode');
+        if(containerRef.current){
+          containerRef.current.scrollTo({
             top: width*HEIGHT_TO_EXPLODE_AT*0.95,
             left: 120,
           });
         }
+
         setTimeout(()=>{
-          let scrollerThing = document.getElementById("scrollerThing")
-          console.log(scrollerThing)
-          if(scrollerThing){
-            scrollerThing.scrollTo({
+          if(containerRef.current){
+            containerRef.current.scrollTo({
               top: width*HEIGHT_TO_EXPLODE_AT,
               left: 120,
             });
           }
-        },1000)
+          positionVars.current.exploding = false;
+          updatePosition(120, width * HEIGHT_TO_EXPLODE_AT);
+          drawPositions();
+        }, 1000);
       }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [exploded])
+  }, [exploded]);
 
   //console.log({ height, width, x: scrollX, y: scrollY, scrollPercent });
-
-  const rangePercent = (percent,finish,start) => {
-    return ((start-finish)*(percent/100))+finish
-  }
-
-  let layerWidth = rangePercent(scrollPercent,width*2,width*1.1)
 
 
   let layerLeft = 0//rangePercent(scrollPercent,layerWidth*0.2,layerWidth*0.05)
@@ -223,25 +391,13 @@ const ScrollingGame = () => {
 
   let denverBackground: React.ReactNode | null = null;
 
-  let fullLayerWidth = rangePercent(scrollPercent,displayWidth*2,displayWidth*1.1)
-  fullLayerWidth = Math.min(fullLayerWidth,1200)
-
   let mountainWidth = rangePercent(scrollPercent,displayWidth*1.6,displayWidth*1.1)
-  let mountainsTop = rangePercent(scrollPercent,height*0.2,height*0.01)
   let mountainPerspective = rangePercent(scrollPercent,layerWidth*0.15,layerWidth*0.2)
   const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
   const mountainDistance = 0.08 - scrollPercent/100 * 0.08
-  let foothillsDistance = 0.16 - scrollPercent/100 * 0.16
-  let foothillsTop = rangePercent(scrollPercent,height*0.1,-height*0.08)
   let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
-  let cityDistance = 0.6 - scrollPercent/100 * 0.3
   let cityWidth = fullLayerWidth *1.05
-  let cityLeft = rangePercent(scrollPercent,layerWidth*0.08,layerWidth*0.05)
-  let cityOffset = rangePercent(scrollPercent,-height*0.1,-height*0.05)
   let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
-  let cityTop = rangePercent(scrollPercent,height*0.2,height*0.02)
-  let treesDistance = 0.8 - scrollPercent/100 * 0.2
-  let treesTop = rangePercent(scrollPercent,height*0.70,height*0.2)
   let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
 
   denverBackground = (
@@ -250,38 +406,42 @@ const ScrollingGame = () => {
         index={layerCount++}
         img={mountainsFiles.undermountains}
         width={fullLayerWidth}
-        left={-width*0.05-layerLeft - scrollX * mountainDistance}
-        top={mountainsTop}
+        left={positionVars.current.mountainLeft}
+        top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
-        opacity={rangePercent(scrollPercent,0.99,0.00)}
+        opacity={positionVars.current.underMountainOpacity}
+        ref={undermountains}
       />
       <Layer
         index={layerCount++}
         img={mountainsFiles.mountainsFull}
         width={fullLayerWidth}
-        left={-width*0.05-layerLeft - scrollX * mountainDistance}
-        top={mountainsTop}
+        left={positionVars.current.mountainLeft}
+        top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
-        opacity={rangePercent(scrollPercent,0.99,0.1)}
+        opacity={positionVars.current.mountainFullOpacity}
+        ref={mountainsFull}
       />
       <Layer
         index={layerCount++}
         img={mountainsFiles.overmountains}
         width={fullLayerWidth}
-        left={-width*0.05-layerLeft - scrollX * mountainDistance}
-        top={mountainsTop}
+        left={positionVars.current.mountainLeft}
+        top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
-        opacity={mountainOverOpacity}
+        opacity={positionVars.current.mountainOverOpacity}
+        ref={overmountains}
       />
 
       <Layer
         index={layerCount++}
         img={mountainsFiles.foothills}
-        width={fullLayerWidth*1.1}
-        left={-width*0.3-layerLeft - scrollX * foothillsDistance}
-        top={foothillsTop}
+        width={fullLayerWidth}
+        left={positionVars.current.foothillsLeft}
+        top={positionVars.current.foothillsTop}
         perspective={foothillsPerspective}
         brightness={rangePercent(scrollPercent,100,50)}
+        ref={foothills}
       />
 
       {setLayerCount(10)}
@@ -289,23 +449,25 @@ const ScrollingGame = () => {
       <Layer
         index={layerCount++}
         img={cityFull}
-        width={cityWidth}
+        width={fullLayerWidth}
         left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
-        top={cityTop}
+        top={positionVars.current.cityTop}
         perspective={cityPerspective}
         scaleY={rangePercent(scrollPercent,1.2,0.8)}
         brightness={rangePercent(scrollPercent,100,70)}
+        ref={city}
       />
 
       <Layer
         index={layerCount++}
         img={trees}
         width={fullLayerWidth}
-        left={rangePercent(scrollPercent, cityOffset-cityLeft-treesDistance*scrollX, -cityLeft)}
-        top={treesTop}
+        left={positionVars.current.treesLeft}
+        top={positionVars.current.treesTop}
         perspective={treesPerspective}
         scaleY={0.88}
         brightness={rangePercent(scrollPercent, 100, 20)}
+        ref={treesRef}
       />
 
     </Fragment>
@@ -313,32 +475,17 @@ const ScrollingGame = () => {
 
   const sidewalkPerspective = rangePercent(scrollPercent*1.2,layerWidth*0.15,layerWidth)
 
-  let scrollOffsetBuilding = -50
 
   let floors = []
 
-  const STARTSCROLLINGAT = 65;
-
-  if(scrollPercent > STARTSCROLLINGAT){
-    let thisScroll = (scrollPercent-STARTSCROLLINGAT)*100/(100-STARTSCROLLINGAT)
-    scrollOffsetBuilding += thisScroll*6.2
-  }
-
-  let sidewalkDivider = 2;
-
 
   const FLOOR_PADDING = 600
-  let sidewalkBottom = coverMax
   let lowbound = height*0.4
 
 
-  const castleOffset = 0.2
 
   if(exploded){
     /////////////////////////////////////////////////////////////////////////////// MAP VIEW, TILES ETC
-
-    sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
-    sidewalkDivider = 1
 
     for(let f=6;f>0;f--){
       console.log("floor"+f)
@@ -385,52 +532,17 @@ const ScrollingGame = () => {
   }
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  INTRO MOUNTAIN VIEW:
 
-  //layerLeft += scrollX
-  let castleBackTop = coverMax+scrollOffsetBuilding/2+15 // Math.max(height*0.2,coverMax+scrollOffsetBuilding/2+15)
 
-  const buildingLayerSpread = 0.22
-
-  let layer1Bottom = coverMax < height * 0.3
-    ? Math.max(height*0.6,rangePercent(scrollPercent,height*0.82,-height*0.5))
-    : coverMax;
-
-
-
-  let showingPreExplosion = false
-
-  if(sidewalkBottom < height*0.5){
-    showingPreExplosion = true
-    sidewalkBottom = rangePercent(scrollPercent,height*0.5333,height*0.7)
-    sidewalkDivider = 1
+  const scrollListener = (e: any) => {
+    const [x, y] = [e.target.scrollLeft, e.target.scrollTop];
+    updatePosition(x, y);
+    drawPositions();
   }
-
-
-  if(showingPreExplosion){
-    layer1Bottom -= 3*screenRatio
-  }else{
-    layer1Bottom += 7*screenRatio
-  }
-
-  const stickPointLayer2 = layer1Bottom - height * buildingLayerSpread;
-  const stickPointLayer3 = (coverMax < stickPointLayer2 * 0.8 ? stickPointLayer2 : coverMax) - height * buildingLayerSpread*1.2;
-  const stickPointLayer4 = (coverMax < stickPointLayer3 ? stickPointLayer3 : coverMax) - height * buildingLayerSpread;
-  const stickPointLayer5 = (coverMax < stickPointLayer4 ? stickPointLayer4 : coverMax) - height * buildingLayerSpread;
-  const stickPointLayer6 = (coverMax < stickPointLayer5 ? stickPointLayer5 : coverMax) - height * buildingLayerSpread;
-
-  //console.log("scrollX",scrollX)
-
-
-  const castleScroll = scrollX*(0.9 - scrollPercent/100 * 0.1)
-
-  let sky: React.ReactNode | null = null;
-  sky = (
-    <Sky topPos={rangePercent(scrollPercent, -height * 0.3, 0.05)} />
-  )
 
 //  <PegaBufficorn scale={Math.max(0.8,0.8*(displayWidth-width)/300)}  />
   return (
     <Fragment>
-      <Title topPos={height * 0.12 - scrollY / 10}>
+      <Title ref={title} topPos={positionVars.current.titlePos}>
         <div style={{ fontSize: "30pt" }}>B<span style={{ fontSize: "28pt" }}>UFFI</span>DAO</div>
         <div style={{lineHeight: "7pt", color:"#adadad",fontSize:"12pt"}}>ETHDENVER 2020</div>
       </Title>
@@ -439,7 +551,7 @@ const ScrollingGame = () => {
         height: (height*screenRatio)-scrollY,
         width: Math.min(displayWidth,(width-1)*1.8),
       }}>
-        {sky}
+        <Sky topPos={positionVars.current.skyPos} ref={sky} />
 
         {/*!loggedIn && (
           <StartButton
@@ -467,9 +579,7 @@ const ScrollingGame = () => {
         }}>
 
 
-
-          <PegaBufficorn2 right={0-(displayWidth-width)/2+scrollX/7} top={rangePercent(scrollPercent, height * 0.2, -height * 0.5)}/>
-
+          <PegaBufficorn2 ref={bufficorn} left={positionVars.current.buficornLeft} top={positionVars.current.bufficornTop}/>
 
           {denverBackground}
 
@@ -477,9 +587,10 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles.castleBack}
             width={layerWidth}
-            left={-width*castleOffset-castleScroll}
-            top={castleBackTop}
+            left={positionVars.current.castleLeft}
+            top={positionVars.current.castleBackTop}
             perspective={sidewalkPerspective}
+            ref={castleBack}
           />
 
           {setLayerCount(50)}
@@ -488,9 +599,10 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles._sidewalk_1}
             width={layerWidth}
-            left={-width*castleOffset-castleScroll}
-            top={6 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
+            left={positionVars.current.castleLeft}
+            top={positionVars.current.sidewalkTop}
             perspective={sidewalkPerspective}
+            ref={sidewalk}
           />
 
           {!showingPreExplosion ? (
@@ -498,42 +610,37 @@ const ScrollingGame = () => {
               index={layerCount++}
               img={castleFiles.floor1_preview}
               width={layerWidth}
-              left={-width*castleOffset-castleScroll}
+              left={positionVars.current.castleLeft}
               top={layer1Bottom + scrollOffsetBuilding}
               perspective={sidewalkPerspective}
+              ref={floor1Preview}
             />
           ) : (
-            <Fragment>
-              <Layer
-                  index={layerCount++}
-                  img={castleFiles.floor1}
-                  width={layerWidth}
-                  left={-width*castleOffset-castleScroll}
-                  top={-12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
-                  perspective={sidewalkPerspective}
-                >
-                </Layer>
-
-            </Fragment>
+            <Layer
+              index={layerCount++}
+              img={castleFiles.floor1}
+              width={layerWidth}
+              left={positionVars.current.castleLeft}
+              top={-12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
+              perspective={sidewalkPerspective}
+              ref={floor1}
+            />
           )}
 
           <Layer
             index={layerCount++}
             img={castleFiles.castleFull}
             width={layerWidth}
-            left={-width*castleOffset-castleScroll}
+            left={positionVars.current.castleLeft}
             top={coverMax + scrollOffsetBuilding/2}
             perspective={sidewalkPerspective}
+            ref={castleFull}
           />
 
         </div>
       </Fixed>
 
-      <Scrollable
-        id={"scrollerThing"}
-        ref={containerRef}
-        onScroll={(e: any) => setScroll([e.target.scrollLeft, e.target.scrollTop])}
-      >
+      <Scrollable ref={containerRef} onScroll={scrollListener}>
         <div style={{
           zIndex:100,
           position:"absolute",

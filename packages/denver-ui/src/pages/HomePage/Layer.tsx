@@ -10,17 +10,18 @@ interface LayerProps {
   opacity?: number;
   scaleY?: number;
   brightness?: number;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
-const Layer: React.FC<LayerProps> = ({
+const Layer: React.FC<LayerProps> = React.forwardRef(({
   index, img, width, left, top, perspective=0, opacity = 0.99, scaleY = 1.0, brightness = 100, children
-}) => {
+}, ref) => {
   const _opacity = opacity >= 1 ? 0.99 : opacity;
 
   const transform = `perspective( ${perspective}px ) rotateX( -5deg ) scaleY( ${scaleY} ) `;
 
   return (
-    <div style={{
+    <div ref={ref} style={{
       zIndex: index,
       position: 'absolute',
       transform: `translate3d(${left}px, ${top}px, 0)`,
@@ -38,6 +39,6 @@ const Layer: React.FC<LayerProps> = ({
       {children}
     </div>
   );
-}
+});
 
 export default Layer
