@@ -122,7 +122,7 @@ const ScrollingGame = () => {
     layerWidth: width * 2,
     fullLayerWidth: Math.min(displayWidth * 2, 1200),
 
-
+    unexploding: false,
 
 
 
@@ -270,7 +270,7 @@ const ScrollingGame = () => {
       mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
       scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
       bufficornLeft, bufficornTop, coverMax, titlePos, castleBackTop, castleLeft, fullLayerWidth,
-      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom
+      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, unexploding
     } = positionVars.current;
 
     setTransform(bufficorn, bufficornLeft, bufficornTop);
@@ -297,7 +297,7 @@ const ScrollingGame = () => {
     setTransform(floor1, castleLeft, -12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider);
     setTransform(castleFull, castleLeft, coverMax + (scrollOffsetBuilding / 2));
 
-    if(coverMax < (height * HEIGHT_TO_EXPLODE_AT)){
+    if(!unexploding && coverMax < (height * HEIGHT_TO_EXPLODE_AT)){
       setExploded(true);
 
       setTimeout(() => {
@@ -348,6 +348,7 @@ const ScrollingGame = () => {
   useLayoutEffect(() => {
     const handleScroll = () => {
       if(exploded && window.scrollY < 10){
+        positionVars.current.unexploding = true;
         setExploded(false);
         console.log('deplode');
         if(containerRef.current){
@@ -364,7 +365,10 @@ const ScrollingGame = () => {
               left: 120,
             });
           }
-        },1000)
+          positionVars.current.unexploding = false;
+          updatePosition(120, width * HEIGHT_TO_EXPLODE_AT);
+          drawPositions();
+        }, 1000);
       }
     }
     window.addEventListener('scroll', handleScroll)
