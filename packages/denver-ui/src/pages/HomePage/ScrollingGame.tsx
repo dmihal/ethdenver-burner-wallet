@@ -103,6 +103,9 @@ const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 
 const ScrollingGame = () => {
   const [exploded, setExploded] = useState(false);
   let [containerRef, { height, width, }] = useDimensions();
+  height = height || window.innerHeight;
+  width = width || window.innerWidth;
+
   let displayWidth = width
   width = Math.min(MAXWIDTH,width)
   console.log({ height, width });
@@ -155,7 +158,6 @@ const ScrollingGame = () => {
 
     const scrollPercent = Math.min(Math.max(Math.floor(scrollY / height / screenRatio * 100 * overScrollToMakeFloorsAtTheTopShowUpBetter), 0), 100);
     positionVars.current.scrollPercent = scrollPercent;
-    console.log({scrollPercent})
     positionVars.current.coverMax = rangePercent(scrollPercent, height*0.8, -height);
 
     positionVars.current.layerWidth = rangePercent(scrollPercent, width*2, width*1.1);
