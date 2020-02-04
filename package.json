@@ -16,13 +16,9 @@
     "start-local": "lerna run --parallel start-local"
   },
   "workspaces": [
-    "admin-wallet",
-    "basic-wallet",
     "contracts",
-    "local-wallet",
-    "test-sponsor-wallet",
-    "test-wallet",
-    "packages/*"
+    "packages/*",
+    "wallets/*"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.5.0",
