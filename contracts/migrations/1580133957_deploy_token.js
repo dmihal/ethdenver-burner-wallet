@@ -1,3 +1,4 @@
+const Dispenser = artifacts.require('Dispenser');
 const Faucet = artifacts.require('Faucet');
 const Whitelist = artifacts.require('Whitelist');
 const XPToken = artifacts.require('XPToken');
@@ -11,12 +12,15 @@ module.exports = function(_deployer, network, [account]) {
       [Whitelist, Whitelist, Whitelist, Whitelist].map(contract => _deployer.deploy(contract)));
 
     const faucet = await _deployer.deploy(Faucet, adminList.address);
+    const dispenser = await _deployer.deploy(Dispenser, adminList.address);
 
     const token = await _deployer.deploy(
       XPToken, 'XP', 'XP', sendList.address, receiveList.address, mintList.address, [faucet.address]);
 
-    await mintList.setWhitelisted(true, [faucet.address]);
+    await mintList.setWhitelisted(true, [faucet.address, dispenser.address]);
+    await sendList.setWhitelisted(true, [dispenser.address]);
     await adminList.setWhitelisted(true, [account]);
     await faucet.setToken(token.address);
+    await dispenser.setToken(token.address);
   });
 };

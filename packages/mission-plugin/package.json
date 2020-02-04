@@ -1,0 +1,17 @@
+{
+  "name": "mission-plugin",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/MissionPlugin.js",
+  "types": "dist/MissionPlugin.d.ts",
+  "scripts": {
+    "build": "tsc && yarn images",
+    "images": "copyfiles -u 1 \"src/**/*.png\" dist/",
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.5"
+  }
+}

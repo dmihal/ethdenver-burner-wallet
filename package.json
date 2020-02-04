@@ -32,6 +32,6 @@
     "lerna": "^3.16.4"
   },
   "dependencies": {
-    "typescript": "3.5.1"
+    "typescript": "3.7"
   }
 }

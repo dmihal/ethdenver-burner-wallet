@@ -5,7 +5,7 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, } from '@burner-wallet/core/gateways';
 import Exchange, { Uniswap, XDaiBridge } from '@burner-wallet/exchange';
-import ModernUI from '@burner-wallet/modern-ui';
+import DenverUI from 'denver-ui';
 import CarbonPlugin from 'carbon-burner-wallet-plugin';
 import LinkdropPlugin from 'linkdrop-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
@@ -42,7 +42,7 @@ const exchange = new Exchange({
 });
 
 const BurnerWallet = () =>
-  <ModernUI
+  <DenverUI
     title="ETHDenver"
     core={core}
     plugins={[
