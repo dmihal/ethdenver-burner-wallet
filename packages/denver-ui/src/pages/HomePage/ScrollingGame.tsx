@@ -138,6 +138,7 @@ const ScrollingGame = () => {
 
     foothillsLeft: 0,
     foothillsTop: 0,
+    foothillWidth: width,
     cityLeft: 0,
     cityTop: 0,
     cityOffset: 0,
@@ -178,6 +179,7 @@ const ScrollingGame = () => {
     const foothillsDistance = 0.16 - scrollPercent/100 * 0.16
     positionVars.current.foothillsLeft = -width*0.05-layerLeft - scrollX * foothillsDistance;
     positionVars.current.foothillsTop = rangePercent(scrollPercent, height*0.1, -height*0.08);
+    positionVars.current.foothillWidth = positionVars.current.fullLayerWidth * 1.25;
 
     positionVars.current.cityLeft = rangePercent(scrollPercent, positionVars.current.layerWidth*0.08, positionVars.current.layerWidth*0.05);
     positionVars.current.cityTop = rangePercent(scrollPercent, height*0.2, height*0.02);
@@ -270,7 +272,7 @@ const ScrollingGame = () => {
       mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
       scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
       bufficornLeft, bufficornTop, coverMax, titlePos, castleBackTop, castleLeft, fullLayerWidth,
-      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding
+      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding, foothillWidth
     } = positionVars.current;
 
     setTransform(bufficorn, bufficornLeft, bufficornTop);
@@ -285,7 +287,7 @@ const ScrollingGame = () => {
     setStyle(overmountains, 'opacity', mountainOverOpacity);
     setLayerWidth(overmountains, fullLayerWidth);
     setTransform(foothills, foothillsLeft, foothillsTop);
-    setLayerWidth(foothills, fullLayerWidth);
+    setLayerWidth(foothills, foothillWidth);
     setTransform(city, rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft), cityTop);
     setLayerWidth(city, fullLayerWidth);
     setTransform(treesRef, treesLeft, treesTop);
@@ -315,7 +317,7 @@ const ScrollingGame = () => {
   const {
     scrollPercent, coverMax, mountainsTop, layerWidth, cityTop, cityLeft, cityOffset, cityDistance,
     fullLayerWidth, scrollOffsetBuilding, layer1Bottom, showingPreExplosion, sidewalkTop, sidewalkBottom,
-    sidewalkDivider
+    sidewalkDivider, foothillWidth
   } = positionVars.current;
 
 
@@ -436,7 +438,7 @@ const ScrollingGame = () => {
       <Layer
         index={layerCount++}
         img={mountainsFiles.foothills}
-        width={fullLayerWidth}
+        width={foothillWidth}
         left={positionVars.current.foothillsLeft}
         top={positionVars.current.foothillsTop}
         perspective={foothillsPerspective}
