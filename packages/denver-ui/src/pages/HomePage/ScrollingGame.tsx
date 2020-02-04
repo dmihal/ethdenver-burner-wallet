@@ -122,7 +122,7 @@ const ScrollingGame = () => {
     layerWidth: width * 2,
     fullLayerWidth: Math.min(displayWidth * 2, 1200),
 
-    unexploding: false,
+    exploding: false,
 
 
 
@@ -270,7 +270,7 @@ const ScrollingGame = () => {
       mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
       scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
       bufficornLeft, bufficornTop, coverMax, titlePos, castleBackTop, castleLeft, fullLayerWidth,
-      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, unexploding
+      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding
     } = positionVars.current;
 
     setTransform(bufficorn, bufficornLeft, bufficornTop);
@@ -297,7 +297,8 @@ const ScrollingGame = () => {
     setTransform(floor1, castleLeft, -12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider);
     setTransform(castleFull, castleLeft, coverMax + (scrollOffsetBuilding / 2));
 
-    if(!unexploding && coverMax < (height * HEIGHT_TO_EXPLODE_AT)){
+    if(!exploding && coverMax < (height * HEIGHT_TO_EXPLODE_AT)){
+      positionVars.current.exploding = true;
       setExploded(true);
 
       setTimeout(() => {
@@ -306,6 +307,7 @@ const ScrollingGame = () => {
           left: width * 0.777,
           behavior: 'smooth',
         });
+        positionVars.current.exploding = false;
       }, 900);
     }
   };
@@ -347,8 +349,8 @@ const ScrollingGame = () => {
   ///////adding this so we can catch the scroll back up and show the intro screen
   useLayoutEffect(() => {
     const handleScroll = () => {
-      if(exploded && window.scrollY < 10){
-        positionVars.current.unexploding = true;
+      if(!positionVars.current.exploding && exploded && window.scrollY < 10){
+        positionVars.current.exploding = true;
         setExploded(false);
         console.log('deplode');
         if(containerRef.current){
@@ -365,7 +367,7 @@ const ScrollingGame = () => {
               left: 120,
             });
           }
-          positionVars.current.unexploding = false;
+          positionVars.current.exploding = false;
           updatePosition(120, width * HEIGHT_TO_EXPLODE_AT);
           drawPositions();
         }, 1000);
