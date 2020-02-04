@@ -20,6 +20,20 @@ export default class DenverMiscPlugin implements Plugin {
   initializePlugin(pluginContext: BurnerPluginContext) {
     this.context = pluginContext;
     pluginContext.addPage('/spot/:id', SpotClaimPage);
+
+    const RedirectToSend: React.FC<PluginPageContext<{ address: string; amount?: string }>> =
+      ({ match, actions }) => {
+        if (match.params.amount) {
+          actions.send({
+            to: match.params.address,
+            asset: 'buff',
+            ether: match.params.amount,
+          });
+        } else {
+          actions.navigateTo('/send', { to: match.params.address });
+        }
+      }
+    pluginContext.addPage('/v/:address/:amount?', RedirectToSend)
   }
 
   async claimSpot(id: string, sender: string) {
