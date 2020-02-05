@@ -4,6 +4,30 @@ import { useBurner } from '@burner-wallet/ui-core';
 
 import ScrollingGame from './ScrollingGame';
 
+const FortmaticButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  background: blue;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  text-align: left;
+
+  & h2 {
+    font-weight: bold;
+    margin: 0;
+    font-size: 20px;
+  }
+  & h3 {
+    color: #CCCCCC;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+  }
+`;
+
 const HomePage: React.FC = () => {
   const [status, setStatus] = useState('fortmatic');
   const { accounts, actions } = useBurner();
@@ -37,9 +61,9 @@ const HomePage: React.FC = () => {
   return (
     <ScrollingGame>
       {status === 'fortmatic' && (
-        <button onClick={login}>
+        <FortmaticButton onClick={login}>
           Sign in with Fortmatic
-        </button>
+        </FortmaticButton>
       )}
     </ScrollingGame>
   );

@@ -9,8 +9,6 @@ import stars from "../../images/stars.png"
 import trees from "../../images/trees.png"
 
 import mountainsFiles from '../../images/mountains';
-import castleFiles from '../../images/castle';
-
 
 const MAXWIDTH = 500;//put this *2 in Template.tsx   max-width
 
