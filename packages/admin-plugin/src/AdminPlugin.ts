@@ -8,8 +8,8 @@ type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
 type Whitelist = { name: string; network: string; address: string };
 
 const WHITELISTS: Whitelist[] = [
-  { name: 'Test Senders', network: '42', address: '' },
-  { name: 'Test Receivers', network: '42', address: '' },
+  { name: 'Test Senders', network: '42', address: '0x740bC1C24c993689030a1819De1Ec7d518F354d6' },
+  { name: 'Test Receivers', network: '42', address: '0xb441F31f3fb330AAb3Ec24319BA7A7e7D6444701' },
 ];
 
 export interface UserStatus {
@@ -89,7 +89,7 @@ export default class AdminPlugin implements Plugin {
 
   async isWhitelisted(userAddress: string, whitelistAddress: string, web3: any): Promise<boolean> {
     const contract = new web3.eth.Contract(whitelistABI, whitelistAddress);
-    const isWhitelisted = await contract.isWhitelisted(userAddress);
+    const isWhitelisted = await contract.methods.isWhitelisted(userAddress).call();
     return isWhitelisted;
   }
 

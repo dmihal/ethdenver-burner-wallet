@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { PluginPageContext } from '@burner-wallet/types';
+import { PluginPageContext, Asset, AccountBalanceData } from '@burner-wallet/types';
 import AdminPlugin, { UserStatus } from '../AdminPlugin';
 
-const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComponents, match, plugin }) => {
+const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComponents, match, plugin, assets }) => {
   const _plugin = plugin as AdminPlugin;
   const [status, setStatus] = useState<UserStatus | null>(null);
 
@@ -13,7 +13,7 @@ const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComp
     refreshStatus();
   }, [match]);
 
-  const { Page, Button } = BurnerComponents;
+  const { Page, Button, AccountBalance } = BurnerComponents;
 
   if (!status) {
     return (<Page title="User Details">Loading...</Page>);
@@ -21,10 +21,32 @@ const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComp
 
   return (
     <Page title="User Details">
+      <h2>Balances</h2>
+      {assets.map((asset: Asset) => (
+        <AccountBalance
+          key={asset.id}
+          asset={asset}
+          account={match.params.account}
+          render={(data: AccountBalanceData | null) => {
+            if (!data) {
+              return null;
+            }
+
+            return (
+              <div>{asset.name}: {data.displayBalance}</div>
+            );
+          }}
+        />
+      ))}
+
       <h2>Wallets</h2>
       <div>Kovan: {status.types['42']}</div>
       <div>xDai: {status.types['100']}</div>
+
       <h2>Whitelist</h2>
+      {status.whitelists.map(({ name, isWhitelisted }) => (
+        <div key={name}>{name}: {isWhitelisted ? 'whitelisted' : 'not whitelisted'}</div>
+      ))}
     </Page>
   );
 };
