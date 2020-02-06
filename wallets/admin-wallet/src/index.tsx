@@ -14,6 +14,7 @@ import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
 import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
+import AdminPlugin from 'admin-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import TestHelpersPlugin from 'test-helpers-plugin';
@@ -61,7 +62,9 @@ const BurnerWallet = () =>
     // @ts-ignore
     core={core}
     plugins={[
-      exchange,
+      new AdminPlugin({
+        contractWalletFactory: process.env.REACT_APP_WALLET_FACTORY_ADDRESS!,
+      }),
       new BurnableENSPlugin({
         domain: 'myburner.test',
         tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',

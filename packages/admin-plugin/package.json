@@ -1,0 +1,14 @@
+{
+  "name": "admin-plugin",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/AdminPlugin.js",
+  "types": "dist/AdminPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-admin": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.0"
+  }
+}
