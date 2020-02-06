@@ -112,11 +112,8 @@ const ScrollingGame: React.FC = ({ children }) => {
 
     coverMax: 10000,
     layerWidth: width * 2,
+    layerScale: 2,
     fullLayerWidth: Math.min(displayWidth * 2, 1200),
-
-    exploding: false,
-
-
 
     bufficornLeft: 0,
     bufficornTop: 0,
@@ -137,12 +134,6 @@ const ScrollingGame: React.FC = ({ children }) => {
     cityDistance: 0,
     treesLeft: 0,
     treesTop: 0,
-
-    castleLeft: 0,
-    scrollOffsetBuilding: 0,
-    sidewalkTop: 0,
-    sidewalkBottom: 0,
-    showingPreExplosion: false,
   });
 
   const updatePosition = (scrollX: number, scrollY: number) => {
@@ -154,6 +145,7 @@ const ScrollingGame: React.FC = ({ children }) => {
     positionVars.current.coverMax = rangePercent(scrollPercent, height*0.8, -height);
 
     positionVars.current.layerWidth = rangePercent(scrollPercent, width*2, width*1.1);
+    positionVars.current.layerScale = rangePercent(scrollPercent, 2, 1.1);
     positionVars.current.fullLayerWidth = Math.min(rangePercent(scrollPercent, displayWidth*2, displayWidth*1.1), 1200);
 
     positionVars.current.bufficornLeft = 0-(displayWidth - width) / 2 + scrollX / 7;
@@ -252,8 +244,8 @@ const ScrollingGame: React.FC = ({ children }) => {
         ref.current.style[prop] = val;
       }
     };
-    const setTransform = (ref: React.RefObject<HTMLElement>, x: number, y: number) =>
-      setStyle(ref, 'transform', `translate3d(${x}px, ${y}px, 0)`);
+    const setTransform = (ref: React.RefObject<HTMLElement>, x: number, y: number, scale: number = 1) =>
+      setStyle(ref, 'transform', `translate3d(${x}px, ${y}px, 0) scale(${scale})`);
     const setLayerWidth = (ref: React.RefObject<HTMLElement>, width: number) => {
       if (ref.current) {
         ref.current.querySelector('img').style.width = `${width}px`;
@@ -264,26 +256,21 @@ const ScrollingGame: React.FC = ({ children }) => {
       mountainsTop, mountainLeft, foothillsLeft, foothillsTop, cityLeft, cityTop, cityOffset, cityDistance,
       scrollX, underMountainOpacity, mountainFullOpacity, mountainOverOpacity, treesLeft, treesTop,
       bufficornLeft, bufficornTop, coverMax, titlePos, castleBackTop, castleLeft, fullLayerWidth,
-      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding, foothillWidth
+      layer1Bottom, scrollOffsetBuilding, sidewalkDivider, sidewalkBottom, exploding, foothillWidth,
+      layerScale
     } = positionVars.current;
 
     setTransform(bufficorn, bufficornLeft, bufficornTop);
     setStyle(title, 'transform', `translate3d(0, ${titlePos}px, 0) scaleY(2) scaleX(0.85)`);
-    setTransform(undermountains, mountainLeft, mountainsTop);
+    setTransform(undermountains, mountainLeft, mountainsTop, layerScale);
     setStyle(undermountains, 'opacity', underMountainOpacity);
-    setLayerWidth(undermountains, fullLayerWidth);
-    setTransform(mountainsFull, mountainLeft, mountainsTop);
+    setTransform(mountainsFull, mountainLeft, mountainsTop, layerScale);
     setStyle(mountainsFull, 'opacity', mountainFullOpacity);
-    setLayerWidth(mountainsFull, fullLayerWidth);
-    setTransform(overmountains, mountainLeft, mountainsTop);
+    setTransform(overmountains, mountainLeft, mountainsTop, layerScale);
     setStyle(overmountains, 'opacity', mountainOverOpacity);
-    setLayerWidth(overmountains, fullLayerWidth);
-    setTransform(foothills, foothillsLeft, foothillsTop);
-    setLayerWidth(foothills, foothillWidth);
-    setTransform(city, rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft), cityTop);
-    setLayerWidth(city, fullLayerWidth);
-    setTransform(treesRef, treesLeft, treesTop);
-    setLayerWidth(treesRef, fullLayerWidth);
+    setTransform(foothills, foothillsLeft, foothillsTop, layerScale * 1.25);
+    setTransform(city, rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft), cityTop, layerScale);
+    setTransform(treesRef, treesLeft, treesTop, layerScale);
 
     setTransform(castleBack, castleLeft, castleBackTop);
     setTransform(sidewalk, castleLeft, castleBackTop);
@@ -345,7 +332,6 @@ const ScrollingGame: React.FC = ({ children }) => {
   const mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
   const mountainDistance = 0.08 - scrollPercent/100 * 0.08
   let foothillsPerspective = rangePercent(scrollPercent,layerWidth*0.05,layerWidth*0.2)
-  let cityWidth = fullLayerWidth *1.05
   let cityPerspective = rangePercent(scrollPercent,layerWidth*0.07,layerWidth*0.2)
   let treesPerspective = rangePercent(scrollPercent,layerWidth*0.3,layerWidth*0.7)
 
@@ -354,30 +340,33 @@ const ScrollingGame: React.FC = ({ children }) => {
       <Layer
         index={layerCount++}
         img={mountainsFiles.undermountains}
-        width={fullLayerWidth}
+        width={width}
         left={positionVars.current.mountainLeft}
         top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
+        scale={positionVars.current.layerScale}
         opacity={positionVars.current.underMountainOpacity}
         ref={undermountains}
       />
       <Layer
         index={layerCount++}
         img={mountainsFiles.mountainsFull}
-        width={fullLayerWidth}
+        width={width}
         left={positionVars.current.mountainLeft}
         top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
+        scale={positionVars.current.layerScale}
         opacity={positionVars.current.mountainFullOpacity}
         ref={mountainsFull}
       />
       <Layer
         index={layerCount++}
         img={mountainsFiles.overmountains}
-        width={fullLayerWidth}
+        width={width}
         left={positionVars.current.mountainLeft}
         top={positionVars.current.mountainsTop}
         perspective={mountainPerspective}
+        scale={positionVars.current.layerScale}
         opacity={positionVars.current.mountainOverOpacity}
         ref={overmountains}
       />
@@ -385,10 +374,11 @@ const ScrollingGame: React.FC = ({ children }) => {
       <Layer
         index={layerCount++}
         img={mountainsFiles.foothills}
-        width={foothillWidth}
+        width={width}
         left={positionVars.current.foothillsLeft}
         top={positionVars.current.foothillsTop}
         perspective={foothillsPerspective}
+        scale={positionVars.current.layerScale * 1.25}
         brightness={rangePercent(scrollPercent,100,50)}
         ref={foothills}
       />
@@ -398,10 +388,11 @@ const ScrollingGame: React.FC = ({ children }) => {
       <Layer
         index={layerCount++}
         img={cityFull}
-        width={fullLayerWidth}
+        width={width}
         left={rangePercent(scrollPercent, cityOffset-cityLeft-cityDistance*scrollX, -cityLeft)}
         top={positionVars.current.cityTop}
         perspective={cityPerspective}
+        scale={positionVars.current.layerScale}
         scaleY={rangePercent(scrollPercent,1.2,0.8)}
         brightness={rangePercent(scrollPercent,100,70)}
         ref={city}
@@ -410,11 +401,12 @@ const ScrollingGame: React.FC = ({ children }) => {
       <Layer
         index={layerCount++}
         img={trees}
-        width={fullLayerWidth}
+        width={width}
         left={positionVars.current.treesLeft}
         top={positionVars.current.treesTop}
         perspective={treesPerspective}
         scaleY={0.88}
+        scale={positionVars.current.layerScale}
         brightness={rangePercent(scrollPercent, 100, 20)}
         ref={treesRef}
       />
