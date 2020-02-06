@@ -13,7 +13,7 @@ import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
-import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
+//import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
 import LegacyPlugin from '@burner-wallet/legacy-plugin';
 import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
@@ -103,7 +103,7 @@ const BurnerWallet = () =>
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
       new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
-      new BurnerConnectPlugin('ETHDenver test wallet'),
+//      new BurnerConnectPlugin('ETHDenver test wallet'),
       new ChingPlugin(),
       new LegacyPlugin(),
     ]}
