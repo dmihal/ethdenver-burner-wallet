@@ -3,6 +3,8 @@ import Box from '3box';
 
 import EditProfilePage from './ui/EditProfilePage';
 
+const windowAny:any = window;
+
 export default class ThreeBoxEditProfilePlugin implements Plugin {
   private pluginContext?: BurnerPluginContext;
   private chain: string;
@@ -31,10 +33,11 @@ export default class ThreeBoxEditProfilePlugin implements Plugin {
   }
 
   async createBox() {
-    const addresses = await window.ethereum.enable();
+    const addresses = await windowAny.ethereum.enable();
     this.address = addresses[0];
-    const box = await Box.create(this.address, window.ethereum, {});
-    await box.auth(['ethDenver'], { address: this.address });
+
+    const box = await Box.create(windowAny.ethereum);
+    await box.auth(['ethDenver'], { address: addresses[0] });
 
     this.profile = await Box.getProfile(this.address);
     this.space = await box.openSpace('ethDenver');
