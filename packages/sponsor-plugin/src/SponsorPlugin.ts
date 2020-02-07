@@ -12,12 +12,19 @@ export interface Mission extends SimpleMission {
   canSend: boolean;
 }
 
+const RedirectToSendXP: React.FC<PluginPageContext<{ address: string }>> = ({ match, actions }) => {
+  actions.navigateTo(`/sendxp/${match.params.address}`);
+  return null;
+};
+
 export default class SponsorPlugin implements Plugin {
   private context?: BurnerPluginContext;
 
   initializePlugin(pluginContext: BurnerPluginContext) {
     this.context = pluginContext;
-    pluginContext.addPage('/sendxp/:to', SendXPPage)
+    pluginContext.addPage('/b/:address', RedirectToSendXP)
+
+    pluginContext.addPage('/sendxp/:to', SendXPPage);
   }
 
   async getMissions(sponsor: string, recipient: string): Promise<Mission[]> {
