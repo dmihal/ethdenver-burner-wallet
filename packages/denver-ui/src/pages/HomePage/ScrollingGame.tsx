@@ -164,7 +164,7 @@ const ScrollingGame = () => {
     positionVars.current.layerWidth = rangePercent(scrollPercent, width*2, width*1.1);
     positionVars.current.fullLayerWidth = Math.min(rangePercent(scrollPercent, displayWidth*2, displayWidth*1.1), 1200);
 
-    positionVars.current.bufficornLeft = 0-(displayWidth - width) / 2 + scrollX / 7;
+    positionVars.current.bufficornLeft = -20 - scrollX / 3;
     positionVars.current.bufficornTop = rangePercent(scrollPercent, height * 0.2, -height * 0.5);
     positionVars.current.titlePos = height * 0.12 - scrollY / 10;
 
@@ -177,7 +177,7 @@ const ScrollingGame = () => {
     positionVars.current.mountainOverOpacity = scrollPercent > 80 ? 0.0 : Math.min(0.7,rangePercent(scrollPercent, 0, 10));
 
     const foothillsDistance = 0.16 - scrollPercent/100 * 0.16
-    positionVars.current.foothillsLeft = -width*0.05-layerLeft - scrollX * foothillsDistance;
+    positionVars.current.foothillsLeft = -width*0.4-layerLeft - scrollX * foothillsDistance;
     positionVars.current.foothillsTop = rangePercent(scrollPercent, height*0.1, -height*0.08);
     positionVars.current.foothillWidth = positionVars.current.fullLayerWidth * 1.25;
 
