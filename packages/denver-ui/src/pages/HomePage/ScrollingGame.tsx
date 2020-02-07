@@ -150,6 +150,7 @@ const ScrollingGame = () => {
     scrollOffsetBuilding: 0,
     sidewalkTop: 0,
     sidewalkBottom: 0,
+    sidewalkLeft: 0,
     showingPreExplosion: false,
   });
 
@@ -232,6 +233,7 @@ const ScrollingGame = () => {
     }
 
     positionVars.current.sidewalkTop = 6 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider;
+    positionVars.current.sidewalkLeft = 0
     positionVars.current.sidewalkBottom = sidewalkBottom;
     positionVars.current.sidewalkDivider = sidewalkDivider;
   };
@@ -276,6 +278,7 @@ const ScrollingGame = () => {
     } = positionVars.current;
 
     setTransform(bufficorn, bufficornLeft, bufficornTop);
+
     setStyle(title, 'transform', `translate3d(0, ${titlePos}px, 0) scaleY(2) scaleX(0.85)`);
     setTransform(undermountains, mountainLeft, mountainsTop);
     setStyle(undermountains, 'opacity', underMountainOpacity);
@@ -316,7 +319,7 @@ const ScrollingGame = () => {
 
   const {
     scrollPercent, coverMax, mountainsTop, layerWidth, cityTop, cityLeft, cityOffset, cityDistance,
-    fullLayerWidth, scrollOffsetBuilding, layer1Bottom, showingPreExplosion, sidewalkTop, sidewalkBottom,
+    fullLayerWidth, scrollOffsetBuilding, layer1Bottom, showingPreExplosion, sidewalkTop, sidewalkLeft, sidewalkBottom,
     sidewalkDivider, foothillWidth
   } = positionVars.current;
 
@@ -597,13 +600,13 @@ const ScrollingGame = () => {
             index={layerCount++}
             img={castleFiles._sidewalk_1}
             width={layerWidth}
-            left={positionVars.current.castleLeft}
+            left={positionVars.current.sidewalkLeft}
             top={positionVars.current.sidewalkTop}
             perspective={sidewalkPerspective}
             ref={sidewalk}
           />
 
-          {!showingPreExplosion ? (
+          {/*showingPreExplosion ? (
             <Layer
               index={layerCount++}
               img={castleFiles.floor1_preview}
@@ -613,17 +616,7 @@ const ScrollingGame = () => {
               perspective={sidewalkPerspective}
               ref={floor1Preview}
             />
-          ) : (
-            <Layer
-              index={layerCount++}
-              img={castleFiles.floor1}
-              width={layerWidth}
-              left={positionVars.current.castleLeft}
-              top={-12 + sidewalkBottom + scrollOffsetBuilding / sidewalkDivider}
-              perspective={sidewalkPerspective}
-              ref={floor1}
-            />
-          )}
+          )*/}
 
           <Layer
             index={layerCount++}
