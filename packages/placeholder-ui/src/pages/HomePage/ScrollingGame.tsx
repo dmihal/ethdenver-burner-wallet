@@ -83,7 +83,7 @@ const Title = styled.div.attrs<{ topPos: number }>({
 
 const Content = styled.div`
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   text-align: center;
   transform: translateX(-50%);
