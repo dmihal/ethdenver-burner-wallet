@@ -3,13 +3,14 @@ import AdminPage from './ui/AdminPage';
 import UserPage from './ui/UserPage';
 import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
+import walletABI from './abis/Wallet.json';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
 type Whitelist = { name: string; network: string; address: string };
 
 const WHITELISTS: Whitelist[] = [
-  { name: 'Test Senders', network: '42', address: '' },
-  { name: 'Test Receivers', network: '42', address: '' },
+  { name: 'Test Senders', network: '42', address: '0x740bC1C24c993689030a1819De1Ec7d518F354d6' },
+  { name: 'Test Receivers', network: '42', address: '0xb441F31f3fb330AAb3Ec24319BA7A7e7D6444701' },
 ];
 
 export interface UserStatus {
@@ -18,6 +19,7 @@ export interface UserStatus {
 }
 
 const RELAYHUB_ADDRESS = '0xD216153c06E857cD7f72665E0aF1d7D82172F494';
+const ADMIN_WALLET = '0x6ebfe51d736c34eefb9107fcab912dd604682616';
 
 interface AdminPluginProps {
   contractWalletFactory: string;
@@ -49,10 +51,11 @@ export default class AdminPlugin implements Plugin {
     const web3xdai = this.context!.getWeb3('100');
     const web3kovan = this.context!.getWeb3('42');
     
-    const [xdaiType, kovanType, whitelists] = await Promise.all([
+    const [xdaiType, kovanType, whitelists, isAdmin] = await Promise.all([
       this.getAccountType(address, web3xdai),
       this.getAccountType(address, web3kovan),
       this.getWhitelists(address),
+      this.isAdmin(address),
     ]);
 
     const types: { [network: string]: AccountType } = {
@@ -60,7 +63,7 @@ export default class AdminPlugin implements Plugin {
       '100': xdaiType,
     };
 
-    return { types, whitelists };
+    return { types, whitelists: whitelists.concat(isAdmin) };
   }
 
   async getAccountType(address: string, web3: any): Promise<AccountType> {
@@ -89,8 +92,20 @@ export default class AdminPlugin implements Plugin {
 
   async isWhitelisted(userAddress: string, whitelistAddress: string, web3: any): Promise<boolean> {
     const contract = new web3.eth.Contract(whitelistABI, whitelistAddress);
-    const isWhitelisted = await contract.isWhitelisted(userAddress);
+    const isWhitelisted = await contract.methods.isWhitelisted(userAddress).call();
     return isWhitelisted;
+  }
+
+  async isAdmin(address: string) {
+    const adminNetworks = ['42'];
+
+    const admins = await Promise.all(adminNetworks.map(async (network: string) => {
+      const web3 = this.context!.getWeb3(network);
+      const wallet = new web3.eth.Contract(walletABI as any, ADMIN_WALLET);
+      const isWhitelisted = await wallet.methods.isOwner(address).call();
+      return { name: `Admin ${network}`, isWhitelisted };
+    }))
+    return admins;
   }
 
   async getFaucetCap() {

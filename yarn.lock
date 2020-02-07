@@ -1092,9 +1092,9 @@
     "@burner-wallet/types" "^1.0.0"
 
 "@burner-factory/contract-wallet-signer@^0.2.0":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-signer/-/contract-wallet-signer-0.2.1.tgz#d5cdd461afc41b0d25c415c64fbfd47b232e7d55"
-  integrity sha512-k74emOI1NH11nqTF474ZhQFW3BMwAmG6cPyZ+F1Wn3Ip8wSaiRbhKnHJyuA0hgWXH+7fuJghKL5t8nkLaFfnnw==
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@burner-factory/contract-wallet-signer/-/contract-wallet-signer-0.2.2.tgz#85c7ac21f0521ab375f71847683b8e509e3bf5db"
+  integrity sha512-kkEJYKrDqr8XpiM+qAsdlbTpKnByNG9XKdpNBNnl6faTykxwWIj/Odv6KXPEoDFdZTrx6/Bl/qY+D84x123cUw==
   dependencies:
     "@burner-wallet/core" "^1.1.0"
 
@@ -1118,17 +1118,17 @@
     styled-components "^4.4.1"
 
 "@burner-wallet/assets@^1.0.0", "@burner-wallet/assets@^1.1.0", "@burner-wallet/assets@^1.1.0 || ^1.0.0":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/assets/-/assets-1.1.3.tgz#6052980ac9451e390ca6e5b822faa4163eb67645"
-  integrity sha512-PQ4jK+HlxyvA0PlkQsk8+Nvclb/HIsXFmKXoWJnE5THR5cWDJTOFKGsy0c8vNJE5pDczVR2SzUVgC0o/0PjRwA==
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/assets/-/assets-1.1.5.tgz#e3654303555671c2850723d1c6dc2bc4803741e1"
+  integrity sha512-6VIGHHuJ6fdL48B3MxaJ2fxNhzBlgzUveuQ5QuVmztz20iRQyf78MYtppeEpfwsRjuqSRL56a42QMNn7RR/j6w==
   dependencies:
     isomorphic-fetch "^2.2.1"
     web3-utils "^1.2.2"
 
-"@burner-wallet/burner-connect-wallet@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/burner-connect-wallet/-/burner-connect-wallet-0.1.4.tgz#fb89bd8cd65baa1b23016ad614d478948cf307fa"
-  integrity sha512-btkSSDMAF4/UusO+hCUA0g6dcXVlaH7kWNeZkxLMJDUsyR6OCVQA0py6jM/SbnnO7TXuoBT2rH7sYj+/7rDy1Q==
+"@burner-wallet/burner-connect-wallet@^0.1.4", "@burner-wallet/burner-connect-wallet@^0.1.6":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/burner-connect-wallet/-/burner-connect-wallet-0.1.7.tgz#053f3a94c68d5d8d95ee43684b403b55934724c1"
+  integrity sha512-1cLs/kOT25Qe7l5OqCaXaCXy6rt2pr/tljmBgf7E5LkOtXj9np8InpMO+Y3/DnXsPOYQqAv8H9hzIxC7ERSwFQ==
   dependencies:
     "@burner-wallet/core" "^1.0.0"
     "@burner-wallet/types" "^1.0.0"

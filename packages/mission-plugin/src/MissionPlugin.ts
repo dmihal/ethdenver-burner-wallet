@@ -43,7 +43,16 @@ export default class MissionPlugin implements Plugin {
 
     this.loadDynamicMissions();
 
-    setInterval(() => this.loadDynamicMissions(), this.refreshSeconds * 1000);
+    const load = () => setTimeout(async () => {
+      try {
+        await this.loadDynamicMissions();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        load();
+      }
+    }, this.refreshSeconds * 1000);
+    load();
   }
 
   async loadDynamicMissions() {

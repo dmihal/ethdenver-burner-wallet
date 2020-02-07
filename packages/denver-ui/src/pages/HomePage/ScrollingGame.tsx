@@ -102,7 +102,7 @@ const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 
 
 const ScrollingGame = () => {
   const [exploded, setExploded] = useState(false);
-  let [containerRef, { height, width, }] = useDimensions();
+  let [containerRef, { height, width }, containerNode] = useDimensions();
   height = height || window.innerHeight;
   width = width || window.innerWidth;
 
@@ -321,24 +321,20 @@ const ScrollingGame = () => {
   } = positionVars.current;
 
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(()=>{
-      console.log("LAGGED ACTION")
-
-        console.log("SCROLL AT START IS THIS THE RIGHT WAY? WE NEED TO DETECT IMAGES LOADED")
-        if(containerRef.current){
-          const { scaleX, scrollY } = positionVars.current;
-          if( scrollX==0 && scrollY==0 ){
-            containerRef.current.scrollTo({
-              top: 250,
-              left: 120,
-              behavior: 'smooth',
-            });
-          }
+      if(containerNode){
+        const { scaleX, scrollY } = positionVars.current;
+        if(scrollX === 0 && scrollY === 0){
+          containerNode.scrollTo({
+            top: 250,
+            left: 120,
+            behavior: 'smooth',
+          });
         }
-
-    },500);
-  }, []);
+      }
+    }, 500);
+  }, [containerNode]);
 
   useLayoutEffect(() => {
     if (!height || !width) {
@@ -355,16 +351,16 @@ const ScrollingGame = () => {
         positionVars.current.exploding = true;
         setExploded(false);
         console.log('deplode');
-        if(containerRef.current){
-          containerRef.current.scrollTo({
+        if(containerNode){
+          containerNode.scrollTo({
             top: width*HEIGHT_TO_EXPLODE_AT*0.95,
             left: 120,
           });
         }
 
         setTimeout(()=>{
-          if(containerRef.current){
-            containerRef.current.scrollTo({
+          if(containerNode){
+            containerNode.scrollTo({
               top: width*HEIGHT_TO_EXPLODE_AT,
               left: 120,
             });
