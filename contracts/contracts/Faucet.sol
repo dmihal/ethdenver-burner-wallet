@@ -94,6 +94,15 @@ contract Faucet is Context, IERC777, IERC20, Admins, FreeGas {
     return adjustedBalance;
   }
 
+  function canSend(
+    address from,
+    address to,
+    uint256 amount
+  ) external view returns (bool, string memory) {
+    return token.canSend(from, to, amount);
+  }
+
+
   function name() external view returns (string memory) {
     return token.name();
   }
