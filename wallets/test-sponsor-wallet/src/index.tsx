@@ -5,7 +5,7 @@ import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, GSNGateway } from '@burner-wallet/core/gateways';
 import ENSPlugin from '@burner-wallet/ens-plugin';
-import ModernUI from '@burner-wallet/modern-ui';
+import DenverUI from 'denver-ui';
 import BurnableENSPlugin from '@burner-factory/burnable-ens-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
@@ -16,6 +16,7 @@ import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable
 
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
+import SponsorPlugin from 'sponsor-plugin';
 import schedule from './waterloo.json';
 import TestHelpersPlugin from 'test-helpers-plugin';
 
@@ -51,16 +52,12 @@ const core = new BurnerCore({
 });
 
 const BurnerWallet = () =>
-  <ModernUI
+  <DenverUI
     title="ETHDenver - test sponsor"
     // @ts-ignore
     core={core}
     plugins={[
-      new BurnableENSPlugin({
-        domain: 'myburner.test',
-        tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
-        network: '5',
-      }),
+      new SponsorPlugin(),
       new ENSPlugin('5'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
