@@ -48,9 +48,13 @@ const OverlayBalance: React.FC = () => {
   ]
 
   useEffect(() => {
-      let interval = setInterval(pollingFn,10000)
-      setTimeout(pollingFn,30)
-      return ()=>{clearInterval(interval)}
+    let timeout = null;
+    const poll = async () => {
+      await pollingFn();
+      timeout = setTimeout(poll, 10000);
+    };
+    poll();
+    return ()=>{clearTimeout(timeout)}
   },[]);
 
   return (
