@@ -46,15 +46,15 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
       _allowedDenominationList.push(denomination);
     } else {
       uint256 lastValue = _allowedDenominationList[_allowedDenominationList.length - 1];
-      _allowedDenominationList.length--;
 
       if (lastValue != denomination) {
         for (uint256 i = 0; i < _allowedDenominationList.length; i++) {
           if (_allowedDenominationList[i] == denomination) {
-            _allowedDenominationList[i] == lastValue;
+            _allowedDenominationList[i] = lastValue;
           }
         }
       }
+      _allowedDenominationList.length--;
     }
   }
 
