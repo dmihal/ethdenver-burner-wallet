@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    environment:
+      DOMAINS: 'buffidao.com, sponsor-test.buffidao.com'
+      # DOMAINS: 'buffidao.com, s.buffidao.com, sponsor.buffidao.com, sponsor-test.buffidao.com, test.buffidao.com, vendor.buffidao.com, vendor-test.buffidao.com, admin.buffidao.com'
+      STAGE: 'production'
+    volumes:
+      - /opt/sites:/var/www/vhosts
+      - /opt/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
