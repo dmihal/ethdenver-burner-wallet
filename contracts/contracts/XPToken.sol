@@ -8,12 +8,15 @@ import './ModifiedERC777.sol';
 import './IWhitelist.sol';
 import './FreeGas.sol';
 import './IMintableToken.sol';
+import './IReputationAdmin.sol';
 
 contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
 
   IWhitelist public senderList;
   IWhitelist public receiverList;
   IWhitelist public minterList;
+
+  IReputationAdmin public rep;
 
   mapping(uint256 => bool) private _allowedDenominations;
   uint256[] private _allowedDenominationList;
@@ -114,7 +117,28 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
     sent[hash(from, to, amount)] = true;
 
     ModifiedERC777._move(operator, from, to, amount, userData, operatorData);
+
+    if (address(rep) != address(0)) {
+      address[] memory toList = new address[](1);
+      toList[0] = to;
+      uint256[] memory amtList = new uint256[](1);
+      amtList[0] = amount;
+      rep.reputationMint(toList, amtList);
+    }
+
     emit Distribute(from, to, amount, userData);
+  }
+
+  function setRep(IReputationAdmin _rep) external onlyOwner {
+    rep = _rep;
+  }
+
+  function transferRepOwnership(address newOwner) external onlyOwner {
+    rep.transferOwnership(newOwner);
+  }
+
+  function reputationMint(address[] calldata _beneficiaries, uint256[] calldata _amounts) external onlyOwner {
+    rep.reputationMint(_beneficiaries, _amounts);
   }
 
   function _postTransfer(address, address from, address to, uint256, bytes memory, bytes memory) internal {
