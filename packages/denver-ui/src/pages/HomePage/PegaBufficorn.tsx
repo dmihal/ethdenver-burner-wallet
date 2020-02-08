@@ -12,11 +12,9 @@ interface PegaBufficornProps {
   scale: number;
 }
 
-const PegaBufficorn = styled.div.attrs<PegaBufficornProps>({
-  style: ({ topPos, scale }) => ({
-    transform: `translate3d(0, ${topPos}px, 0) scale( ${scale} )`,
-  }),
-})<PegaBufficornProps>`
+const PegaBufficorn = styled.div.attrs<PegaBufficornProps>(({ topPos, scale }) => ({
+  style: { transform: `translate3d(0, ${topPos}px, 0) scale( ${scale} )` },
+}))<PegaBufficornProps>`
   z-index: 25;
   position: absolute;
   right: ${props => props.rightPos}px;

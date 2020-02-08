@@ -47,13 +47,13 @@ const Fixed = styled.div`
   overflow: hidden;
 `;
 
-const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
-  style: ({ boxWidth }) => ({
+const ButtonBox = styled.div.attrs<{ boxWidth: number }>(({ boxWidth }) => ({
+  style: {
     left: boxWidth * 1.1 + 'px',
     height: boxWidth * 0.9 + 'px',
     width:"100%"
-  }),
-})<{ boxWidth: number }>`
+  },
+}))<{ boxWidth: number }>`
   z-index: 999;
   position: absolute;
   top: 0;
@@ -61,11 +61,9 @@ const ButtonBox = styled.div.attrs<{ boxWidth: number }>({
   margin-top: 10%;
 `;
 
-const Sky = styled.div.attrs<{ topPos: number }>({
-  style: ({ topPos }) => ({
-    transform: `translate3d(0, ${topPos}px, 0)`,
-  }),
-})<{ topPos: number }>`
+const Sky = styled.div.attrs<{ topPos: number }>(({ topPos }) => ({
+  style: { transform: `translate3d(0, ${topPos}px, 0)` },
+}))<{ topPos: number }>`
   background-image: linear-gradient(to bottom, #0a1411 0%,#372e56 20%,#df5089 100%);
   background-color: #FFFFFF;
   width: 100%;
@@ -80,11 +78,9 @@ const Sky = styled.div.attrs<{ topPos: number }>({
   }
 `;
 
-const Title = styled.div.attrs<{ topPos: number }>({
-  style: ({ topPos }) => ({
-    transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)`,
-  }),
-})<{ topPos: number }>`
+const Title = styled.div.attrs<{ topPos: number }>(({ topPos }) => ({
+  style: { transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)` },
+}))<{ topPos: number }>`
   color: #efefef;
   width: 100%;
   position: fixed;

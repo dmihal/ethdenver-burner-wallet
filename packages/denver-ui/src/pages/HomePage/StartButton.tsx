@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div.attrs<{ leftPos: number, height: number }>({
-  style: ({ leftPos }) => ({
-    transform: `translate3d(${leftPos}px, 0, 0)`,
-  }),
-})<{ leftPos: number, height: number }>`
+const Container = styled.div.attrs<{ leftPos: number, height: number }>(({ leftPos }) => ({
+  style: { transform: `translate3d(${leftPos}px, 0, 0)` },
+}))<{ leftPos: number, height: number }>`
   cursor: pointer;
   position: absolute;
   z-index: 999;
