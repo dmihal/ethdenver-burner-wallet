@@ -54,17 +54,22 @@ const ScanButton = styled.button`
 `;
 
 const HUD: React.FC = () => {
-  const { actions } = useBurner();
+  const { actions, assets } = useBurner();
+  const assetIDs = assets.map((asset) => asset.id);
   return (
       <OuterContainer>
         <InnerContainer>
-          <Overlay top={24} side="left">
-            <OverlayBalance asset="buff" />
-          </Overlay>
+          {assetIDs.indexOf('buff') !== -1 && (
+            <Overlay top={24} side="left">
+              <OverlayBalance asset="buff" />
+            </Overlay>
+          )}
 
-          <Overlay top={64} side="left">
-            <OverlayBalance asset="xdai" />
-          </Overlay>
+          {assetIDs.indexOf('xdai') !== -1 && (
+            <Overlay top={64} side="left">
+              <OverlayBalance asset="xdai" />
+            </Overlay>
+          )}
 
           <Overlay top={104} side="left">
             <OverlayTokens />
@@ -74,9 +79,11 @@ const HUD: React.FC = () => {
             <OverlayAccount />
           </Overlay>
 
-          <Overlay top={70} side="right">
-            <OverlayXP />
-          </Overlay>
+          {assetIDs.indexOf('xp') !== -1 && (
+            <Overlay top={70} side="right">
+              <OverlayXP />
+            </Overlay>
+          )}
 
           <UIBar>
             <ScanButton onClick={() => {
