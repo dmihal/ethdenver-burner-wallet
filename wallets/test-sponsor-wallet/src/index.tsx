@@ -21,6 +21,7 @@ import schedule from './waterloo.json';
 import TestHelpersPlugin from 'test-helpers-plugin';
 import { XPToken } from 'denver-assets';
 import { faucet_test_address } from 'denver-config';
+import AccountCacheSigner from 'account-cache-signer';
 
 const xp = new XPToken({
   id: 'xp',
@@ -38,6 +39,7 @@ const keth = new NativeAsset({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
+    new AccountCacheSigner(10),
     new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
     new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),

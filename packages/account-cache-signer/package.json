@@ -1,0 +1,14 @@
+{
+  "name": "account-cache-signer",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/AccountCacheSigner.js",
+  "types": "dist/AccountCacheSigner.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-admin": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.0"
+  }
+}

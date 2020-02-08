@@ -28,6 +28,7 @@ import ChingPlugin from 'ching-plugin';
 import buffIcon from './buff.png';
 import { faucet_test_address } from 'denver-config';
 import { XPToken } from 'denver-assets';
+import AccountCacheSigner from 'account-cache-signer';
 
 
 const buff = new ERC777Asset({
@@ -62,6 +63,7 @@ const kdai = new ERC20Asset({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
+    new AccountCacheSigner(10),
     new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
     new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),
