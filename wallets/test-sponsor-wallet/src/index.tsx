@@ -19,10 +19,10 @@ import FortmaticSigner from 'fortmatic-signer';
 import SponsorPlugin from 'sponsor-plugin';
 import schedule from './waterloo.json';
 import TestHelpersPlugin from 'test-helpers-plugin';
-
+import { XPToken } from 'denver-assets';
 import { faucet_test_address } from 'denver-config';
 
-const xp = new ERC777Asset({
+const xp = new XPToken({
   id: 'xp',
   name: 'XP',
   network: '42',

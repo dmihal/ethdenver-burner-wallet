@@ -1,0 +1,10 @@
+{
+  "name": "denver-assets",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "dependencies": {
+    "@burner-wallet/assets": "^1.0.5"
+  }
+}

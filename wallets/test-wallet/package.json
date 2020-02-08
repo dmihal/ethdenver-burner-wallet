@@ -21,6 +21,7 @@
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
     "ching-plugin": "^1.0.3",
+    "denver-assets": "^1.0.0",
     "denver-config": "^0.1.0",
     "denver-misc-plugin": "^1.0.0",
     "denver-ui": "^1.0.0",

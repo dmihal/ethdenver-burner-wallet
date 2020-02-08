@@ -27,6 +27,7 @@ import TestHelpersPlugin from 'test-helpers-plugin';
 import ChingPlugin from 'ching-plugin';
 import buffIcon from './buff.png';
 import { faucet_test_address } from 'denver-config';
+import { XPToken } from 'denver-assets';
 
 
 const buff = new ERC777Asset({
@@ -38,7 +39,7 @@ const buff = new ERC777Asset({
   usdPrice: 1,
 });
 
-const xp = new ERC777Asset({
+const xp = new XPToken({
   id: 'xp',
   name: 'XP',
   network: '42',
