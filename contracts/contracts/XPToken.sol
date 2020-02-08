@@ -67,12 +67,12 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
       return (false, "Not authorized sender");
     }
     if (!receiverList.isWhitelisted(to)) {
-      return (false, "Not authorized sender");
+      return (false, "Not authorized receiver");
     }
     if (!_allowedDenominations[amount]) {
       return (false, "Invalid denomination");
     }
-    if (!sent[hash(from, to, amount)]) {
+    if (sent[hash(from, to, amount)]) {
       return (false, "Already sent");
     }
 

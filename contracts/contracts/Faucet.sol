@@ -9,7 +9,7 @@ import './IWhitelist.sol';
 import './FreeGas.sol';
 
 contract Faucet is Context, IERC777, IERC20, Admins, FreeGas {
-  IMintableToken token;
+  IMintableToken public token;
 
   event RateChange(address indexed user, uint256 rate);
 
