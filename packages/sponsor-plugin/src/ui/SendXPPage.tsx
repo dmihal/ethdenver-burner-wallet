@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useState, useEffect } from 'react';
-import { PluginPageContext } from '@burner-wallet/types';
+import { PluginPageContext, AccountBalanceData } from '@burner-wallet/types';
 import SponsorPlugin, { Mission } from '../SponsorPlugin';
 import styled from 'styled-components';
 
@@ -34,15 +34,25 @@ const SpotClaimPage: React.FC<PluginPageContext<SendPageParams>> = ({
     });
   };
 
-  const { Page, Button } = BurnerComponents;
+  const { Page, Button, AccountBalance } = BurnerComponents;
   return (
     <Page title="Send XP">
       <div>To: {match.params.to}</div>
+      <AccountBalance asset="xp" account={defaultAccount} render={(data: AccountBalanceData | null) => data && (
+        <div>Balance: {data.displayBalance} XP</div>
+      )}/>
       <div style={{ display: 'flex' }}>
         {missions.map((mission: Mission, i: number) => (
-          <Button disabled={!mission.canSend || selectedMission === i} onClick={() => setSelectedMission(i)}>
-            <div>{mission.xp}</div>
-            <div>{mission.task}</div>
+          <Button
+            key={mission.task}
+            disabled={!mission.canSend || selectedMission === i}
+            onClick={() => setSelectedMission(i)}
+          >
+            <div style={{ flexDirection: 'column' }}>
+              <div>{mission.xp}</div>
+              <div>{mission.task}</div>
+              <div>{mission.error}</div>
+            </div>
           </Button>
         ))}
       </div>
