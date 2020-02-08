@@ -20,20 +20,14 @@ import SponsorPlugin from 'sponsor-plugin';
 import schedule from './waterloo.json';
 import TestHelpersPlugin from 'test-helpers-plugin';
 import { XPToken } from 'denver-assets';
-import { faucet_test_address } from 'denver-config';
+import { faucet_test_address, xp_test_network } from 'denver-config';
 import AccountCacheSigner from 'account-cache-signer';
 
 const xp = new XPToken({
   id: 'xp',
   name: 'XP',
-  network: '42',
+  network: xp_test_network,
   address: faucet_test_address,
-});
-
-const keth = new NativeAsset({
-  id: 'keth',
-  name: 'kETH',
-  network: '42',
 });
 
 const core = new BurnerCore({
@@ -51,7 +45,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [xp, keth],
+  assets: [xp],
 });
 
 const BurnerWallet = () =>

@@ -12,7 +12,7 @@ class XPToken extends ERC777Asset {
     }
 
     const decoded = web3.eth.abi.decodeParameters(['uint256','bytes'], log.data);
-    const msg = web3.utils.toUtf8(decoded[1]);
+    const msg = decoded[1] && web3.utils.toUtf8(decoded[1]);
 
     return {
       asset: this.id,
@@ -21,7 +21,7 @@ class XPToken extends ERC777Asset {
       to: web3.utils.toChecksumAddress(log.topics[2].substr(26)),
       value: decoded[0],
       displayValue: this.getDisplayValue(decoded[0]),
-      message: msg.length > 0 ? msg : null,
+      message: msg && msg.length > 0 ? msg : null,
       timestamp: await this._getBlockTimestamp(receipt.blockNumber),
     };
   }

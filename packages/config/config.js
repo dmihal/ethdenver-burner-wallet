@@ -1,2 +1,5 @@
-module.exports.xp_test_address = '0x0AA464FFC42C0d9526a1a04Cf2553580Dbf677fF';
-module.exports.faucet_test_address = '0x9DF008067362a9D4830A406e36537AE8395cA48F';
+module.exports.xp_test_network = '4';
+module.exports.xp_test_address = '0x740bC1C24c993689030a1819De1Ec7d518F354d6';
+module.exports.faucet_test_address = '0xF6EA79e8cF5Ee9E65A82528329c34B4136A4bF5c';
+module.exports.senderlist_test_address = '0x486EcCDEF912949BF2FB04AeC6E11AD11Dd2e42b';
+module.exports.receiverlist_test_address = '0x9bBf1aCa4ABDDfeB0751fccbDa1DFeCCaD90bD72';

@@ -102,11 +102,15 @@ export default class AdminPlugin implements Plugin {
       return this.setAdmin(address, _isWhitelisted, network, sender);
     }
 
-    // TODO
+    const web3 = this.context!.getWeb3(network);
+    const contract = new web3.eth.Contract(whitelistABI, whitelist);
+    const data = contract.methods.setWhitelisted(_isWhitelisted, [address]).encodeABI();
+    console.log({ whitelist, data, sender });
+    return this.send(whitelist, data, sender, network);
   }
 
   async isAdmin(address: string) {
-    const adminNetworks = ['42'];
+    const adminNetworks = ['4','42'];
 
     const admins = await Promise.all(adminNetworks.map(async (network: string) => {
       const web3 = this.context!.getWeb3(network);
@@ -128,7 +132,10 @@ export default class AdminPlugin implements Plugin {
   }
 
   async send(target: string, data: string, sender: string, network: string) {
-
+    const web3 = this.context!.getWeb3(network);
+    const wallet = new web3.eth.Contract(walletABI as any, ADMIN_WALLET);
+    const receipt = await wallet.methods.execute(target, data, '0').send({ from: sender });
+    return receipt;
   }
 
   async getFaucetCap() {

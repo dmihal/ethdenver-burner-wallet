@@ -18,6 +18,8 @@ import AdminPlugin from 'admin-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import TestHelpersPlugin from 'test-helpers-plugin';
+import { faucet_test_address, xp_test_network } from 'denver-config';
+import { XPToken } from 'denver-assets';
 
 
 const testbuff = new ERC777Asset({
@@ -28,11 +30,11 @@ const testbuff = new ERC777Asset({
   icon: 'https://buffidai.io/static/media/bufficorn.e2983bb0.png',
 });
 
-const testxp = new ERC777Asset({
+const testxp = new XPToken({
   id: 'testxp',
   name: 'Test XP',
-  network: '42',
-  address: '0xda0067da015674083dcad4e4431c00c273828fe5',
+  network: xp_test_network,
+  address: faucet_test_address,
 });
 
 const core = new BurnerCore({
@@ -52,10 +54,6 @@ const core = new BurnerCore({
   assets: [testbuff, testxp],
 });
 
-const exchange = new Exchange({
-  pairs: [new Uniswap('dai')],
-});
-
 const BurnerWallet = () =>
   <ModernUI
     title="ETHDenver Admin"
@@ -65,12 +63,6 @@ const BurnerWallet = () =>
       new AdminPlugin({
         contractWalletFactory: process.env.REACT_APP_WALLET_FACTORY_ADDRESS!,
       }),
-      new BurnableENSPlugin({
-        domain: 'myburner.test',
-        tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
-        network: '5',
-      }),
-      new ENSPlugin('5'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
       new ContractWalletPlugin(),

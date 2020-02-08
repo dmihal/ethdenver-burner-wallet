@@ -13,7 +13,7 @@ import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
-//import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
+import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
 import LegacyPlugin from '@burner-wallet/legacy-plugin';
 import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
@@ -26,7 +26,7 @@ import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import TestHelpersPlugin from 'test-helpers-plugin';
 import ChingPlugin from 'ching-plugin';
 import buffIcon from './buff.png';
-import { faucet_test_address } from 'denver-config';
+import { xp_test_address, xp_test_network } from 'denver-config';
 import { XPToken } from 'denver-assets';
 import AccountCacheSigner from 'account-cache-signer';
 
@@ -43,21 +43,8 @@ const buff = new ERC777Asset({
 const xp = new XPToken({
   id: 'xp',
   name: 'XP',
-  network: '42',
-  address: faucet_test_address,
-});
-
-const keth = new NativeAsset({
-  id: 'keth',
-  name: 'kETH',
-  network: '42',
-});
-
-const kdai = new ERC20Asset({
-  id: 'kdai',
-  name: 'kDai',
-  network: '42',
-  address: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
+  network: xp_test_network,
+  address: xp_test_address,
 });
 
 const core = new BurnerCore({
@@ -75,7 +62,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, xdai, xp, keth, kdai],
+  assets: [buff, xdai, xp],
 });
 
 const exchange = new Exchange({
@@ -93,12 +80,6 @@ const BurnerWallet = () =>
         dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B',
         dispenserNetwork: '42',
       }),
-      new BurnableENSPlugin({
-        domain: 'myburner.test',
-        tokenAddress: '0xc03bbef8b85a19ABEace435431faED98c31852d9',
-        network: '5',
-      }),
-      new ENSPlugin('5'),
       new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
@@ -107,7 +88,7 @@ const BurnerWallet = () =>
       new ContractWalletPlugin(),
       new ThreeBoxEditProfilePlugin(),
       new TestHelpersPlugin(process.env.REACT_APP_TEST_ADAPTER!),
-//      new BurnerConnectPlugin('ETHDenver test wallet'),
+      new BurnerConnectPlugin('ETHDenver test wallet'),
       new ChingPlugin(),
       new LegacyPlugin(),
     ]}
