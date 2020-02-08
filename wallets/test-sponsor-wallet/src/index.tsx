@@ -20,12 +20,13 @@ import SponsorPlugin from 'sponsor-plugin';
 import schedule from './waterloo.json';
 import TestHelpersPlugin from 'test-helpers-plugin';
 
+import { faucet_test_address } from 'denver-config';
 
 const xp = new ERC777Asset({
   id: 'xp',
   name: 'XP',
   network: '42',
-  address: '0xda0067da015674083dcad4e4431c00c273828fe5',
+  address: faucet_test_address,
 });
 
 const keth = new NativeAsset({
