@@ -28,16 +28,16 @@ const AdminPage: React.FC<PluginPageContext> = ({ BurnerComponents, plugin, defa
     }
   });
 
-  const refreshCap = async () => {
+  const refreshCaps = async () => {
     setLoading(true);
-    const cap = await _plugin.getFaucetCap();
-    setNewCap(cap);
-    setCurrentCap(cap);
+    const caps = await _plugin.getFaucetCaps();
+    setNewCap(caps[0].cap);
+    setCurrentCap(caps[0].cap);
     setLoading(false);
   };
 
   useEffect(() => {
-    refreshCap();
+    refreshCaps();
     const gsnWatcher = setInterval(refreshGSNBalances, 10000);
 
     () => {
@@ -47,8 +47,8 @@ const AdminPage: React.FC<PluginPageContext> = ({ BurnerComponents, plugin, defa
 
   const setCap = async () => {
     setLoading(true);
-    await _plugin.setFaucetCap(newCap, defaultAccount);
-    await refreshCap();
+    // await _plugin.setFaucetCap(newCap, defaultAccount);
+    await refreshCaps();
     setLoading(false);
   };
 
@@ -59,7 +59,7 @@ const AdminPage: React.FC<PluginPageContext> = ({ BurnerComponents, plugin, defa
       <input value={address} onChange={(e: any) => setAddress(e.target.value)} />
       <Button onClick={() => actions.navigateTo(`/admin/user/${address}`)} disabled={address.length !== 42}>Go</Button>
 
-      <h2>Faucet</h2>
+      <h2>Faucets</h2>
       <div>
         Cap:
         <input

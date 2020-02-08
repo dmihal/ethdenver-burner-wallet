@@ -4,19 +4,25 @@ import UserPage from './ui/UserPage';
 import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
 import walletABI from './abis/Wallet.json';
-import { xp_test_network, senderlist_test_address, receiverlist_test_address } from 'denver-config';
+import faucetABI from './abis/Faucet.json';
+import { xp_test_network, senderlist_test_address, receiverlist_test_address, faucet_test_address } from 'denver-config';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
-type Whitelist = { name: string; network: string; address: string };
+type CONTRACT = { name: string; network: string; address: string };
 
-const WHITELISTS: Whitelist[] = [
+const WHITELISTS: CONTRACT[] = [
   { name: 'Test Senders', network: xp_test_network, address: senderlist_test_address },
   { name: 'Test Receivers', network: xp_test_network, address: receiverlist_test_address },
+];
+
+const FAUCETS: CONTRACT[] = [
+  { name: 'Test Faucet', network: xp_test_network, address: faucet_test_address },
 ];
 
 export interface UserStatus {
   types: { [network: string]: AccountType };
   whitelists: { name: string, isWhitelisted: boolean, address: string, network: string }[];
+  faucets: { name: string, rate: string, address: string, network: string }[];
 }
 
 const RELAYHUB_ADDRESS = '0xD216153c06E857cD7f72665E0aF1d7D82172F494';
@@ -52,11 +58,12 @@ export default class AdminPlugin implements Plugin {
     const web3xdai = this.context!.getWeb3('100');
     const web3kovan = this.context!.getWeb3('42');
     
-    const [xdaiType, kovanType, whitelists, isAdmin] = await Promise.all([
+    const [xdaiType, kovanType, whitelists, isAdmin, faucets] = await Promise.all([
       this.getAccountType(address, web3xdai),
       this.getAccountType(address, web3kovan),
       this.getWhitelists(address),
       this.isAdmin(address),
+      this.getFaucetRates(address),
     ]);
 
     const types: { [network: string]: AccountType } = {
@@ -64,7 +71,7 @@ export default class AdminPlugin implements Plugin {
       '100': xdaiType,
     };
 
-    return { types, whitelists: whitelists.concat(isAdmin) };
+    return { types, whitelists: whitelists.concat(isAdmin), faucets };
   }
 
   async getAccountType(address: string, web3: any): Promise<AccountType> {
@@ -92,7 +99,7 @@ export default class AdminPlugin implements Plugin {
   }
 
   async isWhitelisted(userAddress: string, whitelistAddress: string, web3: any): Promise<boolean> {
-    const contract = new web3.eth.Contract(whitelistABI, whitelistAddress);
+    const contract = new web3.eth.Contract(whitelistABI as any, whitelistAddress);
     const isWhitelisted = await contract.methods.isWhitelisted(userAddress).call();
     return isWhitelisted;
   }
@@ -103,7 +110,7 @@ export default class AdminPlugin implements Plugin {
     }
 
     const web3 = this.context!.getWeb3(network);
-    const contract = new web3.eth.Contract(whitelistABI, whitelist);
+    const contract = new web3.eth.Contract(whitelistABI as any, whitelist);
     const data = contract.methods.setWhitelisted(_isWhitelisted, [address]).encodeABI();
     console.log({ whitelist, data, sender });
     return this.send(whitelist, data, sender, network);
@@ -138,11 +145,34 @@ export default class AdminPlugin implements Plugin {
     return receipt;
   }
 
-  async getFaucetCap() {
-    return '0';
+  async getFaucetCaps() {
+    return await Promise.all(FAUCETS.map(async ({ name, network, address }) => {
+      const web3 = this.context!.getWeb3(network);
+      const faucet = new web3.eth.Contract(faucetABI as any, address);
+      const cap = web3.utils.fromWei(await faucet.methods.cap().call(), 'ether');
+      return { name, network, address, cap };
+    }));
   }
 
-  async setFaucetCap(cap: string, sender: string) {
-    return;
+  async setFaucetCap(cap: string, address: string, network: string, sender: string) {
+    const web3 = this.context!.getWeb3(network);
+    const faucet = new web3.eth.Contract(faucetABI as any, address);
+    return faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).send({ from: sender });
+  }
+
+  async getFaucetRates(user: string) {
+    const faucets = await Promise.all(FAUCETS.map(async ({ name, network, address }) => {
+      const web3 = this.context!.getWeb3(network);
+      const faucet = new web3.eth.Contract(faucetABI as any, address);
+      const rate = web3.utils.fromWei(await faucet.methods.rate(user).call(), 'ether');
+      return { name, rate, network, address };
+    }));
+    return faucets;
+  }
+
+  async setFaucetRate(user: string, rate: string, address: string, network: string, sender: string) {
+    const web3 = this.context!.getWeb3(network);
+    const faucet = new web3.eth.Contract(faucetABI as any, address);
+    return faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).send({ from: sender });
   }
 }

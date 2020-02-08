@@ -1,6 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { PluginPageContext, Asset, AccountBalanceData } from '@burner-wallet/types';
 import AdminPlugin, { UserStatus } from '../AdminPlugin';
+
+const EditableNumber: React.FC<{ value: string; onSave: (val: string) => Promise<any>}> = ({ value, onSave }) => {
+  const [userVal, setUserVal] = useState(value);
+  const [loading, setLoading] = useState(false);
+
+  const save = async () => {
+    setLoading(true);
+    await onSave(userVal);
+    setLoading(false);
+  };
+
+  return (
+    <Fragment>
+      <input type="number" value={userVal} onChange={(e: any) => setUserVal(e.target.value)} min="0" disabled={loading} />
+      {userVal !== value && (
+        <button disabled={loading} onClick={save}>Save</button>
+      )}
+    </Fragment>
+  )
+};
 
 const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({
   BurnerComponents, match, plugin, assets, defaultAccount
@@ -40,6 +60,22 @@ const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({
           }}
         />
       ))}
+
+      <h2>Faucets</h2>
+      {status.faucets.map(({ name, rate, address, network }) => (
+        <div key={name}>
+          {name}: {}
+          <EditableNumber
+            value={rate}
+            onSave={async (newVal: string) => {
+              await _plugin.setFaucetRate(match.params.account, newVal, address, network, defaultAccount);
+              refreshStatus();
+            }}
+          />
+          {} XP/second
+        </div>
+      ))}
+
 
       <h2>Wallets</h2>
       <div>Kovan: {status.types['42']}</div>
