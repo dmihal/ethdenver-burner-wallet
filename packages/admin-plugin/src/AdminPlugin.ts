@@ -4,18 +4,19 @@ import UserPage from './ui/UserPage';
 import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
 import walletABI from './abis/Wallet.json';
+import { xp_test_network, senderlist_test_address, receiverlist_test_address } from 'denver-config';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
 type Whitelist = { name: string; network: string; address: string };
 
 const WHITELISTS: Whitelist[] = [
-  { name: 'Test Senders', network: '42', address: '0x740bC1C24c993689030a1819De1Ec7d518F354d6' },
-  { name: 'Test Receivers', network: '42', address: '0xb441F31f3fb330AAb3Ec24319BA7A7e7D6444701' },
+  { name: 'Test Senders', network: xp_test_network, address: senderlist_test_address },
+  { name: 'Test Receivers', network: xp_test_network, address: receiverlist_test_address },
 ];
 
 export interface UserStatus {
   types: { [network: string]: AccountType };
-  whitelists: { name: string, isWhitelisted: boolean }[];
+  whitelists: { name: string, isWhitelisted: boolean, address: string, network: string }[];
 }
 
 const RELAYHUB_ADDRESS = '0xD216153c06E857cD7f72665E0aF1d7D82172F494';
@@ -85,7 +86,7 @@ export default class AdminPlugin implements Plugin {
     const whitelists = await Promise.all(WHITELISTS.map(async ({ name, network, address }) => {
       const web3 = this.context!.getWeb3(network);
       const isWhitelisted = await this.isWhitelisted(userAddress, address, web3);
-      return { name, isWhitelisted };
+      return { name, isWhitelisted, network, address };
     }));
     return whitelists;
   }
@@ -96,6 +97,14 @@ export default class AdminPlugin implements Plugin {
     return isWhitelisted;
   }
 
+  async setWhitelisted(address: string, _isWhitelisted: boolean, whitelist: string, network: string, sender: string) {
+    if (whitelist === ADMIN_WALLET) {
+      return this.setAdmin(address, _isWhitelisted, network, sender);
+    }
+
+    // TODO
+  }
+
   async isAdmin(address: string) {
     const adminNetworks = ['42'];
 
@@ -103,9 +112,23 @@ export default class AdminPlugin implements Plugin {
       const web3 = this.context!.getWeb3(network);
       const wallet = new web3.eth.Contract(walletABI as any, ADMIN_WALLET);
       const isWhitelisted = await wallet.methods.isOwner(address).call();
-      return { name: `Admin ${network}`, isWhitelisted };
+      return { name: `Admin ${network}`, isWhitelisted, network, address: ADMIN_WALLET };
     }))
     return admins;
+  }
+
+  async setAdmin(address: string, _isWhitelisted: boolean, network: string, sender: string) {
+    const web3 = this.context!.getWeb3(network);
+    const wallet = new web3.eth.Contract(walletABI as any, ADMIN_WALLET);
+    if (_isWhitelisted) {
+      return wallet.methods.addOwner(address).send({ from: sender });
+    } else {
+      return wallet.methods.removeOwner(address).send({ from: sender });
+    }
+  }
+
+  async send(target: string, data: string, sender: string, network: string) {
+
   }
 
   async getFaucetCap() {

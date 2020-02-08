@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { PluginPageContext, Asset, AccountBalanceData } from '@burner-wallet/types';
 import AdminPlugin, { UserStatus } from '../AdminPlugin';
 
-const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComponents, match, plugin, assets }) => {
+const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({
+  BurnerComponents, match, plugin, assets, defaultAccount
+}) => {
   const _plugin = plugin as AdminPlugin;
   const [status, setStatus] = useState<UserStatus | null>(null);
 
@@ -44,8 +46,18 @@ const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({ BurnerComp
       <div>xDai: {status.types['100']}</div>
 
       <h2>Whitelist</h2>
-      {status.whitelists.map(({ name, isWhitelisted }) => (
-        <div key={name}>{name}: {isWhitelisted ? 'whitelisted' : 'not whitelisted'}</div>
+      {status.whitelists.map(({ name, isWhitelisted, address, network }) => (
+        <div key={name}>
+          {name}: {isWhitelisted ? 'whitelisted' : 'not whitelisted'}
+          <Button
+            onClick={async () => {
+              await _plugin.setWhitelisted(match.params.account, !isWhitelisted, address, network, defaultAccount);
+              refreshStatus();
+            }}
+          >
+            Toggle
+          </Button>
+        </div>
       ))}
     </Page>
   );
