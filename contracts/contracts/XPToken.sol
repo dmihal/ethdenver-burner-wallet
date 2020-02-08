@@ -20,6 +20,8 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
 
   mapping(bytes32 => bool) private sent;
 
+  event Distribute(address indexed from, address indexed to, uint256 amount, bytes data);
+
   constructor(
     string memory name,
     string memory symbol,
@@ -112,6 +114,7 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
     sent[hash(from, to, amount)] = true;
 
     ModifiedERC777._move(operator, from, to, amount, userData, operatorData);
+    emit Distribute(from, to, amount, userData);
   }
 
   function _postTransfer(address, address from, address to, uint256, bytes memory, bytes memory) internal {
