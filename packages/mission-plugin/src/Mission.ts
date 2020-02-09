@@ -8,4 +8,5 @@ export default interface Mission {
   game_y_coord: number;
   button: boolean;
   floor: number;
+  link?: string;
 }

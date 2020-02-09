@@ -29,6 +29,7 @@ export default class MissionPlugin implements Plugin {
       xCoord: mission.game_x_coord,
       yCoord: mission.game_y_coord,
       color: mission.color,
+      link: mission.link,
     });
 
     this.addedMissions[mission.title] = true;
