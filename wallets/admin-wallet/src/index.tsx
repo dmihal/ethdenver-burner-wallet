@@ -20,6 +20,7 @@ import FortmaticSigner from 'fortmatic-signer';
 import TestHelpersPlugin from 'test-helpers-plugin';
 import { faucet_test_address, xp_test_network } from 'denver-config';
 import { XPToken } from 'denver-assets';
+import AccountCacheSigner from 'account-cache-signer';
 
 
 const testbuff = new ERC777Asset({
@@ -40,6 +41,7 @@ const testxp = new XPToken({
 const core = new BurnerCore({
   // @ts-ignore
   signers: [
+    new AccountCacheSigner(10),
     new ContractWalletSigner(process.env.REACT_APP_WALLET_FACTORY_ADDRESS!),
     new FortmaticSigner(process.env.REACT_APP_FORTMATIC_KEY!),
     new InjectedSigner(),

@@ -5,6 +5,7 @@ import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
 import walletABI from './abis/Wallet.json';
 import faucetABI from './abis/Faucet.json';
+import tokenABI from './abis/XPToken.json';
 import { xp_test_network, senderlist_test_address, receiverlist_test_address, faucet_test_address } from 'denver-config';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
@@ -112,7 +113,6 @@ export default class AdminPlugin implements Plugin {
     const web3 = this.context!.getWeb3(network);
     const contract = new web3.eth.Contract(whitelistABI as any, whitelist);
     const data = contract.methods.setWhitelisted(_isWhitelisted, [address]).encodeABI();
-    console.log({ whitelist, data, sender });
     return this.send(whitelist, data, sender, network);
   }
 
@@ -145,12 +145,16 @@ export default class AdminPlugin implements Plugin {
     return receipt;
   }
 
-  async getFaucetCaps() {
+  async getFaucets() {
     return await Promise.all(FAUCETS.map(async ({ name, network, address }) => {
       const web3 = this.context!.getWeb3(network);
       const faucet = new web3.eth.Contract(faucetABI as any, address);
       const cap = web3.utils.fromWei(await faucet.methods.cap().call(), 'ether');
-      return { name, network, address, cap };
+      const tokenAddress = await faucet.methods.token().call();
+      const token = new web3.eth.Contract(tokenABI as any, tokenAddress);
+      const denominations = (await token.methods.getDenominations().call())
+        .map((denomination: string) => web3.utils.fromWei(denomination, 'ether'));
+      return { name, network, address, cap, denominations };
     }));
   }
 
@@ -158,6 +162,16 @@ export default class AdminPlugin implements Plugin {
     const web3 = this.context!.getWeb3(network);
     const faucet = new web3.eth.Contract(faucetABI as any, address);
     return faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).send({ from: sender });
+  }
+
+  async setDenomination(denomination: string, isAllowed: boolean, faucetAddress: string, network: string, sender: string) {
+    const web3 = this.context!.getWeb3(network);
+    const faucet = new web3.eth.Contract(faucetABI as any, faucetAddress);
+    const tokenAddress = await faucet.methods.token().call();
+    const token = new web3.eth.Contract(tokenABI as any, tokenAddress);
+
+    const data = token.methods.setDenomination(web3.utils.toWei(denomination, 'ether'), isAllowed).encodeABI();
+    return this.send(tokenAddress, data, sender, network);
   }
 
   async getFaucetRates(user: string) {
@@ -175,4 +189,6 @@ export default class AdminPlugin implements Plugin {
     const faucet = new web3.eth.Contract(faucetABI as any, address);
     return faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).send({ from: sender });
   }
+
+
 }
