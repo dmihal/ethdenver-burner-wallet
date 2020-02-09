@@ -57,7 +57,10 @@ export default class MissionPlugin implements Plugin {
 
   async loadDynamicMissions() {
     if (this.url) {
-      const response = await fetch(this.url);
+      const web3 = this.context.getWeb3('100');
+      const [account] = await web3.eth.getAccounts();
+
+      const response = await fetch(`${this.url}?account=${account}`);
       const json = await response.json();
 
       for (const mission of json) {
