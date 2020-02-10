@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import burnerComponents from './components/burner-components';
 export { default as burnerComponents } from './components/burner-components';
 import Header from './components/Header';
-// import Loading from './components/Loading';
+import Loading from './components/Loading';
 import Scanner from './components/Scanner';
 import Template from './Template';
 
@@ -48,7 +48,7 @@ export default class DenverUI extends BurnerUICore {
     return (
       <Template theme={this.props.theme}>
         <Scanner />
-        {/*<Loading />*/}
+        <Loading />
         <Route path="/" exact>
           {({ match }) => !match && (
             <Header title={this.props.title} />

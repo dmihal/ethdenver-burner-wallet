@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
-import { BurnerContext, withBurner } from '@burner-wallet/ui-core';
+import { useBurner } from '@burner-wallet/ui-core';
 import { RouteComponentProps } from 'react-router-dom';
 import Address from '../../components/Address';
 import Button from '../../components/Button';
 import Page from '../../components/Page';
 import LineItem from '../../components/LineItem';
 
-export interface ConfirmState {
-  to: string;
-  from: string;
-  ether?: string;
-  value?: string;
-  asset: string;
-  message?: string | null;
-  id: any;
-}
+const ConfirmPage: React.FC<RouteComponentProps> = ({ history }) => {
+  const { BurnerComponents, assets, actions, pluginData, t } = useBurner();
+  const { PluginElements } = BurnerComponents;
 
-const ConfirmPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, ConfirmState>> = ({
-  history, assets, actions, pluginData, t
-}) => {
-  const [sending, setSending] = useState(false);
+  const [sending, _setSending] = useState(false);
+  const setSending = (isSending: boolean) => {
+    _setSending(isSending);
+    actions.setLoading(isSending ? 'Sending...' : null);
+  }
 
   if (!history.location.state) {
     history.replace('/send');
@@ -66,6 +61,8 @@ const ConfirmPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, ConfirmS
 
   return (
     <Page title={t('Confirm')}>
+      <PluginElements position="confirm-top" tx={history.location.state} />
+
       <LineItem name={t('From')}>
         <Address address={from} />
       </LineItem>
@@ -75,12 +72,16 @@ const ConfirmPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, ConfirmS
       <LineItem name={t('Amount')} value={`${amount} ${asset.name}`} />
       {message && <LineItem name={t('Note')} value={message} />}
 
+      <PluginElements position="confirm-middle" tx={history.location.state} />
+
       <div style={{ display: 'flex' }}>
         <Button disabled={sending} onClick={send}>{t('Send')}</Button>
         <Button disabled={sending} onClick={() => history.goBack()}>{t('Cancel')}</Button>
       </div>
+
+      <PluginElements position="confirm-bottom" tx={history.location.state} />
     </Page>
   );
 };
 
-export default withBurner(ConfirmPage);
+export default ConfirmPage;

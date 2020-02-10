@@ -34,8 +34,8 @@ const ReceiptPage: React.FC<RouteComponentProps<MatchParams> & BurnerContext> = 
         if (!tx) {
           return (
             <section>
-              <BigEmoji>&#128269;</BigEmoji>
-              <div>Transaction not found...</div>
+              <BigEmoji>🔎</BigEmoji>
+              <div>Searching for the transaction...</div>
               <div>The transaction may still be propogating</div>
             </section>
           );
@@ -48,6 +48,7 @@ const ReceiptPage: React.FC<RouteComponentProps<MatchParams> & BurnerContext> = 
         // @ts-ignore
         const date = formatDate(tx.timestamp)
 
+        const isSent = defaultAccount.toLowerCase() === tx.from!.toLowerCase();
         return (
           <section>
             <div>
@@ -57,7 +58,7 @@ const ReceiptPage: React.FC<RouteComponentProps<MatchParams> & BurnerContext> = 
             </div>
 
             <div>
-              <h2>{defaultAccount === tx.from ? t('Sent') : t('Received')}</h2>
+              <h2>{isSent ? t('Sent') : t('Received')}</h2>
               <div>{amtValue}</div>
             </div>
 
