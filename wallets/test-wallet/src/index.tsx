@@ -30,6 +30,7 @@ import buffIcon from './buff.png';
 import { xp_test_address, xp_test_network } from 'denver-config';
 import { XPToken } from 'denver-assets';
 import AccountCacheSigner from 'account-cache-signer';
+import LeaderboardPlugin from 'leaderboard';
 
 
 const buff = new ERC777Asset({
@@ -94,6 +95,7 @@ const BurnerWallet = () =>
       new LegacyPlugin(),
       new UnstoppableDomainsPlugin(),
       new UnstoppableResolutionPlugin(process.env.REACT_APP_INFURA_KEY!)
+      new LeaderboardPlugin(),
     ]}
   />
 
