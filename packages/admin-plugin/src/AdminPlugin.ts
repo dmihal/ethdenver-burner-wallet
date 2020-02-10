@@ -29,6 +29,8 @@ export interface UserStatus {
 const RELAYHUB_ADDRESS = '0xD216153c06E857cD7f72665E0aF1d7D82172F494';
 const ADMIN_WALLET = '0x6ebfe51d736c34eefb9107fcab912dd604682616';
 
+const ADDRESS_REGEX = /(0x[0-9a-f]{40})/i;
+
 interface AdminPluginProps {
   contractWalletFactory: string;
 }
@@ -46,6 +48,14 @@ export default class AdminPlugin implements Plugin {
     pluginContext.addPage('/admin/user/:account', UserPage);
     pluginContext.addPage('/admin', AdminPage);
     pluginContext.addButton('apps', 'Admin', '/admin');
+
+    pluginContext.onQRScanned((qr: string, ctx: PluginActionContext) => {
+      if (ADDRESS_REGEX.test(qr)) {
+        const address = ADDRESS_REGEX.exec(qr)![1];
+        ctx.actions.navigateTo(`/admin/user/${address}`);
+        return true;
+      }
+    });
   }
 
   async getGSNBalance(address: string, network: string) {

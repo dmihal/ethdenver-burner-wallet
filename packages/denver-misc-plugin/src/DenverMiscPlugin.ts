@@ -1,4 +1,4 @@
-import { BurnerPluginContext, Plugin, PluginPageContext } from '@burner-wallet/types';
+import { BurnerPluginContext, Plugin, PluginPageContext, PluginActionContext } from '@burner-wallet/types';
 import SpotClaimPage from './ui/SpotClaimPage';
 import dispenserABI from './abi/dispenserABI.json';
 
