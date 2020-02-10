@@ -387,8 +387,10 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
       const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
       const windowBottom = windowHeight + window.pageYOffset;
 
-      if (windowBottom >= docHeight) setOffset(prevOffset => prevOffset + 10);
-    });
+      if (windowBottom >= docHeight) {
+        setOffset(prevOffset => prevOffset + 10);
+      }
+    };
     window.addEventListener('scroll', scrollListener);
 
     return () => window.removeEventListener('scroll', scrollListener);
