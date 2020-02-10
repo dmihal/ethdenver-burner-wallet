@@ -1,4 +1,4 @@
-import { BurnerPluginContext, Plugin } from '@burner-wallet/types';
+import { BurnerPluginContext, Plugin, PluginPageContext } from '@burner-wallet/types';
 import SpotClaimPage from './ui/SpotClaimPage';
 import dispenserABI from './abi/dispenserABI.json';
 
@@ -6,6 +6,8 @@ interface PluginProps {
   dispenserAddress: string;
   dispenserNetwork: string;
 }
+
+const VENDOR_URL_REGEX = /\/([vd])\/(0x[0-9a-f]{40})(?:\/([\d\.]+))?/i;
 
 export default class DenverMiscPlugin implements Plugin {
   private context: BurnerPluginContext | null = null;
@@ -32,8 +34,20 @@ export default class DenverMiscPlugin implements Plugin {
         } else {
           actions.navigateTo('/send', { to: match.params.address });
         }
+        return null;
       }
     pluginContext.addPage('/v/:address/:amount?', RedirectToSend)
+
+    pluginContext.onQRScanned((qr: string, ctx: PluginActionContext) => {
+      if (VENDOR_URL_REGEX.test(qr)) {
+        const parsed = VENDOR_URL_REGEX.exec(qr)!;
+        const asset = parsed[1] === 'd' ? 'xdai' : 'buff';
+        const address = parsed[2];
+        const amount = parsed[3];
+        ctx.actions.send({ to: address, asset, ether: amount });
+        return true;
+      }
+    });
   }
 
   async claimSpot(id: string, sender: string) {

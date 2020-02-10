@@ -94,7 +94,7 @@ const BurnerWallet = () =>
       new ChingPlugin(),
       new LegacyPlugin(),
       new UnstoppableDomainsPlugin(),
-      new UnstoppableResolutionPlugin(process.env.REACT_APP_INFURA_KEY!)
+      new UnstoppableResolutionPlugin(process.env.REACT_APP_INFURA_KEY!),
       new LeaderboardPlugin(),
     ]}
   />

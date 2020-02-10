@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SendData } from '@burner-wallet/types';
 import { useBurner } from '@burner-wallet/ui-core';
 import { RouteComponentProps } from 'react-router-dom';
 import Address from '../../components/Address';
@@ -6,7 +7,7 @@ import Button from '../../components/Button';
 import Page from '../../components/Page';
 import LineItem from '../../components/LineItem';
 
-const ConfirmPage: React.FC<RouteComponentProps> = ({ history }) => {
+const ConfirmPage: React.FC<RouteComponentProps<{}, {}, SendData>> = ({ history }) => {
   const { BurnerComponents, assets, actions, pluginData, t } = useBurner();
   const { PluginElements } = BurnerComponents;
 

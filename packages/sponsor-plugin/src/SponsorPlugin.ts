@@ -19,12 +19,22 @@ const RedirectToSendXP: React.FC<PluginPageContext<{ address: string }>> = ({ ma
   return null;
 };
 
+const BADGE_URL_REGEX = /\/b\/(0x[0-9a-f]{40})/i;
+
 export default class SponsorPlugin implements Plugin {
   private context?: BurnerPluginContext;
 
   initializePlugin(pluginContext: BurnerPluginContext) {
     this.context = pluginContext;
-    pluginContext.addPage('/b/:address', RedirectToSendXP)
+    pluginContext.addPage('/b/:address', RedirectToSendXP);
+
+    pluginContext.onQRScanned((qr: string, ctx: PluginActionContext) => {
+      if (BADGE_URL_REGEX.test(qr)) {
+        const address = BADGE_URL_REGEX.exec(qr)![1];
+        ctx.actions.navigateTo(`/sendxp/${address}`);
+        return true;
+      }
+    });
 
     pluginContext.addPage('/sendxp/:to', SendXPPage);
   }
