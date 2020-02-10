@@ -15,8 +15,5 @@
     "@burner-wallet/types": "^1.0.0",
     "@types/react": "*",
     "ethereum-blockies-base64": "^1.0.2"
-  },
-  "devDependencies": {
-    "typescript": "3.5.1"
   }
 }

@@ -380,7 +380,7 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
   useEffect(() => {
     handleTopFive();
 
-    window.addEventListener('scroll', () => {
+    const scrollListener = () => {
       const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
       const { body } = document;
       const html = document.documentElement;
@@ -389,8 +389,9 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
       if (windowBottom >= docHeight) setOffset(prevOffset => prevOffset + 10);
     });
+    window.addEventListener('scroll', scrollListener);
 
-    return () => window.removeEventListener('scroll', () => { });
+    return () => window.removeEventListener('scroll', scrollListener);
   }, []);
 
   useEffect(() => {
