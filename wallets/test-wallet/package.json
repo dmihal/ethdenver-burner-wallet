@@ -5,7 +5,6 @@
   "dependencies": {
     "3box-edit-profile-plugin": "^0.1.0",
     "@burner-factory/burnable-ens-plugin": "^1.0.0",
-    "@burner-factory/collectable-plugin": "^1.0.0",
     "@burner-factory/contract-wallet-plugin": "^0.1.0",
     "@burner-factory/contract-wallet-signer": "^0.2.0",
     "@burner-factory/push-notification-plugin": "^0.1.0",
@@ -20,6 +19,8 @@
     "@types/react": "*",
     "@types/react-dom": "16.8.4",
     "@types/react-router-dom": "^4.3.3",
+    "@unstoppabledomains/burner-plugin-domains": "^1.0.2",
+    "@unstoppabledomains/burner-plugin-resolution": "^1.0.3",
     "account-cache-signer": "^0.1.0",
     "ching-plugin": "^1.0.3",
     "denver-assets": "^1.0.0",

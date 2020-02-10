@@ -8,13 +8,14 @@ import ENSPlugin from '@burner-wallet/ens-plugin';
 import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import DenverUI from 'denver-ui';
 import BurnableENSPlugin from '@burner-factory/burnable-ens-plugin';
-import CollectablePlugin from '@burner-factory/collectable-plugin';
 import PushNotificationPlugin from '@burner-factory/push-notification-plugin';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import { BurnerConnectPlugin } from '@burner-wallet/burner-connect-wallet';
 import LegacyPlugin from '@burner-wallet/legacy-plugin';
+import UnstoppableDomainsPlugin from "@unstoppabledomains/burner-plugin-domains";
+import UnstoppableResolutionPlugin from "@unstoppabledomains/burner-plugin-resolution";
 import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable-line import/no-webpack-loader-syntax
 
 import DenverMiscPlugin from 'denver-misc-plugin';
@@ -80,7 +81,7 @@ const BurnerWallet = () =>
         dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B',
         dispenserNetwork: '42',
       }),
-      new CollectablePlugin('42', '0xdc6Bc87DD19a4e6877dCEb358d77CBe76e226B8b'),
+      new BuilderPlugin(),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
       new MissionPlugin('https://s.buffidao.com/map'),
@@ -91,6 +92,8 @@ const BurnerWallet = () =>
       new BurnerConnectPlugin('ETHDenver test wallet'),
       new ChingPlugin(),
       new LegacyPlugin(),
+      new UnstoppableDomainsPlugin(),
+      new UnstoppableResolutionPlugin(process.env.REACT_APP_INFURA_KEY!)
     ]}
   />
 
