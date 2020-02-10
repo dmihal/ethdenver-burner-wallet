@@ -11,6 +11,7 @@ import LinkdropPlugin from 'linkdrop-plugin';
 import SchedulePlugin from '@burner-factory/schedule-plugin';
 import StockMarketMenuPlugin from '@burner-factory/stock-market-menu-plugin';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import LeaderboardPlugin from 'leaderboard';
 import ContractWalletSigner from '@burner-factory/contract-wallet-signer';
 import ContractWalletPlugin from '@burner-factory/contract-wallet-plugin';
 import FortmaticPlugin from 'fortmatic-plugin';
@@ -53,6 +54,7 @@ const BurnerWallet = () =>
       new ContractWalletPlugin(),
       new LinkdropPlugin(),
       new ThreeBoxEditProfilePlugin(),
+      new LeaderboardPlugin(),
     ]}
   />
 

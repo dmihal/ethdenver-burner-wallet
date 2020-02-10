@@ -16,6 +16,9 @@ import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import { faucet_test_address, xp_test_network } from 'denver-config';
 import VendorPlugin from '@burner-factory/vendor-plugin';
+import schedule from './waterloo.json';
+import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import LeaderboardPlugin from 'leaderboard';
 
 
 const testbuff = new ERC777Asset({
@@ -54,6 +57,7 @@ const BurnerWallet = () =>
       new FortmaticPlugin(),
       new ContractWalletPlugin(),
       new BurnerConnectPlugin('ETHDenver admin wallet'),
+      new LeaderboardPlugin(),
     ]}
   />
 
