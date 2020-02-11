@@ -86,16 +86,7 @@ const DataRank = styled.td`
 `
 
 const DataUser = styled.td<{ isTopFive: boolean }>`
-  ${({ isTopFive }) => {
-    if (isTopFive) {
-      return `
-      width: 75%;
-      `;
-    } else {
-      'width: 67%;'
-    }
-  }
-  }
+  width: 67%;
 `
 
 const DataXP = styled.td<{ isTopFive: boolean }>`
@@ -186,7 +177,7 @@ const LoadingWrapper = styled.div`
 const daoMemberRequest = (offset) => {
   return {
     query: `{
-    daos(where: {id: "0x294f999356ed03347c7a23bcbcf8d33fa41dc830"}) {
+    daos(where: {id: "0xe248a76a4a84667c859eb51b9af6dea29e52f139"}) {
       reputationHolders(first: 10, skip: ${offset}, orderBy: balance, orderDirection: desc) {
         address
         balance
@@ -199,7 +190,7 @@ const daoMemberRequest = (offset) => {
 const topFiveDaoMemberRequest = () => {
   return {
     query: `{
-    daos(where: {id: "0x294f999356ed03347c7a23bcbcf8d33fa41dc830"}) {
+    daos(where: {id: "0xe248a76a4a84667c859eb51b9af6dea29e52f139"}) {
       reputationHolders(first: 5, skip: 0, orderBy: balance, orderDirection: desc) {
         address
         balance
@@ -258,7 +249,7 @@ const assembleCompleteProfiles = (reputationHolders, userList) => {
 }
 
 const fetchDAOMembers = async (requestShape, offset) => {
-  const res = await fetch('https://api.thegraph.com/subgraphs/name/daostack/alchemy', {
+  const res = await fetch('https://api.thegraph.com/subgraphs/name/daostack/v38_0_xdai', {
     method: 'POST',
     body: JSON.stringify(requestShape(offset)),
     headers: {
@@ -462,15 +453,13 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
 
   return (
     <TableRow isTopFive={isTopFive}>
-      {!isTopFive && (
-        <DataRank>
-          <p>{rank + 5}</p>
-        </DataRank>
-      )}
+      <DataRank>
+        <p>{isTopFive ? rank : rank + 5}</p>
+      </DataRank>
 
       <DataUser isTopFive={isTopFive}>
         <Profile>
-          {isTopFive && <ProfilePicture src={src} alt="Profile" />}
+          <ProfilePicture src={src} alt="Profile" />
           <ProfileNames>
             <h3>
               {name || shortenEthAddr(address)}
