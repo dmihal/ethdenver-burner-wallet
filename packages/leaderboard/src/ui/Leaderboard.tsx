@@ -37,7 +37,7 @@ const TableBody = styled.tbody`
   margin-top: 8px;
 `
 
-const TableRow = styled.tr`
+const TableRow = styled.tr<{ isTopFive: boolean }>`
   width: 100%;
 
   & th {
@@ -85,7 +85,7 @@ const DataRank = styled.td`
   }
 `
 
-const DataUser = styled.td`
+const DataUser = styled.td<{ isTopFive: boolean }>`
   ${({ isTopFive }) => {
     if (isTopFive) {
       return `
@@ -98,7 +98,7 @@ const DataUser = styled.td`
   }
 `
 
-const DataXP = styled.td`
+const DataXP = styled.td<{ isTopFive: boolean }>`
   width: 25%;
 
   ${({ isTopFive }) => {
@@ -228,7 +228,7 @@ const shortenEthAddr = (str) => {
 
 const handleRankProfiles = (completeProfiles) => {
   const reputationHolders = Object.values(completeProfiles);
-  return reputationHolders.sort((a, b) => {
+  return reputationHolders.sort((a: any, b: any) => {
     const balanceA = parseInt(a.balance);
     const balanceB = parseInt(b.balance);
     if (balanceA < balanceB) return 1;
@@ -278,7 +278,7 @@ const fetchDAOMembers = async (requestShape, offset) => {
 
 // polling every five minutes for updates to the leaderboard
 function useInterval(callback, delay) {
-  const savedCallback = useRef();
+  const savedCallback = useRef(callback);
   // Remember the latest callback.
   useEffect(() => {
     savedCallback.current = callback;
@@ -411,7 +411,6 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
               xp={account.balance}
               address={account.address}
               key={account.address}
-              offset={offset}
               rank={i + 1}
               isTopFive={true}
             />
@@ -428,7 +427,6 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
               xp={account.balance}
               address={account.address}
               key={account.address}
-              offset={offset}
               rank={i + 1}
               isTopFive={false}
             />
@@ -460,7 +458,7 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
       <DataUser isTopFive={isTopFive}>
         <Profile>
           {isTopFive && <ProfilePicture src={src} alt="Profile" />}
-          <ProfileNames isTopFive={isTopFive}>
+          <ProfileNames>
             <h3>
               {name || shortenEthAddr(address)}
             </h3>
