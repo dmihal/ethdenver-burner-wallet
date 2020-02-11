@@ -209,7 +209,7 @@ const topFiveDaoMemberRequest = () => {
   }
 };
 
-const createProfiles = async (reputationHolders) => {
+const createProfiles = async (reputationHolders: any, Box: any) => {
   const fetchedProfiles = await Promise.all(reputationHolders.map(address => Box.getProfile(address)));
   const verifiedAccounts = await Promise.all(fetchedProfiles.map(address => Box.getVerifiedAccounts(address)));
   const ensNamesArray = await Promise.all(fetchedProfiles.map(address => fetchENSNames(address)));
@@ -324,6 +324,17 @@ const fetchENSNames = async (address) => {
   if (data.domains.length) return data.domains[0].name;
 }
 
+let _BoxPromise: null | Promise<any> = null;
+
+const getBox = async () => {
+  if (!_BoxPromise) {
+    _BoxPromise = import('3box');
+  }
+
+  const { default: Box } = await _BoxPromise;
+  return Box;
+};
+
 const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents }) => {
   const { Page } = BurnerComponents;
   const StyledPage = styled(Page)`
@@ -358,8 +369,9 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
   useInterval(handleTopFive, 300000);
 
   async function handleTopFive() {
+    const Box = await getBox();
     const topFiveHolders = await fetchDAOMembers(topFiveDaoMemberRequest, null);
-    const topFive = await createProfiles(topFiveHolders);
+    const topFive = await createProfiles(topFiveHolders, Box);
     const topFiveProfiles = assembleCompleteProfiles(topFiveHolders, topFive);
     const topFiveProfilesRanked = handleRankProfiles(topFiveProfiles);
 
@@ -368,8 +380,9 @@ const LeaderboardPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
 
   async function handleFetchDaoMembers() {
     setShowLoading(true);
+    const Box = await getBox();
     const reputationHolders = await fetchDAOMembers(daoMemberRequest, offset);
-    const mainList = await createProfiles(reputationHolders);
+    const mainList = await createProfiles(reputationHolders, Box);
     const completeProfiles = assembleCompleteProfiles(reputationHolders, mainList);
     const allProfilesRanked = handleRankProfiles(completeProfiles);
 
