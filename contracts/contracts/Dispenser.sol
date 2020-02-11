@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
+import "openzeppelin-solidity/contracts/cryptography/ECDSA.sol";
 import "openzeppelin-solidity/contracts/introspection/IERC1820Registry.sol";
 import "openzeppelin-solidity/contracts/token/ERC777/IERC777Recipient.sol";
 import './Admins.sol';
@@ -8,21 +9,22 @@ import './IMintableToken.sol';
 import './IWhitelist.sol';
 import './FreeGas.sol';
 
+
 contract Dispenser is FreeGas, Admins, IERC777Recipient {
+  using ECDSA for bytes32;
+
   struct Code {
     uint256 value;
     bool enabled;
     string message;
     mapping(address => bool) claimed;
   }
-
-  uint256 public nextId;
-
   IMintableToken public token;
 
-  mapping(uint256 => Code) private codes;
+  mapping(address => Code) private codes;
 
-  event Claim(address indexed claimer, uint256 indexed code, uint256 value);
+  event Claim(address indexed claimer, address indexed code, uint256 value);
+  event CodeCreated(address signer, uint256 value, string message);
 
   constructor(IWhitelist admins) public Admins(admins) {
     IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24)
@@ -33,26 +35,37 @@ contract Dispenser is FreeGas, Admins, IERC777Recipient {
     token = _token;
   }
 
-  function claim(uint256 codeId) external {
+  function claim(bytes calldata signature) external {
     address sender = _msgSender();
-    require(codes[codeId].enabled, "Not an active code");
-    require(!codes[codeId].claimed[sender], "Already claimed");
+    address signer = keccak256(abi.encodePacked(sender)).toEthSignedMessageHash().recover(signature);
 
-    codes[codeId].claimed[sender] = true;
-    token.mint(address(this), codes[codeId].value, new bytes(0));
-    token.send(sender, codes[codeId].value, bytes(codes[codeId].message));
+    require(codes[signer].enabled, "Not an active code");
+    require(!codes[signer].claimed[sender], "Already claimed");
+
+    codes[signer].claimed[sender] = true;
+    token.mint(address(this), codes[signer].value, new bytes(0));
+    token.send(sender, codes[signer].value, bytes(codes[signer].message));
   }
 
-  function createCode(uint256 value, string calldata message) external onlyAdmins {
-    codes[nextId].value = value;
-    codes[nextId].enabled = true;
-    codes[nextId].message = message;
-
-    nextId = nextId + 1;
+  function getCode(address signer) external view returns (uint256 value, bool enabled, string memory message) {
+    value = codes[signer].value;
+    enabled = codes[signer].enabled;
+    message = codes[signer].message;
   }
 
-  function setEnabled(uint256 id, bool isEnabled) external onlyAdmins {
-    codes[id].enabled = isEnabled;
+  function canClaim(address signer, address user) external view returns (bool) {
+    return !codes[signer].claimed[user];
+  }
+
+  function createCode(uint256 value, address signer, string calldata message) external onlyAdmins {
+    codes[signer].value = value;
+    codes[signer].enabled = true;
+    codes[signer].message = message;
+    emit CodeCreated(signer, value, message);
+  }
+
+  function setEnabled(address signer, bool isEnabled) external onlyAdmins {
+    codes[signer].enabled = isEnabled;
   }
 
   function tokensReceived(
