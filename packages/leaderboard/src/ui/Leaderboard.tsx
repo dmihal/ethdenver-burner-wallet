@@ -85,7 +85,7 @@ const DataRank = styled.td`
   }
 `
 
-const DataUser = styled.td<{ isTopFive: boolean }>`
+const DataUser = styled.td`
   width: 67%;
 `
 
@@ -457,7 +457,7 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
         <p>{isTopFive ? rank : rank + 5}</p>
       </DataRank>
 
-      <DataUser isTopFive={isTopFive}>
+      <DataUser>
         <Profile>
           <ProfilePicture src={src} alt="Profile" />
           <ProfileNames>
