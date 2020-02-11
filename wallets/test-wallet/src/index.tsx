@@ -31,6 +31,7 @@ import { XPToken } from 'denver-assets';
 import AccountCacheSigner from 'account-cache-signer';
 import LeaderboardPlugin from 'leaderboard';
 import BuilderPlugin from 'builder-plugin';
+import DAOPlugin from 'dao-plugin';
 
 
 const buff = new ERC777Asset({
@@ -96,6 +97,7 @@ const BurnerWallet = () =>
       new UnstoppableDomainsPlugin(),
       new UnstoppableResolutionPlugin(process.env.REACT_APP_INFURA_KEY!),
       new LeaderboardPlugin(),
+      new DAOPlugin(),
     ]}
   />
 

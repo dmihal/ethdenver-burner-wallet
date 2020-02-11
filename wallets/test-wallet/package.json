@@ -24,6 +24,7 @@
     "account-cache-signer": "^0.1.0",
     "builder-plugin": "^0.1.0",
     "ching-plugin": "^1.0.3",
+    "dao-plugin": "^0.1.0",
     "denver-assets": "^1.0.0",
     "denver-config": "^0.1.0",
     "denver-misc-plugin": "^1.0.0",

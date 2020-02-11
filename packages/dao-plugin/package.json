@@ -1,0 +1,14 @@
+{
+  "name": "dao-plugin",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/DAOPlugin.js",
+  "types": "dist/DAOPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-test": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.0"
+  }
+}
