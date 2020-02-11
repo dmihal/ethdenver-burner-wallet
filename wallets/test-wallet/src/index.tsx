@@ -4,7 +4,6 @@ import { NativeAsset, ERC20Asset, ERC777Asset, xdai } from '@burner-wallet/asset
 import BurnerCore from '@burner-wallet/core';
 import { InjectedSigner, LocalSigner } from '@burner-wallet/core/signers';
 import { InfuraGateway, InjectedGateway, XDaiGateway, GSNGateway } from '@burner-wallet/core/gateways';
-import ENSPlugin from '@burner-wallet/ens-plugin';
 import Exchange, { Uniswap } from '@burner-wallet/exchange';
 import DenverUI from 'denver-ui';
 import BurnableENSPlugin from '@burner-factory/burnable-ens-plugin';
@@ -31,6 +30,7 @@ import { xp_test_address, xp_test_network } from 'denver-config';
 import { XPToken } from 'denver-assets';
 import AccountCacheSigner from 'account-cache-signer';
 import LeaderboardPlugin from 'leaderboard';
+import BuilderPlugin from 'builder-plugin';
 
 
 const buff = new ERC777Asset({
