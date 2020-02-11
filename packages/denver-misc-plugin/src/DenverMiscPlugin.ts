@@ -1,4 +1,5 @@
 import { BurnerPluginContext, Plugin, PluginPageContext, PluginActionContext } from '@burner-wallet/types';
+import PKClaimPage from './ui/PKClaimPage';
 import SpotClaimPage from './ui/SpotClaimPage';
 import dispenserABI from './abi/dispenserABI.json';
 
@@ -37,6 +38,7 @@ export default class DenverMiscPlugin implements Plugin {
         return null;
       }
     pluginContext.addPage('/v/:address/:amount?', RedirectToSend)
+    pluginContext.addPage('/claim', PKClaimPage);
 
     pluginContext.onQRScanned((qr: string, ctx: PluginActionContext) => {
       if (VENDOR_URL_REGEX.test(qr)) {
