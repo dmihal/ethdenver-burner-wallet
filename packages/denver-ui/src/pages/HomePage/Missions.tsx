@@ -8,12 +8,13 @@ import styled from 'styled-components';
 const Container = styled.div`
   position: absolute;
   top: 0;
-  right: -150px;
+  left: 1000px;
   bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-bottom: 100px;
+  width: 1000px;
 `;
 
 
