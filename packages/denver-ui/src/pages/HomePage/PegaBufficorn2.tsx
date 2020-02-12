@@ -29,7 +29,7 @@ const Inner = styled.div`
   width: 200%;
   height: 100%;
 
-  animation: ${buffiAnimate} 0.4s steps(3) infinite;
+  animation: ${buffiAnimate} 0.25s steps(3) infinite;
 `;
 
 interface BuffiProps {
