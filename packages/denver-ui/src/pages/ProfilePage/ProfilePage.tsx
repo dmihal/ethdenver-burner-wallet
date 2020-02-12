@@ -7,7 +7,7 @@ import Clipboard from '../../components/Clipboard';
 import Button from '../../components/Button';
 import Page from '../../components/Page';
 
-const { PluginElements } = DataProviders;
+const { PluginElements, AddressName } = DataProviders;
 
 const QRContainer = styled.div`
   width: 80%;
@@ -53,11 +53,27 @@ const StyledInput = styled.input`
   flex: 1;
 `;
 
+const UDButton = styled(Button)`
+  background-image: url('https://avatars2.githubusercontent.com/u/36172275?s=200&v=4');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #9a92e3;
+  flex-direction: column;
+  font-size: 18px;
+`;
+
 const ProfilePage: React.FC = () => {
   const { defaultAccount, actions } = useBurner();
   return (
     <Page title="Account">
       <PluginElements position='home-top' />
+
+      <UDButton onClick={() => actions.navigateTo('/dot-crypto')}>
+        <AddressName address={defaultAccount} render={(name: any) => (
+          name
+        )} />
+        <div style={{ color: '#eeeeee', fontSize: 14 }}>View and transfer your .crypto domains</div>
+      </UDButton>
 
       <QRContainer>
         <QRCode value={defaultAccount} renderAs="svg"/>
