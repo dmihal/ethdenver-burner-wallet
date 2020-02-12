@@ -77,7 +77,6 @@ const ConfirmPage: React.FC<RouteComponentProps<{}, {}, SendData>> = ({ history 
 
       <div style={{ display: 'flex' }}>
         <Button disabled={sending} onClick={send}>{t('Send')}</Button>
-        <Button disabled={sending} onClick={() => history.goBack()}>{t('Cancel')}</Button>
       </div>
 
       <PluginElements position="confirm-bottom" tx={history.location.state} />
