@@ -56,15 +56,17 @@ const ScanButton = styled.button`
 
 const FortmaticButton = styled.button`
   position: absolute;
-  bottom: 30%;
+  bottom: 20%;
   background-image: url('${fortmaticButton}');
-  height: 60px;
-  width: 124px;
+  height: 115px;
+  width: 249px;
   background-color: transparent;
   border: none;
   transform: translateX(20000px) translateX(-50%);
   left: 50%;
   outline: none;
+  cursor: pointer;
+  z-index: 2002;
 `;
 
 const HUD: React.FC = () => {
@@ -103,7 +105,7 @@ const HUD: React.FC = () => {
       const userType = window.localStorage.getItem('userType');
       setFortmatic(!isLoggedIn && userType !== 'claim');
 
-      if (isLoggedIn && !isOverride(accounts)) { 
+      if (isLoggedIn && !isOverride(accounts)) {
         setOverride();
       }
     });
