@@ -12,9 +12,8 @@ const Container = styled.div`
   font-family: 'Squada One', Impact, Arial, Helvetica, sans-serif;
   width: 180px;
   height: 43px;
-
+  cursor: pointer;
   padding: 16px 26px;
-
   background-image: url(${profile});
   filter:"drop-shadow(0px 0px 4px #222222);
 `;
@@ -24,8 +23,8 @@ const OverlayAccount = () => {
   return (
     <Container onClick={() => actions.navigateTo('/account')}>
       {defaultAccount.substr(0, 10)}
-      <div style={{position:"absolute",top:-9,right:18,textAlign:'left'}}>
-        <Blockies seed={defaultAccount} size={8} scale={3} />
+      <div style={{position:"absolute",top:8,right:27,textAlign:'left'}}>
+        <Blockies seed={defaultAccount} size={8} scale={3.3} />
       </div>
     </Container>
   )
