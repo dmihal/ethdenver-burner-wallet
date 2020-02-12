@@ -60,6 +60,7 @@ const UDButton = styled(Button)`
   background-color: #9a92e3;
   flex-direction: column;
   font-size: 18px;
+  align-items: flex-end;
 `;
 
 const ProfilePage: React.FC = () => {

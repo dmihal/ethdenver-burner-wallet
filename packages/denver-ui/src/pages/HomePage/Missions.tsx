@@ -32,6 +32,10 @@ interface MissionProps extends PluginButtonProps {
 const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, xp, onClick, link }) => {
   const { actions } = useBurner();
 
+  if (!description || description.length === 0) {
+    return null;
+  }
+
   if (onClick) {
     return (
       <QuestButton location={title} task={description} color={color} xp={xp} onClick={() => onClick(actions)} />
