@@ -4,7 +4,7 @@ import { PluginPageContext } from '@burner-wallet/types';
 export const pkRegex = /^0x[0-9a-f]{64}$/i;
 
 
-const SpotClaimPage: React.FC<PluginPageContext> = ({ actions }) => {
+const PKClaimPage: React.FC<PluginPageContext> = ({ actions }) => {
   const getPK = () => {
     if (window.location.hash.length > 1) {
       const hash = window.location.hash.substr(1);
@@ -26,4 +26,4 @@ const SpotClaimPage: React.FC<PluginPageContext> = ({ actions }) => {
   return null;
 };
 
-export default SpotClaimPage;
+export default PKClaimPage;
