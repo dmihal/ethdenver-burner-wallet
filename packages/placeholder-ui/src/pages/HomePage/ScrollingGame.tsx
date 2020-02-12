@@ -62,7 +62,7 @@ const Sky = styled.div.attrs<{ topPos: number }>(({ topPos }) => ({
 `;
 
 const Title = styled.div.attrs<{ topPos: number }>(({ topPos }) => ({
-  style: transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)` },
+  style: { transform: `translate3d(0, ${topPos}px, 0) scaleY(2) scaleX(0.85)` },
 }))<{ topPos: number }>`
   color: #efefef;
   width: 100%;

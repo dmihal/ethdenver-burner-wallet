@@ -13,6 +13,7 @@ import 'worker-loader?name=burnerprovider.js!./burnerconnect'; // eslint-disable
 import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import AccountCacheSigner from 'account-cache-signer';
+import DenverMiscPlugin from 'denver-misc-plugin';
 
 
 const core = new BurnerCore({
@@ -41,6 +42,10 @@ const BurnerWallet = () =>
       new FortmaticPlugin(),
       new ContractWalletPlugin(),
       new BurnerConnectPlugin('ETHDenver test wallet'),
+      new DenverMiscPlugin({
+        dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B',
+        dispenserNetwork: '42',
+      }),
     ]}
   />
 

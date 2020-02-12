@@ -6,7 +6,7 @@ import discord from '../../discord.svg';
 
 import ScrollingGame from './ScrollingGame';
 
-const DAOSTACK_LINK = 'https://alchemy-competition-xdai.herokuapp.com/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0xcec4b3377180d361b8acacdd1d48cc9c9d80f4933f3120c0435b4493e81dee96';
+const DAOSTACK_LINK = 'https://alchemy-competition-xdai.herokuapp.com/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0x5089f3dfa54de6255a1aaa2a40bea5d598cc0f3b50654275c484f3740987c94e';
 
 const FortmaticButton = styled.button`
   display: flex;
@@ -98,7 +98,8 @@ const HomePage: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!actions.callSigner('user', 'fortmatic')) {
+    const userType = window.localStorage.getItem('userType');
+    if (!actions.callSigner('user', 'fortmatic') && userType !== 'claim') {
       setStatus('fortmatic');
       return;
     }
@@ -135,7 +136,7 @@ const HomePage: React.FC = () => {
         <div>
           <Heading>You're ready to go!</Heading>
 
-          <DAOStackLink href={DAOSTACK_LINK}>PegaBufficorn Competition</DAOStackLink>
+          <DAOStackLink href={DAOSTACK_LINK}>ETHDenver Hackathon idea competition</DAOStackLink>
           <Description>Winners receive 300 Dai and will have their design printed on stickers</Description>
 
           <DiscordLink href="https://discord.gg/yxYT6Vd" target="_blank">Join the ETHDenver Discord</DiscordLink>
