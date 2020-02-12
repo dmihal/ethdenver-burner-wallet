@@ -44,6 +44,8 @@ export default class FortmaticSigner extends Signer {
         return this.fortmatic.user.logout().then(() => this.updateAccounts());
       case 'user':
         return this.fortmatic.user.getUser();
+      case 'isLoggedIn':
+        return this.fortmatic.user.isLoggedIn();
       default:
         throw new Error(`Unknown action ${action}`);
     }
