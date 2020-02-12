@@ -9,7 +9,7 @@ interface Options {
 export default class MissionPlugin implements Plugin {
   private context?: BurnerPluginContext;
   private url?: string;
-  private addedMissions: { [title: string]: boolean } = {};
+  private dynamicRemoval: Array<() => void> = [];
   private refreshSeconds: number;
 
   constructor(url?: string, { refreshSeconds = 5 }: Options = {}) {
@@ -18,11 +18,7 @@ export default class MissionPlugin implements Plugin {
   }
 
   addMission(mission: Mission) {
-    if (this.addedMissions[mission.title]) {
-      return;
-    }
-
-    this.context.addButton(`floor_${mission.floor}`, mission.title, null, {
+    return this.context.addButton(`floor_${mission.floor}`, mission.title, null, {
       description: mission.task,
       logo: mission.image,
       xp: mission.xp,
@@ -31,8 +27,6 @@ export default class MissionPlugin implements Plugin {
       color: mission.color,
       link: mission.link,
     });
-
-    this.addedMissions[mission.title] = true;
   }
 
   async initializePlugin(pluginContext: BurnerPluginContext) {
@@ -64,9 +58,18 @@ export default class MissionPlugin implements Plugin {
       const response = await fetch(`${this.url}?account=${account}`);
       const json = await response.json();
 
+      this.reset();
       for (const mission of json) {
-        this.addMission(mission);
+        const { remove } = this.addMission(mission);
+        this.dynamicRemoval.push(remove);
       }
     }
+  }
+
+  reset() {
+    for (const remove of this.dynamicRemoval) {
+      remove();
+    }
+    this.dynamicRemoval = [];
   }
 }
