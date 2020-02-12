@@ -39,6 +39,8 @@ const buff = new ERC777Asset({
   name: 'BuffiDai',
   address: buffidai_address,
   network: '100',
+  icon: buffIcon,
+  usdPrice: 1,
 });
 
 const core = new BurnerCore({
