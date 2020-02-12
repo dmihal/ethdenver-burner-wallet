@@ -19,6 +19,7 @@ import VendorPlugin from '@burner-factory/vendor-plugin';
 import schedule from './waterloo.json';
 import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import LeaderboardPlugin from 'leaderboard';
+import CashoutPlugin from 'cashout-plugin';
 
 
 const testbuff = new ERC777Asset({
@@ -52,6 +53,7 @@ const BurnerWallet = () =>
     // @ts-ignore
     core={core}
     plugins={[
+      new CashoutPlugin(),
       new VendorPlugin('zykgNJKiykcW5TJos'),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),

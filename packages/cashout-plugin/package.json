@@ -1,0 +1,14 @@
+{
+  "name": "cashout-plugin",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/CashoutPlugin.js",
+  "types": "dist/CashoutPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-test": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.0"
+  }
+}
