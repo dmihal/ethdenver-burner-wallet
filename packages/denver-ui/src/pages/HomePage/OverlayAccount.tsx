@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
 import Blockies from 'react-blockies';
 import profile from '../../images/profile.png';
-
+import { DataProviders } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
+
+const { AddressName } = DataProviders;
 
 const Container = styled.div`
   font-size: 13px;
@@ -13,19 +15,45 @@ const Container = styled.div`
   width: 180px;
   height: 43px;
   cursor: pointer;
-  padding: 16px 26px;
+  padding-right: 62px;
   background-image: url(${profile});
-  filter:"drop-shadow(0px 0px 4px #222222);
+  filter: drop-shadow(0px 0px 4px #222222);
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Primary = styled.div``;
+
+const Secondary = styled.div`
+  color: #b7b6b6;
 `;
 
 const OverlayAccount = () => {
   const { BurnerComponents, defaultAccount, actions } = useBurner();
   return (
     <Container onClick={() => actions.navigateTo('/account')}>
-      {defaultAccount.substr(0, 10)}
-      <div style={{position:"absolute",top:8,right:27,textAlign:'left'}}>
+      <AddressName
+        address={defaultAccount}
+        render={(name: string | null) => {
+          if (name) {
+            return (
+              <Fragment>
+                <Primary>{name}</Primary>
+                <Secondary>{defaultAccount.substr(0, 10)}</Secondary>
+              </Fragment>
+            );
+          }
+          return (
+            <Primary>{defaultAccount.substr(0, 10)}</Primary>
+          );
+        }}
+      />
+
+      {/*<div style={{position:"absolute",top:8,right:27,textAlign:'left'}}>
         <Blockies seed={defaultAccount} size={8} scale={3.3} />
-      </div>
+      </div>*/}
     </Container>
   )
 }
