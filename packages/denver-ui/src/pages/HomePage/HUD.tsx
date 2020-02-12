@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { useBurner } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
@@ -6,6 +6,7 @@ import OverlayTokens from './OverlayTokens';
 import OverlayBalance from './OverlayBalance';
 import OverlayXP from './OverlayXP';
 import qrscan from "../../images/qrscan.png";
+import fortmaticButton from '../../images/fortmaticButton.png';
 
 const OuterContainer = styled.div`
   position: fixed;
@@ -53,36 +54,97 @@ const ScanButton = styled.button`
   outline: none;
 `;
 
+const FortmaticButton = styled.button`
+  position: absolute;
+  bottom: 30%;
+  background-image: url('${fortmaticButton}');
+  height: 60px;
+  width: 124px;
+  background-color: transparent;
+  border: none;
+  transform: translateX(20000px) translateX(-50%);
+  left: 50%;
+  outline: none;
+`;
+
 const HUD: React.FC = () => {
-  const { actions, assets } = useBurner();
+  const { actions, assets, defaultAccount, accounts } = useBurner();
+  const [showFortmatic, setFortmatic] = useState(true);
+  const signing = useRef(false);
+
+  const isOverride = (_accounts) => {
+    const isContractWallet = actions.canCallSigner('isContractWallet', _accounts[0]);
+    if (!isContractWallet) {
+      console.log('Are contract wallets disabled?');
+      return true;
+    }
+
+    const localSigner = _accounts[_accounts.length - 1]
+    return actions.callSigner('getSignerOverride', _accounts[0]) === localSigner;
+  }
+
+  const setOverride = async () => {
+    if (!signing.current) {
+      signing.current = true;
+      await actions.callSigner('setSignerOverride', accounts[0], accounts[accounts.length - 1]);
+      signing.current = false;
+    }
+  };
+
+  const login = async () => {
+    await actions.callSigner('enable', 'fortmatic');
+    if (!isOverride(accounts)) {
+      await setOverride();
+    }
+  };
+
+  useEffect(() => {
+    Promise.resolve(actions.callSigner('isLoggedIn', 'fortmatic')).then((isLoggedIn: any) => {
+      const userType = window.localStorage.getItem('userType');
+      setFortmatic(!isLoggedIn && userType !== 'claim');
+
+      if (isLoggedIn && !isOverride(accounts)) { 
+        setOverride();
+      }
+    });
+  }, [accounts]);
+
   const assetIDs = assets.map((asset) => asset.id);
   return (
       <OuterContainer>
         <InnerContainer>
-          {assetIDs.indexOf('buff') !== -1 && (
-            <Overlay top={24} side="left">
-              <OverlayBalance asset="buff" />
-            </Overlay>
+          {!showFortmatic && (
+            <Fragment>
+              {assetIDs.indexOf('buff') !== -1 && (
+                <Overlay top={24} side="left">
+                  <OverlayBalance asset="buff" />
+                </Overlay>
+              )}
+
+              {assetIDs.indexOf('xdai') !== -1 && (
+                <Overlay top={64} side="left">
+                  <OverlayBalance asset="xdai" />
+                </Overlay>
+              )}
+
+              <Overlay top={104} side="left">
+                <OverlayTokens />
+              </Overlay>
+
+              <Overlay top={24} side="right">
+                <OverlayAccount />
+              </Overlay>
+
+              {assetIDs.indexOf('xp') !== -1 && (
+                <Overlay top={70} side="right">
+                  <OverlayXP />
+                </Overlay>
+              )}
+            </Fragment>
           )}
 
-          {assetIDs.indexOf('xdai') !== -1 && (
-            <Overlay top={64} side="left">
-              <OverlayBalance asset="xdai" />
-            </Overlay>
-          )}
-
-          <Overlay top={104} side="left">
-            <OverlayTokens />
-          </Overlay>
-
-          <Overlay top={24} side="right">
-            <OverlayAccount />
-          </Overlay>
-
-          {assetIDs.indexOf('xp') !== -1 && (
-            <Overlay top={70} side="right">
-              <OverlayXP />
-            </Overlay>
+          {showFortmatic && (
+            <FortmaticButton onClick={login} />
           )}
 
           <UIBar>
