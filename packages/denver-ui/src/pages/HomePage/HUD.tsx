@@ -69,7 +69,7 @@ const FortmaticButton = styled.button`
 
 const HUD: React.FC = () => {
   const { actions, assets, defaultAccount, accounts } = useBurner();
-  const [showFortmatic, setFortmatic] = useState(true);
+  const [showFortmatic, setFortmatic] = useState(window.localStorage.getItem('userType') !== 'claim');
   const signing = useRef(false);
 
   const isOverride = (_accounts) => {

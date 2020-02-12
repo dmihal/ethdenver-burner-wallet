@@ -19,18 +19,7 @@ export default class AccountCacheSigner extends Signer {
     super({ id: 'cache' });
     this.accounts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     
-    setTimeout(() => {
-      this.serveCache = false;
-      if (this.accounts.length > 0) {
-        this.accounts = [];
-        this.events.emit('accountChange');
-        const droppedCalls = Object.values(this.pendingCalls)
-          .reduce((total: number, list: Array<any>) => total + list.length, 0);
-        if (droppedCalls > 0) {
-          console.warn(`[AccountCacheSigner] Dropped ${droppedCalls}`);
-        }
-      }
-    }, startupTime * 1000);
+    setTimeout(() => this.end(), startupTime * 1000);
   }
 
   setCore(core: BurnerCore) {
@@ -44,10 +33,13 @@ export default class AccountCacheSigner extends Signer {
   }
 
   permissions() {
-    return [];
+    return ['disable'];
   }
 
   invoke(action: string) {
+    if (action === 'disable') {
+      return this.end();
+    }
     throw new Error(`Unexpected action ${action}`);
   }
 
@@ -111,5 +103,18 @@ export default class AccountCacheSigner extends Signer {
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+  }
+
+  end() {
+    this.serveCache = false;
+    if (this.accounts.length > 0) {
+      this.accounts = [];
+      this.events.emit('accountChange');
+      const droppedCalls = Object.values(this.pendingCalls)
+        .reduce((total: number, list: Array<any>) => total + list.length, 0);
+      if (droppedCalls > 0) {
+        console.warn(`[AccountCacheSigner] Dropped ${droppedCalls}`);
+      }
+    }
   }
 }
