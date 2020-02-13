@@ -1172,11 +1172,12 @@
     styled-components "^4.4.1"
 
 "@burner-factory/vendor-plugin@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@burner-factory/vendor-plugin/-/vendor-plugin-0.1.1.tgz#00ff63e08c30cf01f8ba26b970823d7ec9f6f7cd"
-  integrity sha512-1WCFX3iOafAQfXaCYkQtIooYvQaHWQZtIlHoWAcOaPr1BAZr4rRGOhC0B+An3p4EUfDUeVivKpC0eyVbQJtXUQ==
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@burner-factory/vendor-plugin/-/vendor-plugin-0.1.2.tgz#437201e6343079b4c6a16eb101a5d745182a2938"
+  integrity sha512-GBUewoW7ja/Ko+13K5lrHSEeVKkrtreeX+xORB3Ir/hUBN/gQ45bGE15ggLkg44CZK2+v7DbBDYbZ1y1fqrPlA==
   dependencies:
     "@burner-wallet/types" "^1.0.0"
+    react-blockies "^1.4.1"
     styled-components "^4.4.1"
 
 "@burner-wallet/assets@^1.0.0", "@burner-wallet/assets@^1.0.5", "@burner-wallet/assets@^1.1.0":
@@ -1274,9 +1275,9 @@
     web3 "^1.2.2"
 
 "@burner-wallet/ui-core@^1.0.2", "@burner-wallet/ui-core@^1.0.4":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@burner-wallet/ui-core/-/ui-core-1.0.5.tgz#445696e9b3df260b59807de3045bc3a390293779"
-  integrity sha512-yZCfdwbXYJuKPG/24SngYkhFs2qL3M0TlPVxqJ7uIEJWoCOn1j049eyjW4KSd5pL5Wtsh82+mPKOUGveGS2Q5A==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@burner-wallet/ui-core/-/ui-core-1.0.6.tgz#3cf5bd17a84d0e987abf756ffa554df28fa9a6f0"
+  integrity sha512-/LSjsy8KMoZVANTowdssfQuHZrbtE1nkUEZuuNVfoym959Vk6a/JaAZOWf2ikW25D+nN1GbGq54Vg3OVWo3m9Q==
   dependencies:
     "@burner-wallet/core" "^1.1.7"
     "@burner-wallet/types" "^1.0.2"
@@ -3501,15 +3502,6 @@
     regexpp "^3.0.0"
     tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@2.19.1":
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-2.19.1.tgz#170d356d9d5240467c93e35351b07d09f19e8be2"
-  integrity sha512-w0BCh/5WIsMqr2YZ7dOlu76dErgSKkh6wa0zJC1s8HzOYQEjdMFMlvoC6IKpeeLSWvPDg1VIBSgiV/aEh6uIoQ==
-  dependencies:
-    "@types/json-schema" "^7.0.3"
-    "@typescript-eslint/typescript-estree" "2.19.1"
-    eslint-scope "^5.0.0"
-
 "@typescript-eslint/experimental-utils@2.19.2":
   version "2.19.2"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-2.19.2.tgz#4611d44cf0f0cb460c26aa7676fc0a787281e233"
@@ -3520,27 +3512,14 @@
     eslint-scope "^5.0.0"
 
 "@typescript-eslint/parser@^2.10.0", "@typescript-eslint/parser@^2.5.0":
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.19.1.tgz#79176a1f4deb160bef001ee7d8a874f86ebee391"
-  integrity sha512-tBJ//Vpxh5jG8OwsGS716xWVYgv2f9xnlAu4sLYrbeREJd67A4bYIwdd/MEJ72nhZswR+0se5Vxd9jcYpX6bfQ==
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.19.2.tgz#21f42c0694846367e7d6a907feb08ab2f89c0879"
+  integrity sha512-8uwnYGKqX9wWHGPGdLB9sk9+12sjcdqEEYKGgbS8A0IvYX59h01o8os5qXUHMq2na8vpDRaV0suTLM7S8wraTA==
   dependencies:
     "@types/eslint-visitor-keys" "^1.0.0"
-    "@typescript-eslint/experimental-utils" "2.19.1"
-    "@typescript-eslint/typescript-estree" "2.19.1"
+    "@typescript-eslint/experimental-utils" "2.19.2"
+    "@typescript-eslint/typescript-estree" "2.19.2"
     eslint-visitor-keys "^1.1.0"
-
-"@typescript-eslint/typescript-estree@2.19.1":
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-2.19.1.tgz#bb6d501174756df17856e5434dfd342845e84fbe"
-  integrity sha512-rMCadf2iUJiw/J06U+JvdruaC+/rzxBamFlxfLCiuwJHy6aKw3gj4si89kxxY7DneVqmy4DZNDZvEV4SE2t7Lw==
-  dependencies:
-    debug "^4.1.1"
-    eslint-visitor-keys "^1.1.0"
-    glob "^7.1.6"
-    is-glob "^4.0.1"
-    lodash "^4.17.15"
-    semver "^6.3.0"
-    tsutils "^3.17.1"
 
 "@typescript-eslint/typescript-estree@2.19.2":
   version "2.19.2"
@@ -3556,18 +3535,18 @@
     tsutils "^3.17.1"
 
 "@unstoppabledomains/burner-plugin-domains@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@unstoppabledomains/burner-plugin-domains/-/burner-plugin-domains-1.0.2.tgz#5907fcb88dca337143d07f5816f60566812015c4"
-  integrity sha512-s9HnQ9t74lKqhONC7azQggCfIdo+71IQYlplCLhgyIodWlq62oQ4VXMZMdEjGpzpqDGWbbF+XPH7vQCxSxq5Zg==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@unstoppabledomains/burner-plugin-domains/-/burner-plugin-domains-1.0.5.tgz#84f16c335ad6cad87a372af0413e440e9c94caa9"
+  integrity sha512-AaG6AKvje1p/gQpMKSna/3Fb24PtTz6ZAmdF+oVH6+pOEXKgtNDjGUMkans7YP0AeaOYLTZy1dduYThp8m7RvQ==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@burner-wallet/types" "^1.0.0"
     "@types/react" "*"
 
 "@unstoppabledomains/burner-plugin-resolution@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@unstoppabledomains/burner-plugin-resolution/-/burner-plugin-resolution-1.0.3.tgz#386543c8541efff4356c1da005ddec828269ab45"
-  integrity sha512-v2o97veeZs1VbYUqZMKbtw+ogaVoZBEgGCPrueIApi4E6uj1huy+PL9JLqRHbCQbcRyjYuCPsCL7E1Zn1wlXPw==
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@unstoppabledomains/burner-plugin-resolution/-/burner-plugin-resolution-1.0.5.tgz#3393647783ee82fb1e8ea0dc9666470f4818d9ac"
+  integrity sha512-j3muimVteefBJzyObCdFtWSOORg3edeTFoEY2aH6Nm/4i8stPQINQVTPUvvRrJpqx8PGAung8wAmh7GLsWuvxA==
   dependencies:
     "@burner-wallet/assets" "^1.0.0"
     "@burner-wallet/types" "^1.0.0"
@@ -7867,9 +7846,9 @@ ejs@^2.6.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.341, electron-to-chromium@^1.3.47:
-  version "1.3.346"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.346.tgz#b08becbfbd64a42061195afd3a4923d0416c5d46"
-  integrity sha512-Yy4jF5hJd57BWmGPt0KjaXc25AmWZeQK75kdr4zIzksWVtiT6DwaNtvTb9dt+LkQKwUpvBfCyyPsXXtbY/5GYw==
+  version "1.3.347"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.347.tgz#ba9724a8e8122a0b081836892e1e08eef7fa4cd7"
+  integrity sha512-IityliF5ZY4nLa4DaXOGrWVeTK3OcN6LJECVe60DOX/SEF0zohVRxZHJXu4ZA8bW0A3K6Skcn67G20MGXOqhaA==
 
 elliptic@6.3.3:
   version "6.3.3"
