@@ -1,6 +1,7 @@
 import { BurnerPluginContext, Plugin, PluginPageContext, PluginActionContext } from '@burner-wallet/types';
 import PKClaimPage from './ui/PKClaimPage';
 import SpotClaimPage from './ui/SpotClaimPage';
+import SweepPage from './ui/SweepPage';
 import dispenserABI from './abi/dispenserABI.json';
 
 interface PluginProps {
@@ -37,6 +38,7 @@ export default class DenverMiscPlugin implements Plugin {
         }
         return null;
       }
+    pluginContext.addPage('/sweep', SweepPage);
     pluginContext.addPage('/v/:address/:amount?', RedirectToSend)
     pluginContext.addPage('/claim', PKClaimPage);
 
