@@ -15,13 +15,21 @@ const Container = styled.div`
   width: 180px;
   height: 43px;
   cursor: pointer;
-  padding-right: 62px;
+  padding-right: 27px;
   background-image: url(${profile});
   filter: drop-shadow(0px 0px 4px #222222);
   text-align: right;
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+  flex-direction: reverse;
+  align-items: center;
+`;
+
+const Names = styled.div`
+  display: flex;
+  flex-direction: color
   justify-content: center;
+  margin-right: 8px;
 `;
 
 const Primary = styled.div``;
@@ -39,21 +47,19 @@ const OverlayAccount = () => {
         render={(name: string | null) => {
           if (name) {
             return (
-              <Fragment>
+              <Names>
                 <Primary>{name}</Primary>
                 <Secondary>{defaultAccount.substr(0, 10)}</Secondary>
-              </Fragment>
+              </Names>
             );
           }
           return (
-            <Primary>{defaultAccount.substr(0, 10)}</Primary>
+            <Names><Primary>{defaultAccount.substr(0, 10)}</Primary></Names>
           );
         }}
       />
 
-      {/*<div style={{position:"absolute",top:8,right:27,textAlign:'left'}}>
-        <Blockies seed={defaultAccount} size={8} scale={3.3} />
-      </div>*/}
+      <Blockies seed={defaultAccount} size={8} scale={3.3} />
     </Container>
   )
 }
