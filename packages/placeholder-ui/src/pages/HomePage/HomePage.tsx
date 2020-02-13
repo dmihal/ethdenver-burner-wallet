@@ -6,7 +6,7 @@ import discord from '../../discord.svg';
 
 import ScrollingGame from './ScrollingGame';
 
-const DAOSTACK_LINK = 'https://alchemy-competition-xdai.herokuapp.com/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0x5089f3dfa54de6255a1aaa2a40bea5d598cc0f3b50654275c484f3740987c94e';
+const DAOSTACK_LINK = 'https://alchemy-xdai.daostack.io/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0x5089f3dfa54de6255a1aaa2a40bea5d598cc0f3b50654275c484f3740987c94e';
 
 const FortmaticButton = styled.button`
   display: flex;
