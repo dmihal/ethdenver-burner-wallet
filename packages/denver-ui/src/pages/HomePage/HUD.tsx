@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import { useBurner } from '@burner-wallet/ui-core';
 import styled from 'styled-components';
 import OverlayAccount from './OverlayAccount';
 import OverlayTokens from './OverlayTokens';
 import OverlayBalance from './OverlayBalance';
 import OverlayXP from './OverlayXP';
-import qrscan from "../../images/qrscan.png";
+import scan from "../../images/scan.png";
 import fortmaticButton from '../../images/fortmaticButton.png';
+import schedule from '../../images/schedule.png';
+import daoBtn from '../../images/daos.png';
 
 const OuterContainer = styled.div`
   position: fixed;
@@ -36,22 +39,23 @@ const Overlay = styled.div<{ top: number; side: string }>`
 const UIBar = styled.div`
   position: absolute;
   right: 20px;
-  bottom: 20px;
+  bottom: 10px;
   z-index: 150;
   transform: translateX(20000px);
 `;
 
 const ScanButton = styled.button`
-  height: 100px;
+  height: 90px;
   width: 100px;
-  border-radius: 100px;
-  box-shadow: 0px 0px 4px #222222;
-  background-image: url(${qrscan}), linear-gradient(#b75fac, #a24c97);
+  background-image: url(${scan});
   margin: 0 auto;
   display: block;
-  background-size: 90%;
+  background-size: contain;
   background-position: center;
   outline: none;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
 `;
 
 const FortmaticButton = styled.button`
@@ -67,6 +71,28 @@ const FortmaticButton = styled.button`
   outline: none;
   cursor: pointer;
   z-index: 2002;
+`;
+
+const ScheduleButton = styled(Link)`
+  display: block;
+  background-image: url('${schedule}');
+  height: 80px;
+  width: 90px;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  transform: translateX(20000px);
+`;
+
+const DAOButton = styled.a`
+  display: block;
+  background-image: url('${daoBtn}');
+  height: 80px;
+  width: 90px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(20000px) translateX(-50%);
 `;
 
 const HUD: React.FC = () => {
@@ -147,6 +173,14 @@ const HUD: React.FC = () => {
 
           {showFortmatic && (
             <FortmaticButton onClick={login} />
+          )}
+
+          {!showFortmatic && false && (
+            <ScheduleButton to="/schedule" />
+          )}
+
+          {!showFortmatic && (
+            <DAOButton href="https://alchemy-competition-xdai.herokuapp.com/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0x5089f3dfa54de6255a1aaa2a40bea5d598cc0f3b50654275c484f3740987c94e" target="dao" />
           )}
 
           <UIBar>
