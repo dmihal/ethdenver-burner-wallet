@@ -20,7 +20,7 @@ contract("xp", ([creator, user]) => {
 
     const account = web3.eth.accounts.create();
 
-    await dispenser.createCode(toWei('25', 'ether'), account.address, 'Test', { from: creator });
+    await dispenser.createCode(toWei('25', 'ether'), account.address, 'Test', '0', { from: creator });
     const code = await dispenser.getCode(account.address);
     assert.equal(code.value, toWei('25', 'ether'));
     assert.equal(code.enabled, true);

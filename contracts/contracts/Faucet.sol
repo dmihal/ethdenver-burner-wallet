@@ -1,5 +1,6 @@
 pragma solidity ^0.5.0;
 
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/GSN/Context.sol";
 import "openzeppelin-solidity/contracts/token/ERC777/IERC777.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
@@ -10,11 +11,13 @@ import './FreeGas.sol';
 
 contract Faucet is Context, IERC777, IERC20, Admins, FreeGas {
   IMintableToken public token;
+  using SafeMath for uint256;
 
   event RateChange(address indexed user, uint256 rate);
 
   mapping(address => uint256) public lastTransaction;
   mapping(address => uint256) public rate;
+  mapping(address => uint256) public userCap;
   uint256 public cap;
 
   constructor(IWhitelist admins) public Admins(admins) {}
@@ -33,6 +36,12 @@ contract Faucet is Context, IERC777, IERC20, Admins, FreeGas {
       rate[users[i]] = _rate;
       lastTransaction[users[i]] = now;
       emit RateChange(users[i], _rate);
+    }
+  }
+
+  function setUserCap(uint256 _cap, address[] calldata users) external onlyAdmins {
+    for(uint i = 0; i < users.length; i++) {
+      userCap[users[i]] = _cap;
     }
   }
 
@@ -63,20 +72,29 @@ contract Faucet is Context, IERC777, IERC20, Admins, FreeGas {
     }
 
     uint256 currentBalance = token.balanceOf(user);
-    if (cap > 0 && currentBalance > cap) {
+    uint256 _cap = getCap(user);
+    if (_cap > 0 && currentBalance > _cap) {
       return;
     }
 
-    uint256 time = now - lastTransaction[user];
-    uint256 newTokens = time * rate[user];
+    uint256 time = now.sub(lastTransaction[user]);
+    uint256 newTokens = time.mul(rate[user]);
 
-    if (newTokens + currentBalance > cap) {
-      newTokens = cap - currentBalance;
+    if (newTokens.add(currentBalance) > _cap) {
+      newTokens = _cap.sub(currentBalance);
     }
 
     if (newTokens > 0) {
       token.mint(user, newTokens, new bytes(0));
     }
+  }
+
+  function getCap(address user) private view returns (uint256) {
+    if (userCap[user] != 0) {
+      return userCap[user];
+    }
+
+    return cap;
   }
 
   function balanceOf(address owner) external view returns (uint256) {

@@ -50,6 +50,7 @@ const BurnerWallet = () =>
     core={core}
     plugins={[
       new FortmaticPlugin(),
+      new ThreeBoxEditProfilePlugin('5777'),
       new LeaderboardPlugin(),
       new ContractWalletPlugin(),
     ]}

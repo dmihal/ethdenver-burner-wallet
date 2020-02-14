@@ -53,6 +53,25 @@
   },
   {
     "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userCap",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "getHubAddr",
     "outputs": [
@@ -509,6 +528,24 @@
       }
     ],
     "name": "setRate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_cap",
+        "type": "uint256"
+      },
+      {
+        "name": "users",
+        "type": "address[]"
+      }
+    ],
+    "name": "setUserCap",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

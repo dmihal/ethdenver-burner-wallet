@@ -25,6 +25,7 @@ import trees from "../../images/trees.png"
 
 import mountainsFiles from '../../images/mountains';
 import castleFiles from '../../images/castle';
+import { useBurner } from '@burner-wallet/ui-core';
 
 
 const MAXWIDTH = 500;//put this *2 in Template.tsx   max-width
@@ -97,7 +98,17 @@ const Title = styled.div.attrs<{ topPos: number }>(({ topPos }) => ({
 const rangePercent = (percent, finish, start) => ((start - finish) * (percent / 100)) + finish;
 
 const ScrollingGame = () => {
+  const { defaultAccount } = useBurner();
   const [exploded, setExploded] = useState(false);
+  const [missions, setMissions] = useState([]);
+
+  // const [none, _setExploded] = useState(false);
+  // const exploded = useRef(false);
+  // const setExploded = (isExploded: boolean) => {
+  //   exploded.current = isExploded;
+  //   _setExploded(isExploded);
+  // }
+
   let [containerRef, { height, width }, containerNode] = useDimensions();
   height = height || window.innerHeight;
   width = width || window.innerWidth;
@@ -320,6 +331,30 @@ const ScrollingGame = () => {
   } = positionVars.current;
 
 
+  useEffect(() => {
+    let running = true;
+
+    const fetchMissions = async () => {
+      try {
+        const response = await fetch(`https://s.buffidao.com/map?account=${defaultAccount}`);
+        const json = await response.json();
+        if (running) {
+          setMissions(json);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      if (running) {
+        setTimeout(fetchMissions, 15000);
+      }
+    }
+    fetchMissions();
+
+    return () => {
+      running = false;
+    };
+  }, [defaultAccount]);
+
   useLayoutEffect(() => {
     setTimeout(()=>{
       if(containerNode){
@@ -495,8 +530,8 @@ const ScrollingGame = () => {
           left={0}
           top={floorLocation}
         >
-          <Missions floor={f} />
-          <Tiles floor={f} />
+          <Missions missions={missions.filter((mission: any) => mission.floor === f)} />
+          <Tiles missions={missions.filter((mission: any) => mission.floor === f)} />
         </Floor>
       )
     }

@@ -43,17 +43,30 @@ const UserPage: React.FC<PluginPageContext<{ account: string }>> = ({
       ))}
 
       <h2>Faucets</h2>
-      {status.faucets.map(({ name, rate, address, network }) => (
+      {status.faucets.map(({ name, rate, cap, address, network }) => (
         <div key={name}>
-          {name}: {}
-          <EditableNumber
-            value={rate}
-            onSave={async (newVal: string) => {
-              await _plugin.setFaucetRate(match.params.account, newVal, address, network, defaultAccount);
-              refreshStatus();
-            }}
-          />
-          {} XP/second
+          <div>{name}</div>
+          <div>
+            Rate:
+            <EditableNumber
+              value={rate}
+              onSave={async (newVal: string) => {
+                await _plugin.setFaucetRate(match.params.account, newVal, address, network, defaultAccount);
+                refreshStatus();
+              }}
+            />
+            {} XP/second
+          </div>
+          <div>
+            Cap:
+            <EditableNumber
+              value={cap}
+              onSave={async (newVal: string) => {
+                await _plugin.setUserFaucetCap(match.params.account, newVal, address, network, defaultAccount);
+                refreshStatus();
+              }}
+            />
+          </div>
         </div>
       ))}
 

@@ -9,15 +9,15 @@ export default class FortmaticPlugin implements Plugin {
     pluginContext.addElement('advanced', FortmaticSettings);
 
     // @ts-ignore
-    pluginContext.addButton('floor_1', 'Fortmatic', null, {
-      description: 'Login with Fortmatic to claim BuffiDAI!',
-      logo: tile,
-      xp: 50,
-      xCoord: 2,
-      yCoord: 3,
-      color: "#6951ff",
-      floor: 1,
-      onClick: (actions: Actions) => actions.callSigner('enable', 'fortmatic'),
-    });
+    // pluginContext.addButton('floor_1', 'Fortmatic', null, {
+    //   description: 'Login with Fortmatic to claim BuffiDAI!',
+    //   logo: tile,
+    //   xp: 50,
+    //   xCoord: 2,
+    //   yCoord: 3,
+    //   color: "#6951ff",
+    //   floor: 1,
+    //   onClick: (actions: Actions) => actions.callSigner('enable', 'fortmatic'),
+    // });
   } 
 }

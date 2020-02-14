@@ -8,6 +8,7 @@ import Template from './Template';
 
 import HomePage from './pages/HomePage';
 import AdvancedPage from './pages/AdvancedPage';
+import PKPage from './pages/PKPage';
 
 
 export default class DenverUI extends BurnerUICore {
@@ -15,7 +16,7 @@ export default class DenverUI extends BurnerUICore {
     return [
       { path: '/', component: HomePage },
       // { path: '/activity', component: ActivityPage },
-      // { path: '/pk', component: PKPage },
+      { path: '/pk', component: PKPage },
       // { path: '/receive', component: ReceivePage },
       // { path: '/send', component: SendPage },
       // { path: '/confirm', component: ConfirmPage },

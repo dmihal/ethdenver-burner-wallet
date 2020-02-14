@@ -1,39 +1,46 @@
-import { BurnerPluginContext, Plugin } from '@burner-wallet/types';
+import { BurnerPluginContext, Plugin, PluginActionContext } from '@burner-wallet/types';
 import AdminPage from './ui/AdminPage';
+import SpotsPage from './ui/SpotsPage';
 import UserPage from './ui/UserPage';
 import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
+import dispenserABI from './abis/Dispenser.json';
 import walletABI from './abis/Wallet.json';
 import faucetABI from './abis/Faucet.json';
 import tokenABI from './abis/XPToken.json';
-import { xp_test_network, senderlist_test_address, receiverlist_test_address, faucet_test_address } from 'denver-config';
+import { senderlist_address, receiverlist_address, xp_faucet_address, xp_dispenser_address } from 'denver-config';
+import Accounts from 'web3-eth-accounts';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
 type CONTRACT = { name: string; network: string; address: string };
 
 const WHITELISTS: CONTRACT[] = [
-  { name: 'Test Senders', network: xp_test_network, address: senderlist_test_address },
-  { name: 'Test Receivers', network: xp_test_network, address: receiverlist_test_address },
+  { name: 'Senders', network: '100', address: senderlist_address },
+  { name: 'Receivers', network: '100', address: receiverlist_address },
 ];
 
 const FAUCETS: CONTRACT[] = [
-  { name: 'Test Faucet', network: xp_test_network, address: faucet_test_address },
+  { name: 'Faucet', network: '100', address: xp_faucet_address },
 ];
 
 export interface UserStatus {
   types: { [network: string]: AccountType };
   whitelists: { name: string, isWhitelisted: boolean, address: string, network: string }[];
-  faucets: { name: string, rate: string, address: string, network: string }[];
+  faucets: { name: string, rate: string, cap: string, address: string, network: string }[];
 }
 
 const RELAYHUB_ADDRESS = '0xD216153c06E857cD7f72665E0aF1d7D82172F494';
 const ADMIN_WALLET = '0x6ebfe51d736c34eefb9107fcab912dd604682616';
 
 const ADDRESS_REGEX = /(0x[0-9a-f]{40})/i;
+const PK_REGEX = /(0x[0-9a-f]{64})/i;
 
 interface AdminPluginProps {
   contractWalletFactory: string;
 }
+
+// @ts-ignore
+const accounts = new Accounts();
 
 export default class AdminPlugin implements Plugin {
   private context: BurnerPluginContext | null = null;
@@ -45,6 +52,7 @@ export default class AdminPlugin implements Plugin {
 
   initializePlugin(pluginContext: BurnerPluginContext) {
     this.context = pluginContext;
+    pluginContext.addPage('/admin/spots', SpotsPage);
     pluginContext.addPage('/admin/user/:account', UserPage);
     pluginContext.addPage('/admin', AdminPage);
     pluginContext.addButton('apps', 'Admin', '/admin');
@@ -53,6 +61,13 @@ export default class AdminPlugin implements Plugin {
       if (ADDRESS_REGEX.test(qr)) {
         const address = ADDRESS_REGEX.exec(qr)![1];
         ctx.actions.navigateTo(`/admin/user/${address}`);
+        return true;
+      }
+
+      if (PK_REGEX.test(qr)) {
+        const pk = PK_REGEX.exec(qr)![1];
+        const account = accounts.privateKeyToAccount(pk);
+        ctx.actions.navigateTo(`/admin/user/${account.address}`);
         return true;
       }
     });
@@ -127,7 +142,7 @@ export default class AdminPlugin implements Plugin {
   }
 
   async isAdmin(address: string) {
-    const adminNetworks = ['4','42'];
+    const adminNetworks = ['100'];
 
     const admins = await Promise.all(adminNetworks.map(async (network: string) => {
       const web3 = this.context!.getWeb3(network);
@@ -171,7 +186,8 @@ export default class AdminPlugin implements Plugin {
   async setFaucetCap(cap: string, address: string, network: string, sender: string) {
     const web3 = this.context!.getWeb3(network);
     const faucet = new web3.eth.Contract(faucetABI as any, address);
-    return faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).send({ from: sender });
+    const data = faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).encodeABI();
+    return this.send(address, data, sender, network);
   }
 
   async setDenomination(denomination: string, isAllowed: boolean, faucetAddress: string, network: string, sender: string) {
@@ -189,7 +205,8 @@ export default class AdminPlugin implements Plugin {
       const web3 = this.context!.getWeb3(network);
       const faucet = new web3.eth.Contract(faucetABI as any, address);
       const rate = web3.utils.fromWei(await faucet.methods.rate(user).call(), 'ether');
-      return { name, rate, network, address };
+      const cap = web3.utils.fromWei(await faucet.methods.userCap(user).call(), 'ether');
+      return { name, rate, cap, network, address };
     }));
     return faucets;
   }
@@ -197,8 +214,23 @@ export default class AdminPlugin implements Plugin {
   async setFaucetRate(user: string, rate: string, address: string, network: string, sender: string) {
     const web3 = this.context!.getWeb3(network);
     const faucet = new web3.eth.Contract(faucetABI as any, address);
-    return faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).send({ from: sender });
+    const data = faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).encodeABI();
+    return this.send(address, data, sender, network);
   }
 
+  async setUserFaucetCap(user: string, cap: string, address: string, network: string, sender: string) {
+    const web3 = this.context!.getWeb3(network);
+    const faucet = new web3.eth.Contract(faucetABI as any, address);
+    const data = faucet.methods.setUserCap(web3.utils.toWei(cap, 'ether'), [user]).encodeABI();
+    return this.send(address, data, sender, network);
+  }
 
+  async createSpot(signer: string, value: string, message: string, sender: string) {
+    const web3 = this.context!.getWeb3('100');
+    const dispenser = new web3.eth.Contract(dispenserABI as any, xp_dispenser_address);
+
+    const limit = '0';
+    const data = dispenser.methods.createCode(web3.utils.toWei(value, 'ether'), signer, message, limit).encodeABI();
+    return this.send(xp_dispenser_address, data, sender, '100');
+  }
 }

@@ -64,6 +64,10 @@ const PKPage: React.FC<BurnerContext & RouteComponentProps<{}, {}, PKPageState>>
       setStatus('invalid');
     }
 
+    if (actions.canCallSigner('disable', 'cache')) {
+      actions.callSigner('disable', 'cache');
+    }
+
     const canSetPK = actions.canCallSigner('writeKey', defaultAccount, pk);
     if (!canSetPK) {
       setStatus('unavailable');

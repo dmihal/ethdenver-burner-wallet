@@ -15,31 +15,29 @@ const TileContainer = styled.div<{ xCoord: number; yCoord: number }>`
 
 
 interface MissionProps extends PluginButtonProps {
-  logo?: string;
-  xCoord: number;
-  yCoord: number;
+  image?: string;
+  game_x_coord: number;
+  game_y_coord: number;
 }
 
-const Tile: React.FC<MissionProps> = ({ logo, xCoord, yCoord }) => {
-  if (!logo) {
+const Tile: React.FC<MissionProps> = ({ image, game_x_coord, game_y_coord }) => {
+  if (!image) {
     return null;
   }
 
   return (
-    <TileContainer xCoord={xCoord} yCoord={yCoord}>
-      <img src={logo} style={{ maxWidth: '175px' }} />
+    <TileContainer xCoord={game_x_coord} yCoord={game_y_coord}>
+      <img src={image} style={{ maxWidth: '175px' }} />
     </TileContainer>
   );
 };
 
-const Tiles: React.FC<{ floor: number }> = ({ floor }) => {
-  const { BurnerComponents } = useBurner();
-  const { PluginButtons } = BurnerComponents;
+const Tiles: React.FC<{ missions: any[] }> = ({ missions }) => {
   return (
     <Container>
-      <PluginButtons position={`floor_${floor}`} component={Tile} />
+      {missions.map((mission) => (<Tile key={mission.title} {...mission} />))}
     </Container>
-  )
-}
+  );
+};
 
 export default Tiles;

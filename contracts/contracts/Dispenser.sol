@@ -16,6 +16,7 @@ contract Dispenser is FreeGas, Admins, IERC777Recipient {
   struct Code {
     uint256 value;
     bool enabled;
+    uint16 limit;
     string message;
     mapping(address => bool) claimed;
   }
@@ -41,26 +42,31 @@ contract Dispenser is FreeGas, Admins, IERC777Recipient {
 
     require(codes[signer].enabled, "Not an active code");
     require(!codes[signer].claimed[sender], "Already claimed");
+    require(codes[signer].limit == 0 || codes[signer].limit > 1, "Limit reached");
 
     codes[signer].claimed[sender] = true;
     token.mint(address(this), codes[signer].value, new bytes(0));
     token.send(sender, codes[signer].value, bytes(codes[signer].message));
   }
 
-  function getCode(address signer) external view returns (uint256 value, bool enabled, string memory message) {
+  function getCode(address signer) external view returns (uint256 value, bool enabled, string memory message, uint16 limit) {
     value = codes[signer].value;
     enabled = codes[signer].enabled;
     message = codes[signer].message;
+    limit = codes[signer].limit;
   }
 
   function canClaim(address signer, address user) external view returns (bool) {
     return !codes[signer].claimed[user];
   }
 
-  function createCode(uint256 value, address signer, string calldata message) external onlyAdmins {
+  function createCode(uint256 value, address signer, string calldata message, uint16 limit) external onlyAdmins {
     codes[signer].value = value;
     codes[signer].enabled = true;
     codes[signer].message = message;
+    if (limit > 0) {
+      codes[signer].limit = limit + 1;
+    }
     emit CodeCreated(signer, value, message);
   }
 

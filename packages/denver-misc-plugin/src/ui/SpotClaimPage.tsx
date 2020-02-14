@@ -10,7 +10,7 @@ const Inner = styled.div`
 `;
 
 interface ClaimPageParams {
-  id: string;
+  key: string;
 }
 
 const SpotClaimPage: React.FC<PluginPageContext<ClaimPageParams>> = ({
@@ -19,16 +19,27 @@ const SpotClaimPage: React.FC<PluginPageContext<ClaimPageParams>> = ({
   const _plugin = plugin as DenverMiscPlugin;
   const ammount = useRef(null);
   const message = useRef(null);
-  const [status, setStatus] = useState('claiming');
+  const [status, setStatus] = useState('validating');
+
+  const claim = async (key, account) => {
+    try {
+      if (!(await _plugin.canClaimSpot(key, account))) {
+        setStatus('unavailable');
+        return;
+      }
+      setStatus('claiming');
+      const { message: msg, xp } = await _plugin.claimSpot(key, account);
+      message.current = msg;
+      ammount.current = xp;
+      setStatus('complete');
+    } catch (e) {
+      console.error(e);
+      setStatus('error');
+    }
+  };
 
   useEffect(() => {
-    _plugin.claimSpot(match.params.id, defaultAccount)
-      .then(({ ammount, message }: any) => {
-        ammount.current = ammount;
-        message.current = message;
-        setStatus('complete');
-      })
-      .catch(() => setStatus('error'));
+    claim(match.params.key, defaultAccount);
   }, [match]);
 
   const { Page, Button } = BurnerComponents;

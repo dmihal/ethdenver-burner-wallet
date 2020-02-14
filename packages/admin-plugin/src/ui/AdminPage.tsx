@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { PluginPageContext } from '@burner-wallet/types';
 import AdminPlugin from '../AdminPlugin';
 import Faucet from './Faucet';
@@ -47,6 +48,8 @@ const AdminPage: React.FC<PluginPageContext> = ({ BurnerComponents, plugin, defa
   const { Page, Button } = BurnerComponents;
   return (
     <Page title="Admin">
+      <Link to="/admin/spots">Spots</Link>
+
       <h2>User inspector</h2>
       <input value={address} onChange={(e: any) => setAddress(e.target.value)} />
       <Button onClick={() => actions.navigateTo(`/admin/user/${address}`)} disabled={address.length !== 42}>Go</Button>
