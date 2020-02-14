@@ -1,12 +1,15 @@
-import { BurnerPluginContext, Plugin } from '@burner-wallet/types';
+import { BurnerPluginContext, Plugin, PluginActionContext } from '@burner-wallet/types';
 import AdminPage from './ui/AdminPage';
+import SpotsPage from './ui/SpotsPage';
 import UserPage from './ui/UserPage';
 import whitelistABI from './abis/whitelist.json';
 import relayhubABI from './abis/IRelayHub.json';
+import dispenserABI from './abis/Dispenser.json';
 import walletABI from './abis/Wallet.json';
 import faucetABI from './abis/Faucet.json';
 import tokenABI from './abis/XPToken.json';
-import { xp_test_network, senderlist_test_address, receiverlist_test_address, faucet_test_address } from 'denver-config';
+import { xp_test_network, senderlist_test_address, receiverlist_test_address, faucet_test_address, xp_dispenser_address } from 'denver-config';
+import Accounts from 'web3-eth-accounts';
 
 type AccountType = 'Contract Deployed' | 'EOA' | 'Unknown';
 type CONTRACT = { name: string; network: string; address: string };
@@ -45,6 +48,7 @@ export default class AdminPlugin implements Plugin {
 
   initializePlugin(pluginContext: BurnerPluginContext) {
     this.context = pluginContext;
+    pluginContext.addPage('/admin/spots', SpotsPage);
     pluginContext.addPage('/admin/user/:account', UserPage);
     pluginContext.addPage('/admin', AdminPage);
     pluginContext.addButton('apps', 'Admin', '/admin');
@@ -171,7 +175,8 @@ export default class AdminPlugin implements Plugin {
   async setFaucetCap(cap: string, address: string, network: string, sender: string) {
     const web3 = this.context!.getWeb3(network);
     const faucet = new web3.eth.Contract(faucetABI as any, address);
-    return faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).send({ from: sender });
+    const data = faucet.methods.setCap(web3.utils.toWei(cap, 'ether')).encodeABI();
+    return this.send(address, data, sender, network);
   }
 
   async setDenomination(denomination: string, isAllowed: boolean, faucetAddress: string, network: string, sender: string) {
@@ -197,8 +202,16 @@ export default class AdminPlugin implements Plugin {
   async setFaucetRate(user: string, rate: string, address: string, network: string, sender: string) {
     const web3 = this.context!.getWeb3(network);
     const faucet = new web3.eth.Contract(faucetABI as any, address);
-    return faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).send({ from: sender });
+    const data = faucet.methods.setRate(web3.utils.toWei(rate, 'ether'), [user]).encodeABI();
+    return this.send(address, data, sender, network);
   }
 
+  async createSpot(signer: string, value: string, message: string, sender: string) {
+    const web3 = this.context!.getWeb3('100');
+    const dispenser = new web3.eth.Contract(dispenserABI as any, xp_dispenser_address);
 
+    const limit = '0';
+    const data = dispenser.methods.createCode(web3.utils.toWei(value, 'ether'), signer, message, limit).encodeABI();
+    return this.send(xp_dispenser_address, data, sender, '100');
+  }
 }
