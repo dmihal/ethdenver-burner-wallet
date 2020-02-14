@@ -59,7 +59,7 @@ const OverlayAccount = () => {
         }}
       />
 
-      <Blockies seed={defaultAccount} size={8} scale={3.3} />
+      <Blockies seed={defaultAccount.toLowerCase()} size={8} scale={3.3} />
     </Container>
   )
 }

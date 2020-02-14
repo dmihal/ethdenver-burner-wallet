@@ -20,25 +20,23 @@ const Container = styled.div`
 
 interface MissionProps extends PluginButtonProps {
   action?: () => void;
-  description: string;
-  logo?: string;
-  to: string | null;
+  task: string;
   color: string;
   xp: number;
   onClick?: (actions?: Actions) => void;
   link?: string;
 }
 
-const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, xp, onClick, link }) => {
+const Mission: React.FC<MissionProps> = ({ title, task, color, xp, onClick, link }) => {
   const { actions } = useBurner();
 
-  if (!description || description.length === 0) {
+  if (!task || task.length === 0) {
     return null;
   }
 
   if (onClick) {
     return (
-      <QuestButton location={title} task={description} color={color} xp={xp} onClick={() => onClick(actions)} />
+      <QuestButton location={title} task={task} color={color} xp={xp} onClick={() => onClick(actions)} />
     );
   }
 
@@ -46,7 +44,7 @@ const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, 
     return (
       <QuestButton
         location={title}
-        task={description}
+        task={task}
         color={color}
         xp={xp}
         onClick={() => window.open(link, 'mission')}
@@ -55,16 +53,15 @@ const Mission: React.FC<MissionProps> = ({ title, description, logo, to, color, 
   }
 
   return (
-    <QuestInfo location={title} task={description} color={color} xp={xp} />
+    <QuestInfo location={title} task={task} color={color} xp={xp} />
   );
 };
 
-const Missions: React.FC<{ floor: number }> = ({ floor }) => {
-  const { BurnerComponents } = useBurner();
-  const { PluginButtons } = BurnerComponents;
+const Missions: React.FC<{ missions: any[] }> = ({ missions }) => {
+  console.log({missions})
   return (
     <Container>
-      <PluginButtons position={`floor_${floor}`} component={Mission} />
+      {missions.map((mission) => (<Mission key={mission.title} {...mission} />))}
     </Container>
   )
 }
