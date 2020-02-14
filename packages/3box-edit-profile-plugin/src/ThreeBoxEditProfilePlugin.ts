@@ -1,5 +1,5 @@
 import { BurnerPluginContext, Plugin } from '@burner-wallet/types';
-import Box from '3box';
+import { get3Box } from './3boxlib';
 
 import EditProfilePage from './ui/EditProfilePage';
 
@@ -15,8 +15,8 @@ export default class ThreeBoxEditProfilePlugin implements Plugin {
 
   private boxPromise: object;
 
-  constructor(chain = '1') {
-    this.chain = chain;
+  constructor() {
+    this.chain = '100';
   }
 
   async initializePlugin(pluginContext: BurnerPluginContext) {
@@ -28,16 +28,13 @@ export default class ThreeBoxEditProfilePlugin implements Plugin {
     this.boxPromise = this.createBox();
   }
 
-  getProvider() {
-    return this.pluginContext!.getWeb3(this.chain).currentProvider;
-  }
-
   async createBox() {
-    const addresses = await windowAny.ethereum.enable();
-    this.address = addresses[0];
+    const web3 = this.pluginContext!.getWeb3(this.chain);
+    this.address = (await web3.eth.getAccounts())[0];
 
-    const box = await Box.create(windowAny.ethereum);
-    await box.auth(['ethDenver'], { address: addresses[0] });
+    const Box = await get3Box();
+    const box = await Box.create(web3.currentProvider);
+    await box.auth(['ethDenver'], { address: this.address });
 
     this.profile = await Box.getProfile(this.address);
     this.space = await box.openSpace('ethDenver');

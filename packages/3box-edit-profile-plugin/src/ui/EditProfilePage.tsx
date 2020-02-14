@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PluginPageContext } from '@burner-wallet/types';
 import styled from 'styled-components';
-import EditProfile from '3box-profile-edit-react';
-import Box from '3box';
-import Web3 from 'web3';
+import { get3Box, getEditProfile } from '../3boxlib';
 
 import ThreeBoxEditProfilePlugin from '../ThreeBoxEditProfilePlugin';
 
@@ -48,6 +46,7 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
   const [profile, setProfile] = useState();
   const [myAddress, setAddress] = useState();
   const [showClaimedXP, setShowClaimedXP] = useState(false);
+  const [EditProfile, setEditProfile] = useState<any>(null);
 
   useEffect(() => {
     async function handleLoad3Box() {
@@ -62,7 +61,12 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
     handleLoad3Box();
   }, [defaultAccount]);
 
+  useEffect(() => {
+    getEditProfile().then((_EditProfile: any) => setEditProfile(_EditProfile));
+  }, []);
+
   const onSaveComplete = async (currentUserAddr) => {
+    const Box = await get3Box();
     const profile = await Box.getProfile(currentUserAddr);
     const hasClaimedXP = await space.public.get('hasClaimedXP');
 
@@ -92,7 +96,7 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
         </ClaimedXPConfirmation>
       )}
 
-      {box ? (
+      {box && EditProfile ? (
         <EditProfile
           box={box}
           space={space}
