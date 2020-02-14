@@ -5,6 +5,7 @@ export const senderlist_address: string;
 export const receiverlist_address: string;
 export const minterlist_address: string;
 export const adminlist_address: string;
+export const xp_dispenser_address: string;
 
 export const xp_test_network: string;
 export const xp_test_address: string;
