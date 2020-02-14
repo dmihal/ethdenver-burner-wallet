@@ -1,0 +1,53 @@
+{
+  "name": "vendor-test-wallet",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "3box-edit-profile-plugin": "^0.1.0",
+    "@burner-factory/burnable-ens-plugin": "^1.0.0",
+    "@burner-factory/collectable-plugin": "^1.0.0",
+    "@burner-factory/contract-wallet-plugin": "^0.1.0",
+    "@burner-factory/contract-wallet-signer": "^0.2.0",
+    "@burner-factory/push-notification-plugin": "^0.1.0",
+    "@burner-factory/schedule-plugin": "^1.0.0",
+    "@burner-factory/vendor-plugin": "^0.1.1",
+    "@burner-wallet/assets": "^1.1.0",
+    "@burner-wallet/burner-connect-wallet": "^0.1.4",
+    "@burner-wallet/core": "^1.1.0",
+    "@burner-wallet/ens-plugin": "^1.0.1",
+    "@burner-wallet/exchange": "^1.0.0",
+    "@burner-wallet/modern-ui": "^1.0.0",
+    "@types/node": "12.0.4",
+    "@types/react": "*",
+    "@types/react-dom": "16.8.4",
+    "@types/react-router-dom": "^4.3.3",
+    "cashout-plugin": "^0.1.0",
+    "fortmatic-plugin": "^1.0.0",
+    "fortmatic-signer": "^1.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.2.0",
+    "test-helpers-plugin": "^0.1.0",
+    "typescript": "3.5.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start-vendor": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {}
+}

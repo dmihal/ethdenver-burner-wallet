@@ -13,11 +13,9 @@
   "dependencies": {
     "3box": "^1.16.1",
     "3box-profile-edit-react": "0.0.6",
-    "@burner-wallet/types": "^1.0.0",
-    "@types/react": "*",
-    "web3": "^1.2.5"
+    "@burner-wallet/types": "^1.0.0"
   },
   "devDependencies": {
-    "typescript": "3.5.1"
+    "@types/react": "*"
   }
 }

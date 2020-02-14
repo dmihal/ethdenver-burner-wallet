@@ -1,0 +1,16 @@
+{
+  "name": "denver-misc-plugin",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/DenverMiscPlugin.js",
+  "types": "dist/DenverMiscPlugin.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start-basic": "tsc -w",
+    "start-test": "tsc -w",
+    "start-local": "tsc -w"
+  },
+  "dependencies": {
+    "@burner-wallet/types": "^1.0.5"
+  }
+}

@@ -11,7 +11,7 @@ export default class FortmaticSigner extends Signer {
 
   constructor(key: string) {
     super({ id: 'fortmatic' });
-    this.fortmatic = new Fortmatic(key, 'kovan');
+    this.fortmatic = new Fortmatic(key, 'mainnet');
     this.isLoggedIn = false;
     this.web3 = new Web3(this.fortmatic.getProvider());
 
@@ -22,8 +22,9 @@ export default class FortmaticSigner extends Signer {
     return this.isLoggedIn;
   }
 
-  signTx(tx: any): Promise<string> {
-    throw new Error('Not implemented');
+  async signTx(tx: any): Promise<any> {
+    const signedTransaction = await this.web3.eth.signTransaction(tx);
+    return { ...tx, signedTransaction };
   }
 
   // @ts-ignore
@@ -32,7 +33,7 @@ export default class FortmaticSigner extends Signer {
   }
 
   permissions() {
-    return this.isLoggedIn ? [] : ['enable'];
+    return this.isLoggedIn ? [] : ['enable', 'logout', 'user'];
   }
 
   invoke(action: string) {
@@ -40,9 +41,11 @@ export default class FortmaticSigner extends Signer {
       case 'enable':
         return this.enable();
       case 'logout':
-        return this.fortmatic.user.logout();
+        return this.fortmatic.user.logout().then(() => this.updateAccounts());
       case 'user':
         return this.fortmatic.user.getUser();
+      case 'isLoggedIn':
+        return this.fortmatic.user.isLoggedIn();
       default:
         throw new Error(`Unknown action ${action}`);
     }

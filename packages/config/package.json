@@ -1,0 +1,7 @@
+{
+  "name": "denver-config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "config.js",
+  "types": "config.d.ts"
+}
