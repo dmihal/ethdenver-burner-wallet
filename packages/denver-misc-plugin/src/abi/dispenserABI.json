@@ -2,20 +2,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "nextId",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "getHubAddr",
     "outputs": [
       {
@@ -228,7 +214,7 @@
       {
         "indexed": true,
         "name": "code",
-        "type": "uint256"
+        "type": "address"
       },
       {
         "indexed": false,
@@ -237,6 +223,28 @@
       }
     ],
     "name": "Claim",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "message",
+        "type": "string"
+      }
+    ],
+    "name": "CodeCreated",
     "type": "event"
   },
   {
@@ -274,14 +282,68 @@
     "constant": false,
     "inputs": [
       {
-        "name": "codeId",
-        "type": "uint256"
+        "name": "signature",
+        "type": "bytes"
       }
     ],
     "name": "claim",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "signer",
+        "type": "address"
+      }
+    ],
+    "name": "getCode",
+    "outputs": [
+      {
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "name": "enabled",
+        "type": "bool"
+      },
+      {
+        "name": "message",
+        "type": "string"
+      },
+      {
+        "name": "limit",
+        "type": "uint16"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "canClaim",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -292,8 +354,16 @@
         "type": "uint256"
       },
       {
+        "name": "signer",
+        "type": "address"
+      },
+      {
         "name": "message",
         "type": "string"
+      },
+      {
+        "name": "limit",
+        "type": "uint16"
       }
     ],
     "name": "createCode",
@@ -306,8 +376,8 @@
     "constant": false,
     "inputs": [
       {
-        "name": "id",
-        "type": "uint256"
+        "name": "signer",
+        "type": "address"
       },
       {
         "name": "isEnabled",
