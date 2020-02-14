@@ -22,7 +22,7 @@ import FortmaticPlugin from 'fortmatic-plugin';
 import FortmaticSigner from 'fortmatic-signer';
 import MissionPlugin from 'mission-plugin';
 // import schedule from './waterloo.json';
-// import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
+import ThreeBoxEditProfilePlugin from '3box-edit-profile-plugin';
 import TestHelpersPlugin from 'test-helpers-plugin';
 import ChingPlugin from 'ching-plugin';
 import buffIcon from './buff.png';
@@ -55,7 +55,7 @@ const core = new BurnerCore({
     new InfuraGateway(process.env.REACT_APP_INFURA_KEY),
     new XDaiGateway(),
   ],
-  assets: [buff, xdai, dai, eth],
+  assets: [buff, xdai],
 });
 
 const BurnerWallet = () =>
@@ -63,6 +63,7 @@ const BurnerWallet = () =>
     title="ETHDenver"
     core={core}
     plugins={[
+      new ThreeBoxEditProfilePlugin(),
       new DenverMiscPlugin({
         dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B', //TODO
         dispenserNetwork: '42',

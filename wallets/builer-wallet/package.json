@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "3box-edit-profile-plugin": "^0.1.0",
     "@burner-wallet/assets": "^1.1.0",
     "@burner-wallet/carbon-plugin": "^1.0.3",
     "@burner-wallet/core": "^1.1.0",
