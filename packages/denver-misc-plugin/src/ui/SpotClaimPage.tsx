@@ -28,8 +28,10 @@ const SpotClaimPage: React.FC<PluginPageContext<ClaimPageParams>> = ({
         return;
       }
       setStatus('claiming');
-      await _plugin.claimSpot(key, account);
-      setStatus('complete')
+      const { message: msg, xp } = await _plugin.claimSpot(key, account);
+      message.current = msg;
+      ammount.current = xp;
+      setStatus('complete');
     } catch (e) {
       console.error(e);
       setStatus('error');
@@ -48,8 +50,8 @@ const SpotClaimPage: React.FC<PluginPageContext<ClaimPageParams>> = ({
 
         {status === 'complete' && (
           <Fragment>
-            <h2>Claimed XP</h2>
-            <div></div>
+            <h2>Claimed {ammount.current} XP</h2>
+            <div>{message.current}</div>
             <Button to="/">Continue</Button>
           </Fragment>
         )}

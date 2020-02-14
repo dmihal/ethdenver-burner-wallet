@@ -75,10 +75,12 @@ export default class DenverMiscPlugin implements Plugin {
 
     const signer = accounts.privateKeyToAccount(pk);
     console.log('claiming', signer, sender);
+    const details = await contract.methods.getCode(signer.address).call();
 
     const hash = web3.utils.soliditySha3({ type: 'address', value: sender });
     const { signature } = signer.sign(hash);
     const response = await contract.methods.claim(signature).send({ from: sender });
     console.log(response);
+    return { message: details.message, xp: web3.utils.fromWei(details.value, 'ether') };
   }
 }
