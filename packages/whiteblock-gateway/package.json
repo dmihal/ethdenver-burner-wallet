@@ -1,0 +1,14 @@
+{
+  "name": "whiteblock-gateway",
+  "version": "1.0.0",
+  "description": "Sign messages using Fortmatic",
+  "license": "MIT",
+  "main": "dist/WhiteblockGateway.js",
+  "types": "dist/WhiteblockGateway.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@burner-wallet/core": "^1.1.0"
+  }
+}
