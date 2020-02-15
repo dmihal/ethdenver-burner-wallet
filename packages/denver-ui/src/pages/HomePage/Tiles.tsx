@@ -27,7 +27,7 @@ const Tile: React.FC<MissionProps> = ({ image, game_x_coord, game_y_coord }) => 
 
   return (
     <TileContainer xCoord={game_x_coord} yCoord={game_y_coord}>
-      <img src={image} style={{ maxWidth: '175px' }} />
+      <img src={image} style={{ maxWidth: '175px', maxHeight: '175px' }} />
     </TileContainer>
   );
 };

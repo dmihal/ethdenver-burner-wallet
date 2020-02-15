@@ -30,6 +30,7 @@ const Names = styled.div`
   flex-direction: color
   justify-content: center;
   margin-right: 8px;
+  flex-direction: column;
 `;
 
 const Primary = styled.div``;

@@ -84,7 +84,7 @@ const ScheduleButton = styled(Link)`
   transform: translateX(20000px);
 `;
 
-const DAOButton = styled.a`
+const DAOButton = styled(Link)`
   display: block;
   background-image: url('${daoBtn}');
   height: 80px;
@@ -180,7 +180,7 @@ const HUD: React.FC = () => {
           )}
 
           {!showFortmatic && (
-            <DAOButton href="https://alchemy-competition-xdai.herokuapp.com/dao/0xe248a76a4a84667c859eb51b9af6dea29e52f139/crx/proposal/0x5089f3dfa54de6255a1aaa2a40bea5d598cc0f3b50654275c484f3740987c94e" target="dao" />
+            <DAOButton to="/dao" target="dao" />
           )}
 
           <UIBar>

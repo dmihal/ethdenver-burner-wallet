@@ -77,7 +77,7 @@ const ProfilePage: React.FC = () => {
       </UDButton>
 
       <QRContainer>
-        <QRCode value={defaultAccount} renderAs="svg"/>
+        <QRCode value={`https://buffidao.com/b/${defaultAccount}`} renderAs="svg"/>
       </QRContainer>
 
       <AddressInputContainer>
