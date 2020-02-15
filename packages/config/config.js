@@ -6,6 +6,7 @@ module.exports.receiverlist_address = '0xc03bbef8b85a19ABEace435431faED98c31852d
 module.exports.minterlist_address = '0x486EcCDEF912949BF2FB04AeC6E11AD11Dd2e42b';
 module.exports.adminlist_address = '0x6B8999225E1dFa4A48170B51d58c124faf232Fe6';
 module.exports.xp_dispenser_address = '0x5e3C19cD2c9C4a11FA24E5B404d9327Fa11d8d20';
+module.exports.xp_simple_dispenser_address = '0xA0Bb4B97a78F990b8244f4040b7f025a6eAaEE4B';
 
 module.exports.xp_test_network = '4';
 module.exports.xp_test_address = '0x740bC1C24c993689030a1819De1Ec7d518F354d6';
