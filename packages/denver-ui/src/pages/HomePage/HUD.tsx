@@ -175,7 +175,7 @@ const HUD: React.FC = () => {
             <FortmaticButton onClick={login} />
           )}
 
-          {!showFortmatic && false && (
+          {!showFortmatic && (
             <ScheduleButton to="/schedule" />
           )}
 

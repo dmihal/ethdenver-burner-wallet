@@ -33,6 +33,7 @@ import LeaderboardPlugin from 'leaderboard';
 import BuilderPlugin from 'builder-plugin';
 
 import { buffidai_address } from 'denver-config';
+import schedule from './denver.json';
 
 const buff = new ERC777Asset({
   id: 'buff',
@@ -68,6 +69,7 @@ const BurnerWallet = () =>
         dispenserAddress: '0x6Db43Ea17004b5efBc85A3708bDb0E8bAee9C89B', //TODO
         dispenserNetwork: '42',
       }),
+      new SchedulePlugin(schedule),
       new BuilderPlugin(),
       new PushNotificationPlugin(process.env.REACT_APP_VAPID_KEY!, process.env.REACT_APP_WALLET_ID!),
       new FortmaticPlugin(),
