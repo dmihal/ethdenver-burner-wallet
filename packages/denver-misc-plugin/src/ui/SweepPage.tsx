@@ -6,15 +6,22 @@ const HASH_REGEX = /^#0x[0-9a-f]{64}$/i;
 
 const moveAll = async (assets: Asset[], sender: string, recipient: string) => {
   const _assets = Array.from(assets).sort((asset: Asset) => asset.type === 'native' ? 1 : -1);
+  let sweepCount = 0;
   for (const asset of _assets) {
     const balance = await asset.getMaximumSendableBalance(sender, recipient);
+    console.log(sender, asset.name, balance);
     if (balance !== '0') {
       await asset.send({
         to: recipient,
         from: sender,
         value: balance,
       });
+      sweepCount++;
     }
+  }
+
+  if (sweepCount === 0) {
+    throw new Error('Already claimed');
   }
 };
 
@@ -33,12 +40,17 @@ const SweepPage: React.FC<PluginPageContext> = ({ plugin, defaultAccount, Burner
 
   useEffect(() => {
     if (!HASH_REGEX.test(window.location.hash)) {
-      setStatus('Invalid Key')
+      setStatus('Invalid Key');
       return;
     }
 
-    sweep(window.location.hash.substr(1)).then(() => setStatus('Susccessfully claimed tokens!'));
-  }, [window.location.hash]);
+    sweep(window.location.hash.substr(1))
+      .then(() => setStatus('Susccessfully claimed tokens!'))
+      .catch((e: any) => {
+        console.error(e);
+        setStatus(`Error claiming: ${e.message}`);
+      });
+  }, []);
 
   return (
     <BurnerComponents.Page title="Claim funds">
