@@ -4,8 +4,9 @@ import DAOPlugin from '../DAOPlugin';
 import styled from 'styled-components';
 import DAOItem from './DAOItem';
 
-const AchievementsPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents, plugin }) => {
+const DAOPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents, plugin }) => {
   const _plugin = plugin as DAOPlugin;
+  const [buffidao, setBuffidao] = useState<any>(null);
   const [daos, setDAOs] = useState<any[]>([]);
 
   const fetchData = async () => {
@@ -18,14 +19,20 @@ const AchievementsPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerC
         "sec-fetch-mode": "cors","sec-fetch-site":"same-site"
       },
       body: JSON.stringify({
-        query: '{daos { id name register schemes { name id } proposals { title } } }',
+        query: '{daos { id name register schemes { name id } proposals { title stage } } }',
         variables: null,
       }),
       method: "POST",
       mode: "cors",
     });
     const json = await response.json();
-    setDAOs(json.data.daos.filter((dao: any) => dao.register === 'registered'));
+    setDAOs(json.data.daos.filter((dao: any) => {
+      if (dao.name === 'BuffiDAO') {
+        setBuffidao(dao);
+        return false;
+      }
+      return dao.register === 'registered';
+    }));
   };
 
   useEffect(() => {
@@ -35,6 +42,9 @@ const AchievementsPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerC
   const { Page, History } = BurnerComponents;
   return (
     <Page title="DAOs">
+      {buffidao && (
+        <DAOItem dao={buffidao} />
+      )}
       {daos.map((dao: any) => (
         <DAOItem dao={dao} key={dao.id} />
       ))}
@@ -42,4 +52,4 @@ const AchievementsPage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerC
   );
 }
 
-export default AchievementsPage;
+export default DAOPage;
