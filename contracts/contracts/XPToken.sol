@@ -109,12 +109,13 @@ contract XPToken is Context, Ownable, ModifiedERC777, FreeGas, IMintableToken {
   )
     internal
   {
-    require(senderList.isWhitelisted(from), "Sender is not whitelisted");
     require(receiverList.isWhitelisted(to), "Receiver is not whitelisted");
-    require(_allowedDenominations[amount], "Invalid denomination");
-    require(!sent[hash(from,to,amount)], "Already sent");
-
-    sent[hash(from, to, amount)] = true;
+    if (!minterList.isWhitelisted(from)) {
+      require(senderList.isWhitelisted(from), "Sender is not whitelisted");
+      require(_allowedDenominations[amount], "Invalid denomination");
+      require(!sent[hash(from,to,amount)], "Already sent");
+      sent[hash(from, to, amount)] = true;
+    }
 
     ModifiedERC777._move(operator, from, to, amount, userData, operatorData);
 
