@@ -453,40 +453,43 @@ const LeaderRow = ({ profile, xp, address, rank, isTopFive }) => {
 
   return (
     <TableRow isTopFive={isTopFive}>
-      <DataRank>
-        <p>{isTopFive ? rank : rank + 5}</p>
-      </DataRank>
+      <a href={`https://3box.io/${address}`}>
+        <DataRank>
+          <p>{isTopFive ? rank : rank + 5}</p>
+        </DataRank>
 
-      <DataUser>
-        <Profile>
-          <ProfilePicture src={src} alt="Profile" />
-          <ProfileNames>
-            <h3>
-              {name || shortenEthAddr(address)}
-            </h3>
+        <DataUser>
+          <Profile>
+            <ProfilePicture src={src} alt="Profile" />
+            <ProfileNames>
+              <h3>
+                {name || shortenEthAddr(address)}
+              </h3>
 
-            <ProfileMetaNames>
-              {name && <p>{shortenEthAddr(address)}</p>}
-              {ensName && (
-                <a href={`https://${ensName}`}>
-                  <p>{ensName}</p>
-                </a>
-              )}
-              {twitter && (
-                <a href={`https://twitter.com/${twitter}`}>
-                  <p>{`@${twitter}`}</p>
-                </a>
-              )}
-            </ProfileMetaNames>
-          </ProfileNames>
-        </Profile>
-      </DataUser>
+              <ProfileMetaNames>
+                {name && <p>{shortenEthAddr(address)}</p>}
+                {ensName && (
+                  <a href={`https://${ensName}`}>
+                    <p>{ensName}</p>
+                  </a>
+                )}
 
-      <DataXP isTopFive={isTopFive}>
-        <p>
-          {`${(xp / 1000000000000000000).toFixed(0)} pts`}
-        </p>
-      </DataXP>
+                {twitter && (
+                  <a href={`https://twitter.com/${twitter}`}>
+                    <p>{`@${twitter}`}</p>
+                  </a>
+                )}
+              </ProfileMetaNames>
+            </ProfileNames>
+          </Profile>
+        </DataUser>
+
+        <DataXP isTopFive={isTopFive}>
+          <p>
+            {`${(xp / 1000000000000000000).toFixed(0)} pts`}
+          </p>
+        </DataXP>
+      </a>
     </TableRow>
   )
 }
