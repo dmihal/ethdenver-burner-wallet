@@ -42,7 +42,7 @@ const RedirectToSend: React.FC<PluginPageContext<{ address: string; amount?: str
 }
 
 const VENDOR_URL_REGEX = /\/([vbd])\/(0x[0-9a-f]{40})(?:\/([\d\.]+))?/i;
-const SWEEP_REGEX = /\/sweep#(0x[0-9a-f]{64})/;
+const SWEEP_REGEX = /\/sweep#((?:0x[0-9a-f]{64})|(?:[\w\-]{43}))/;
 const SPOT_REGEX = /\/spot\/((?:0x[0-9a-f]{64})|(?:simple\d+))/;
 
 export default class DenverMiscPlugin implements Plugin {
@@ -61,7 +61,6 @@ export default class DenverMiscPlugin implements Plugin {
         const asset = parsed[1] === 'd' ? 'xdai' : 'buff';
         const address = parsed[2];
         const amount = parsed[3];
-        console.log(parsed)
         if (amount && amount.length > 0) {
           ctx.actions.send({ to: address, asset, ether: amount });
         } else {
