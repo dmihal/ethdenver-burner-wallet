@@ -38,7 +38,9 @@ const ClaimedXPConfirmation = styled.div`
   color: white;
 `;
 
-const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerComponents, plugin }) => {
+const EditProfilePage: React.FC<PluginPageContext> = ({
+  defaultAccount, BurnerComponents, plugin, actions,
+}) => {
   const _plugin = plugin as ThreeBoxEditProfilePlugin;
   const { Page } = BurnerComponents;
   const [box, setBox] = useState();
@@ -70,14 +72,15 @@ const EditProfilePage: React.FC<PluginPageContext> = ({ defaultAccount, BurnerCo
     const profile = await Box.getProfile(currentUserAddr);
     const hasClaimedXP = await space.public.get('hasClaimedXP');
 
-    console.log('profile', profile);
-    console.log('hasClaimedXP', hasClaimedXP);
-
     if (profile && (profile.name || profile.image) && !hasClaimedXP) {
-      console.log('congrats youve won XP');
-      // claim XP
 
-      // await space.public.set('hasClaimedXP', true); // set flag 
+      await space.public.set('hasClaimedXP', true);
+
+      actions.send({
+        to: currentUserAddr,
+        asset: 'xp',
+        value: '100',
+      });
 
       setShowClaimedXP(true);
       setTimeout(() => {
